@@ -1,0 +1,76 @@
+# OS and editor files
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# C# / .NET API
+api/bin/
+api/obj/
+api/TestResults/
+api/*.user
+api/*.rsuser
+api/*.suo
+api/*.userosscache
+api/*.sln.docstates
+
+# .NET tooling and coverage
+*.nupkg
+*.snupkg
+coverage/
+coverage.xml
+coverage.json
+*.coverage
+*.coveragexml
+
+# React / Node web app
+web/node_modules/
+web/.pnp/
+web/.pnp.js
+web/dist/
+web/build/
+web/.next/
+web/out/
+web/.vite/
+web/.cache/
+web/coverage/
+
+# Package manager caches
+web/.npm/
+web/.yarn/*
+!web/.yarn/patches/
+!web/.yarn/plugins/
+!web/.yarn/releases/
+!web/.yarn/sdks/
+!web/.yarn/versions/
+
+# TypeScript / framework generated files
+web/*.tsbuildinfo
+web/vite.config.*.timestamp-*
+web/vite.config.*.mjs
+
+# Local database and temporary files
+*.db
+*.sqlite
+*.sqlite3
+tmp/
+temp/

@@ -1,6 +1,6 @@
-using BeerFerment.Api.Data;
-using BeerFerment.Api.Data.Seed;
-using BeerFerment.Api.Services;
+using BrewMonitor.Api.Data;
+using BrewMonitor.Api.Data.Seed;
+using BrewMonitor.Api.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using System.Text.Json.Serialization;

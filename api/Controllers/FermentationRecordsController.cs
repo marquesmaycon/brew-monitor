@@ -1,8 +1,8 @@
-using BeerFerment.Api.Models;
-using BeerFerment.Api.Services;
+using BrewMonitor.Api.Models;
+using BrewMonitor.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BeerFerment.Api.Controllers;
+namespace BrewMonitor.Api.Controllers;
 
 [ApiController]
 [Route("api/fermentation-records")]

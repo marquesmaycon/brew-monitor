@@ -1,8 +1,8 @@
-using BeerFerment.Api.Enums;
-using BeerFerment.Api.Models;
+using BrewMonitor.Api.Enums;
+using BrewMonitor.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BeerFerment.Api.Data.Seed;
+namespace BrewMonitor.Api.Data.Seed;
 
 public static class DatabaseSeeder
 {

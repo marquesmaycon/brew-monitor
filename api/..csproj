@@ -4,8 +4,8 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>BeerFerment.Api</RootNamespace>
-    <AssemblyName>BeerFerment.Api</AssemblyName>
+    <RootNamespace>BrewMonitor.Api</RootNamespace>
+    <AssemblyName>BrewMonitor.Api</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

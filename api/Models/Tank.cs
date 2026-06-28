@@ -1,4 +1,4 @@
-namespace BeerFerment.Api.Models;
+namespace BrewMonitor.Api.Models;
 
 public class Tank
 {

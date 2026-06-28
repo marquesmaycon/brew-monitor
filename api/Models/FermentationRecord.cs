@@ -1,8 +1,8 @@
-using BeerFerment.Api.Enums;
+using BrewMonitor.Api.Enums;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
-namespace BeerFerment.Api.Models;
+namespace BrewMonitor.Api.Models;
 
 public class FermentationRecord
 {

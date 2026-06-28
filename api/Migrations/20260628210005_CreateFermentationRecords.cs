@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace BeerFerment.Api.Migrations
+namespace BrewMonitor.Api.Migrations
 {
     /// <inheritdoc />
     public partial class CreateFermentationRecords : Migration

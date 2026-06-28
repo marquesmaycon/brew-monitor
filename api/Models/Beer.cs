@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace BeerFerment.Api.Models;
+namespace BrewMonitor.Api.Models;
 
 public class Beer
 {

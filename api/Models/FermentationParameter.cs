@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
-namespace BeerFerment.Api.Models;
+namespace BrewMonitor.Api.Models;
 
 public class FermentationParameter
 {

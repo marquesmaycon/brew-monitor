@@ -1,6 +1,6 @@
-using BeerFerment.Api.Models;
+using BrewMonitor.Api.Models;
 
-namespace BeerFerment.Api.Services;
+namespace BrewMonitor.Api.Services;
 
 public interface IFermentationRecordService
 {

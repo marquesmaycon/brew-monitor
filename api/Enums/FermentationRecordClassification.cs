@@ -1,4 +1,4 @@
-namespace BeerFerment.Api.Enums;
+namespace BrewMonitor.Api.Enums;
 
 public enum FermentationRecordClassification
 {

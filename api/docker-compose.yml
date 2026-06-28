@@ -1,16 +1,16 @@
 services:
   postgres:
     image: postgres:16
-    container_name: beerferment-postgres
+    container_name: brewmonitor-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: beerferment
-      POSTGRES_USER: beerferment
-      POSTGRES_PASSWORD: beerferment123
+      POSTGRES_DB: brewmonitor
+      POSTGRES_USER: brewmonitor
+      POSTGRES_PASSWORD: brewmonitor123
     ports:
       - "5432:5432"
     volumes:
-      - beerferment_postgres_data:/var/lib/postgresql/data
+      - brewmonitor_postgres_data:/var/lib/postgresql/data
 
 volumes:
-  beerferment_postgres_data:
+  brewmonitor_postgres_data:

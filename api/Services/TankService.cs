@@ -1,8 +1,8 @@
-using BeerFerment.Api.Data;
-using BeerFerment.Api.Models;
+using BrewMonitor.Api.Data;
+using BrewMonitor.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BeerFerment.Api.Services;
+namespace BrewMonitor.Api.Services;
 
 public class TankService(AppDbContext context) : ITankService
 {

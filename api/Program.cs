@@ -14,6 +14,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         .UseSnakeCaseNamingConvention()
 );
 builder.Services.AddScoped<IBeerService, BeerService>();
+builder.Services.AddScoped<ITankService, TankService>();
 
 var app = builder.Build();
 

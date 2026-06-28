@@ -8,14 +8,14 @@ public class TankService(AppDbContext context) : ITankService
 {
   public Task<List<Tank>> GetAllAsync()
   {
-    return context.Tank
+    return context.Tanks
       .OrderBy(tank => tank.Name)
       .ToListAsync();
   }
 
   public Task<Tank?> GetByIdAsync(Guid id)
   {
-    return context.Tank.FindAsync(id).AsTask();
+    return context.Tanks.FindAsync(id).AsTask();
   }
 
   public async Task<Tank> CreateAsync(Tank tank)
@@ -24,7 +24,7 @@ public class TankService(AppDbContext context) : ITankService
     tank.CreatedAt = DateTime.UtcNow;
     tank.UpdatedAt = null;
 
-    context.Tank.Add(tank);
+    context.Tanks.Add(tank);
     await context.SaveChangesAsync();
 
     return tank;
@@ -32,7 +32,7 @@ public class TankService(AppDbContext context) : ITankService
 
   public async Task<Tank?> UpdateAsync(Guid id, Tank tank)
   {
-    var existingTank = await context.Tank.FindAsync(id);
+    var existingTank = await context.Tanks.FindAsync(id);
 
     if (existingTank is null)
     {
@@ -50,14 +50,14 @@ public class TankService(AppDbContext context) : ITankService
 
   public async Task<bool> DeleteAsync(Guid id)
   {
-    var tank = await context.Tank.FindAsync(id);
+    var tank = await context.Tanks.FindAsync(id);
 
     if (tank is null)
     {
       return false;
     }
 
-    context.Tank.Remove(tank);
+    context.Tanks.Remove(tank);
     await context.SaveChangesAsync();
 
     return true;

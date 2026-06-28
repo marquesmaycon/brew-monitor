@@ -48,9 +48,9 @@ namespace BeerFerment.Api.Migrations
                         .HasColumnName("updated_at");
 
                     b.HasKey("Id")
-                        .HasName("pk_beer");
+                        .HasName("pk_beers");
 
-                    b.ToTable("beer", (string)null);
+                    b.ToTable("beers", (string)null);
                 });
 
             modelBuilder.Entity("BeerFerment.Api.Models.Tank", b =>
@@ -78,9 +78,9 @@ namespace BeerFerment.Api.Migrations
                         .HasColumnName("updated_at");
 
                     b.HasKey("Id")
-                        .HasName("pk_tank");
+                        .HasName("pk_tanks");
 
-                    b.ToTable("tank", (string)null);
+                    b.ToTable("tanks", (string)null);
                 });
 #pragma warning restore 612, 618
         }

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BeerFerment.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260628193809_CreateTankTable")]
-    partial class CreateTankTable
+    [Migration("20260628195026_CreateInitialTables")]
+    partial class CreateInitialTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,9 +51,9 @@ namespace BeerFerment.Api.Migrations
                         .HasColumnName("updated_at");
 
                     b.HasKey("Id")
-                        .HasName("pk_beer");
+                        .HasName("pk_beers");
 
-                    b.ToTable("beer", (string)null);
+                    b.ToTable("beers", (string)null);
                 });
 
             modelBuilder.Entity("BeerFerment.Api.Models.Tank", b =>
@@ -81,9 +81,9 @@ namespace BeerFerment.Api.Migrations
                         .HasColumnName("updated_at");
 
                     b.HasKey("Id")
-                        .HasName("pk_tank");
+                        .HasName("pk_tanks");
 
-                    b.ToTable("tank", (string)null);
+                    b.ToTable("tanks", (string)null);
                 });
 #pragma warning restore 612, 618
         }

@@ -62,4 +62,105 @@ public class BeersController(IBeerService beerService) : ControllerBase
 
     return NoContent();
   }
+
+  [HttpGet("{beerId:guid}/fermentation-parameters")]
+  public async Task<ActionResult<FermentationParameter>> GetFermentationParameter(Guid beerId)
+  {
+    if (!await beerService.ExistsAsync(beerId))
+    {
+      return NotFound();
+    }
+
+    var parameter = await beerService.GetFermentationParameterAsync(beerId);
+
+    if (parameter is null)
+    {
+      return NotFound();
+    }
+
+    return Ok(parameter);
+  }
+
+  [HttpPost("{beerId:guid}/fermentation-parameters")]
+  public async Task<ActionResult<FermentationParameter>> CreateFermentationParameter(
+    Guid beerId,
+    FermentationParameter parameter
+  )
+  {
+    if (!await beerService.ExistsAsync(beerId))
+    {
+      return NotFound();
+    }
+
+    var existingParameter = await beerService.GetFermentationParameterAsync(beerId);
+
+    if (existingParameter is not null)
+    {
+      return Conflict("Fermentation parameters already exist for this beer.");
+    }
+
+    if (!HasValidRanges(parameter))
+    {
+      return BadRequest("Minimum values must be less than or equal to maximum values.");
+    }
+
+    var createdParameter = await beerService.CreateFermentationParameterAsync(beerId, parameter);
+
+    return CreatedAtAction(
+      nameof(GetFermentationParameter),
+      new { beerId = createdParameter.BeerId },
+      createdParameter
+    );
+  }
+
+  [HttpPut("{beerId:guid}/fermentation-parameters")]
+  public async Task<ActionResult<FermentationParameter>> UpdateFermentationParameter(
+    Guid beerId,
+    FermentationParameter parameter
+  )
+  {
+    if (!await beerService.ExistsAsync(beerId))
+    {
+      return NotFound();
+    }
+
+    if (!HasValidRanges(parameter))
+    {
+      return BadRequest("Minimum values must be less than or equal to maximum values.");
+    }
+
+    var updatedParameter = await beerService.UpdateFermentationParameterAsync(beerId, parameter);
+
+    if (updatedParameter is null)
+    {
+      return NotFound();
+    }
+
+    return Ok(updatedParameter);
+  }
+
+  [HttpDelete("{beerId:guid}/fermentation-parameters")]
+  public async Task<IActionResult> DeleteFermentationParameter(Guid beerId)
+  {
+    if (!await beerService.ExistsAsync(beerId))
+    {
+      return NotFound();
+    }
+
+    var deleted = await beerService.DeleteFermentationParameterAsync(beerId);
+
+    if (!deleted)
+    {
+      return NotFound();
+    }
+
+    return NoContent();
+  }
+
+  private static bool HasValidRanges(FermentationParameter parameter)
+  {
+    return parameter.MinTemperature <= parameter.MaxTemperature
+      && parameter.MinPh <= parameter.MaxPh
+      && parameter.MinExtract <= parameter.MaxExtract;
+  }
 }

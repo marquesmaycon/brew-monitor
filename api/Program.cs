@@ -1,4 +1,5 @@
 using BeerFerment.Api.Data;
+using BeerFerment.Api.Data.Seed;
 using BeerFerment.Api.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
@@ -25,6 +26,12 @@ builder.Services.AddScoped<ITankService, TankService>();
 builder.Services.AddScoped<IFermentationRecordService, FermentationRecordService>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await DatabaseSeeder.SeedAsync(context);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

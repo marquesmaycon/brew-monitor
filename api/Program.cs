@@ -1,4 +1,4 @@
-using ArBrain.Api.Data;
+using BeerFerment.Api.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

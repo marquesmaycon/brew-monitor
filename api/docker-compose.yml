@@ -1,16 +1,16 @@
 services:
   postgres:
     image: postgres:16
-    container_name: arbrain-postgres
+    container_name: beerferment-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: arbrain_ferment
-      POSTGRES_USER: arbrain
-      POSTGRES_PASSWORD: arbrain123
+      POSTGRES_DB: beerferment
+      POSTGRES_USER: beerferment
+      POSTGRES_PASSWORD: beerferment123
     ports:
       - "5432:5432"
     volumes:
-      - arbrain_postgres_data:/var/lib/postgresql/data
+      - beerferment_postgres_data:/var/lib/postgresql/data
 
 volumes:
-  arbrain_postgres_data:
+  beerferment_postgres_data:

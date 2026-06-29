@@ -16,15 +16,12 @@ import {
 } from './requests'
 
 export const beerKeys = {
-  all: ['beers'] as const,
-  lists: function () {
-    return [...beerKeys.all, 'list'] as const
-  },
-  details: function () {
-    return [...beerKeys.all, 'detail'] as const
+  root: ['beers'] as const,
+  list: function () {
+    return [...beerKeys.root, 'list'] as const
   },
   detail: function (id: string) {
-    return [...beerKeys.details(), id] as const
+    return [...beerKeys.root, id] as const
   },
   fermentationParameter: function (beerId: string) {
     return [...beerKeys.detail(beerId), 'fermentation-parameter'] as const
@@ -33,7 +30,7 @@ export const beerKeys = {
 
 export function listBeersOptions() {
   return queryOptions({
-    queryKey: beerKeys.lists(),
+    queryKey: beerKeys.list(),
     queryFn: function () {
       return listBeers()
     },

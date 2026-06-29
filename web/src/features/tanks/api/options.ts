@@ -11,21 +11,18 @@ import {
 } from './requests'
 
 export const tankKeys = {
-  all: ['tanks'] as const,
-  lists: function () {
-    return [...tankKeys.all, 'list'] as const
-  },
-  details: function () {
-    return [...tankKeys.all, 'detail'] as const
+  root: ['tanks'] as const,
+  list: function () {
+    return [...tankKeys.root, 'list'] as const
   },
   detail: function (id: string) {
-    return [...tankKeys.details(), id] as const
+    return [...tankKeys.root, id] as const
   },
 }
 
 export function listTanksOptions() {
   return queryOptions({
-    queryKey: tankKeys.lists(),
+    queryKey: tankKeys.list(),
     queryFn: function () {
       return listTanks()
     },

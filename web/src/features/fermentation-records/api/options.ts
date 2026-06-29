@@ -11,21 +11,18 @@ import {
 } from './requests'
 
 export const fermentationRecordKeys = {
-  all: ['fermentation-records'] as const,
-  lists: function () {
-    return [...fermentationRecordKeys.all, 'list'] as const
-  },
-  details: function () {
-    return [...fermentationRecordKeys.all, 'detail'] as const
+  root: ['fermentation-records'] as const,
+  list: function () {
+    return [...fermentationRecordKeys.root, 'list'] as const
   },
   detail: function (id: string) {
-    return [...fermentationRecordKeys.details(), id] as const
+    return [...fermentationRecordKeys.root, id] as const
   },
 }
 
 export function listFermentationRecordsOptions() {
   return queryOptions({
-    queryKey: fermentationRecordKeys.lists(),
+    queryKey: fermentationRecordKeys.list(),
     queryFn: function () {
       return listFermentationRecords()
     },

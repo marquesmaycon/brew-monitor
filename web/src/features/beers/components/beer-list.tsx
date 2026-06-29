@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { Link } from '@tanstack/react-router'
 import type {
   ColumnFiltersState,
   PaginationState,
@@ -11,7 +12,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { ArrowUpDown } from 'lucide-react'
+import { ArrowUpDown, Pencil } from 'lucide-react'
 import { useState } from 'react'
 
 import { DataTable } from '#/components/data-table'
@@ -73,41 +74,90 @@ const columnHelper = createColumnHelper<Beer>()
 const columns = [
   columnHelper.accessor('name', {
     header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      >
-        Product
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
+      <div className="flex items-center gap-2">
+        Nome
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          <ArrowUpDown className="" />
+        </Button>
+      </div>
     ),
     cell: (info) => info.row.original.name,
   }),
   columnHelper.accessor('style', {
     header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      >
-        Style
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
+      <div className="flex items-center gap-2">
+        Estilo
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          <ArrowUpDown className="" />
+        </Button>
+      </div>
     ),
     cell: (info) => info.row.original.style,
   }),
   columnHelper.accessor('createdAt', {
     header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      >
-        Created At
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
+      <div className="flex items-center gap-2">
+        Criado em
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          <ArrowUpDown className="" />
+        </Button>
+      </div>
     ),
     cell: ({ row }) => {
       const isoDate = row.original.createdAt
       return isoDate ? new Date(isoDate).toLocaleDateString() : null
     },
+  }),
+  columnHelper.display({
+    id: 'parameters',
+    header: () => 'Parâmetros',
+    cell: ({ row }) => (
+      <div>
+        <Button asChild variant="ghost" size="icon" aria-label="Editar cerveja">
+          <Link
+            to="/beers/$beerId/parameters"
+            params={{ beerId: row.original.id }}
+            title="Editar cerveja"
+          >
+            <Pencil />
+            <span className="sr-only">Editar cerveja</span>
+          </Link>
+        </Button>
+      </div>
+    ),
+    enableSorting: false,
+    enableColumnFilter: false,
+  }),
+  columnHelper.display({
+    id: 'actions',
+    header: () => <div className="text-right">Actions</div>,
+    cell: ({ row }) => (
+      <div className="flex justify-end">
+        <Button asChild variant="ghost" size="icon" aria-label="Editar cerveja">
+          <Link
+            to="/beers/$beerId/edit"
+            params={{ beerId: row.original.id }}
+            title="Editar cerveja"
+          >
+            <Pencil />
+            <span className="sr-only">Editar cerveja</span>
+          </Link>
+        </Button>
+      </div>
+    ),
+    enableSorting: false,
+    enableColumnFilter: false,
   }),
 ]

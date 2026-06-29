@@ -11,7 +11,7 @@ type InputFieldProps = ComponentProps<typeof Input> & {
 }
 
 export function InputField({ label, mask, ...props }: InputFieldProps) {
-  const field = useFieldContext<string>()
+  const field = useFieldContext<number | string>()
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
 
   return (
@@ -22,7 +22,9 @@ export function InputField({ label, mask, ...props }: InputFieldProps) {
         name={field.name}
         value={field.state.value}
         onBlur={field.handleBlur}
-        onChange={({ target: { value } }) => field.handleChange(mask ? mask(value) : value)}
+        onChange={({ target: { value } }) =>
+          field.handleChange(mask ? mask(value) : value)
+        }
         aria-invalid={isInvalid}
         {...props}
       />

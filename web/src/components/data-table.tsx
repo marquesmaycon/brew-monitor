@@ -8,6 +8,7 @@ import {
   Loader2,
 } from 'lucide-react'
 
+import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
@@ -16,7 +17,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 import {
@@ -142,9 +142,9 @@ export function DataTable<TData>({ table, isFetching }: DataTableProps<TData>) {
           onValueChange={(val) => table.setPageSize(Number(val))}
         >
           <SelectTrigger className="min-w-40 flex-1 sm:w-52 sm:flex-none">
-            <SelectValue placeholder="Per page" />
+            <SelectValue placeholder="Por página" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent position="item-aligned">
             {['5', '10', '20', '50'].map((pageSize) => (
               <SelectItem key={pageSize} value={pageSize}>
                 Mostrar {pageSize}

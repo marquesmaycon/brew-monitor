@@ -1,12 +1,19 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-import { getDashboardMetricsOptions } from '#/features/dashboard/api/options'
+import {
+  getDashboardMetricsOptions,
+  getFermentationHistoryOptions,
+} from '#/features/dashboard/api/options'
 import { DashboardCards } from '#/features/dashboard/components/dashboard-cards'
+import { FermentationHistoryChart } from '#/features/dashboard/components/fermentation-history-chart'
 
 export const Route = createFileRoute('/')({
   component: App,
   loader: ({ context }) =>
-    context.queryClient.ensureQueryData(getDashboardMetricsOptions()),
+    Promise.all([
+      context.queryClient.ensureQueryData(getDashboardMetricsOptions()),
+      context.queryClient.ensureQueryData(getFermentationHistoryOptions()),
+    ]),
 })
 
 function App() {
@@ -22,6 +29,7 @@ function App() {
       </div>
 
       <DashboardCards />
+      <FermentationHistoryChart />
     </section>
   )
 }

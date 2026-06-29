@@ -1,4 +1,5 @@
 using BrewMonitor.Api.Data;
+using BrewMonitor.Api.DTOs.Dashboard;
 using BrewMonitor.Api.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +34,62 @@ public class DashboardController(AppDbContext context) : ControllerBase
         recordsByClassification,
         FermentationRecordClassification.OutOfStandard
       )
+    });
+  }
+
+  [HttpGet("fermentation-history")]
+  public async Task<ActionResult<FermentationHistoryResponse>> GetFermentationHistory(
+    [FromQuery] string? batchNumber = null
+  )
+  {
+    var batches = await context.FermentationRecords
+      .GroupBy(record => new
+      {
+        record.BatchNumber,
+        record.Beer.Name,
+        record.Beer.Style
+      })
+      .Select(group => new FermentationHistoryBatchResponse
+      {
+        BatchNumber = group.Key.BatchNumber,
+        BeerName = group.Key.Name,
+        BeerStyle = group.Key.Style,
+        LastRegisteredAt = group.Max(record => record.RegisteredAt)
+      })
+      .OrderByDescending(batch => batch.LastRegisteredAt)
+      .ToListAsync();
+
+    var selectedBatchNumber = string.IsNullOrWhiteSpace(batchNumber)
+      ? batches.FirstOrDefault()?.BatchNumber
+      : batchNumber.Trim();
+
+    if (
+      selectedBatchNumber is not null
+      && !batches.Any(batch => batch.BatchNumber == selectedBatchNumber)
+    )
+    {
+      return NotFound("Batch does not exist.");
+    }
+
+    var data = selectedBatchNumber is null
+      ? []
+      : await context.FermentationRecords
+        .Where(record => record.BatchNumber == selectedBatchNumber)
+        .OrderBy(record => record.RegisteredAt)
+        .Select(record => new FermentationHistoryPointResponse
+        {
+          RegisteredAt = record.RegisteredAt,
+          Temperature = record.Temperature,
+          Ph = record.Ph,
+          Extract = record.Extract
+        })
+        .ToListAsync();
+
+    return Ok(new FermentationHistoryResponse
+    {
+      SelectedBatchNumber = selectedBatchNumber,
+      Batches = batches,
+      Data = data
     });
   }
 

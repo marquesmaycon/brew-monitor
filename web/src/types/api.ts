@@ -10,6 +10,13 @@ export type Paginated<T> = {
   }
 }
 
+export type DashboardMetrics = {
+  totalFermentationRecords: number
+  withinStandardRecords: number
+  attentionRecords: number
+  outOfStandardRecords: number
+}
+
 export type EntityTimestamps = {
   createdAt: string
   updatedAt: string | null

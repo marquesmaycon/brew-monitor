@@ -6,11 +6,28 @@ namespace BrewMonitor.Api.Services;
 
 public class BeerService(AppDbContext context) : IBeerService
 {
-  public Task<List<Beer>> GetAllAsync()
+  public async Task<PaginatedResult<Beer>> GetAllAsync(int page, int limit)
   {
-    return context.Beers
-      .OrderBy(beer => beer.Name)
+    page = Math.Max(page, 1);
+    limit = Math.Max(limit, 1);
+
+    var query = context.Beers
+      .OrderBy(beer => beer.Name);
+
+    var total = await query.CountAsync();
+    var beers = await query
+      .Skip((page - 1) * limit)
+      .Take(limit)
       .ToListAsync();
+
+    return new PaginatedResult<Beer>
+    {
+      Data = beers,
+      Meta = new PaginationMeta
+      {
+        Total = total
+      }
+    };
   }
 
   public Task<Beer?> GetByIdAsync(Guid id)

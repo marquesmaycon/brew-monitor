@@ -9,9 +9,12 @@ namespace BrewMonitor.Api.Controllers;
 public class BeersController(IBeerService beerService) : ControllerBase
 {
   [HttpGet]
-  public async Task<ActionResult<List<Beer>>> GetAll()
+  public async Task<ActionResult<PaginatedResult<Beer>>> GetAll(
+    [FromQuery] int page = 1,
+    [FromQuery] int limit = 10
+  )
   {
-    var beers = await beerService.GetAllAsync();
+    var beers = await beerService.GetAllAsync(page, limit);
 
     return Ok(beers);
   }

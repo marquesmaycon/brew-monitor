@@ -17,9 +17,6 @@ import {
 
 export const beerKeys = {
   root: ['beers'] as const,
-  list: function () {
-    return [...beerKeys.root, 'list'] as const
-  },
   detail: function (id: string) {
     return [...beerKeys.root, id] as const
   },
@@ -30,7 +27,7 @@ export const beerKeys = {
 
 export function listBeersOptions() {
   return queryOptions({
-    queryKey: beerKeys.list(),
+    queryKey: beerKeys.root,
     queryFn: function () {
       return listBeers()
     },

@@ -13,7 +13,8 @@ const beerDefaultValues: BeerSchema = {
   style: '',
 }
 
-export const beerFormOptions = formOptions({
-  defaultValues: beerDefaultValues,
-  validators: { onSubmit: beerSchema },
-})
+export const beerFormOptions = (beer?: BeerSchema) =>
+  formOptions({
+    defaultValues: beer ?? beerDefaultValues,
+    validators: { onSubmit: beerSchema },
+  })

@@ -24,6 +24,13 @@ export default function Header() {
           >
             Home
           </Link>
+          <Link
+            to="/beers"
+            className="nav-link"
+            activeProps={{ className: 'nav-link is-active' }}
+          >
+            Cervejas
+          </Link>
           <a
             href="https://tanstack.com/start/latest/docs/framework/react/overview"
             className="nav-link"

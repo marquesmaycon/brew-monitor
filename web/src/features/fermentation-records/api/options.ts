@@ -1,6 +1,10 @@
-import { mutationOptions, queryOptions } from '@tanstack/react-query'
+import {
+  keepPreviousData,
+  mutationOptions,
+  queryOptions,
+} from '@tanstack/react-query'
 
-import type { FermentationRecordPayload } from '@/types/api'
+import type { FermentationRecordPayload, Pagination } from '@/types/api'
 
 import {
   createFermentationRecord,
@@ -12,20 +16,23 @@ import {
 
 export const fermentationRecordKeys = {
   root: ['fermentation-records'] as const,
-  list: function () {
-    return [...fermentationRecordKeys.root, 'list'] as const
+  list: function (pagination: Pagination) {
+    return [...fermentationRecordKeys.root, pagination] as const
   },
   detail: function (id: string) {
     return [...fermentationRecordKeys.root, id] as const
   },
 }
 
-export function listFermentationRecordsOptions() {
+export function listFermentationRecordsOptions(
+  pagination: Pagination = { limit: 20, page: 1 },
+) {
   return queryOptions({
-    queryKey: fermentationRecordKeys.list(),
+    queryKey: fermentationRecordKeys.list(pagination),
     queryFn: function () {
-      return listFermentationRecords()
+      return listFermentationRecords(pagination)
     },
+    placeholderData: keepPreviousData,
   })
 }
 

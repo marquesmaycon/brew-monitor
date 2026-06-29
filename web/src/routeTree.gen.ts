@@ -11,10 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TanksIndexRouteImport } from './routes/tanks/index'
+import { Route as FermentationRecordsIndexRouteImport } from './routes/fermentation-records/index'
 import { Route as BeersIndexRouteImport } from './routes/beers/index'
 import { Route as TanksNewRouteImport } from './routes/tanks/new'
+import { Route as FermentationRecordsNewRouteImport } from './routes/fermentation-records/new'
 import { Route as BeersNewRouteImport } from './routes/beers/new'
 import { Route as TanksTankIdEditRouteImport } from './routes/tanks/$tankId/edit'
+import { Route as FermentationRecordsRecordIdEditRouteImport } from './routes/fermentation-records/$recordId/edit'
 import { Route as BeersBeerIdParametersRouteImport } from './routes/beers/$beerId/parameters'
 import { Route as BeersBeerIdEditRouteImport } from './routes/beers/$beerId/edit'
 
@@ -28,6 +31,12 @@ const TanksIndexRoute = TanksIndexRouteImport.update({
   path: '/tanks/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FermentationRecordsIndexRoute =
+  FermentationRecordsIndexRouteImport.update({
+    id: '/fermentation-records/',
+    path: '/fermentation-records/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const BeersIndexRoute = BeersIndexRouteImport.update({
   id: '/beers/',
   path: '/beers/',
@@ -36,6 +45,11 @@ const BeersIndexRoute = BeersIndexRouteImport.update({
 const TanksNewRoute = TanksNewRouteImport.update({
   id: '/tanks/new',
   path: '/tanks/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FermentationRecordsNewRoute = FermentationRecordsNewRouteImport.update({
+  id: '/fermentation-records/new',
+  path: '/fermentation-records/new',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BeersNewRoute = BeersNewRouteImport.update({
@@ -48,6 +62,12 @@ const TanksTankIdEditRoute = TanksTankIdEditRouteImport.update({
   path: '/tanks/$tankId/edit',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FermentationRecordsRecordIdEditRoute =
+  FermentationRecordsRecordIdEditRouteImport.update({
+    id: '/fermentation-records/$recordId/edit',
+    path: '/fermentation-records/$recordId/edit',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const BeersBeerIdParametersRoute = BeersBeerIdParametersRouteImport.update({
   id: '/beers/$beerId/parameters',
   path: '/beers/$beerId/parameters',
@@ -62,32 +82,41 @@ const BeersBeerIdEditRoute = BeersBeerIdEditRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/beers/new': typeof BeersNewRoute
+  '/fermentation-records/new': typeof FermentationRecordsNewRoute
   '/tanks/new': typeof TanksNewRoute
   '/beers/': typeof BeersIndexRoute
+  '/fermentation-records/': typeof FermentationRecordsIndexRoute
   '/tanks/': typeof TanksIndexRoute
   '/beers/$beerId/edit': typeof BeersBeerIdEditRoute
   '/beers/$beerId/parameters': typeof BeersBeerIdParametersRoute
+  '/fermentation-records/$recordId/edit': typeof FermentationRecordsRecordIdEditRoute
   '/tanks/$tankId/edit': typeof TanksTankIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/beers/new': typeof BeersNewRoute
+  '/fermentation-records/new': typeof FermentationRecordsNewRoute
   '/tanks/new': typeof TanksNewRoute
   '/beers': typeof BeersIndexRoute
+  '/fermentation-records': typeof FermentationRecordsIndexRoute
   '/tanks': typeof TanksIndexRoute
   '/beers/$beerId/edit': typeof BeersBeerIdEditRoute
   '/beers/$beerId/parameters': typeof BeersBeerIdParametersRoute
+  '/fermentation-records/$recordId/edit': typeof FermentationRecordsRecordIdEditRoute
   '/tanks/$tankId/edit': typeof TanksTankIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/beers/new': typeof BeersNewRoute
+  '/fermentation-records/new': typeof FermentationRecordsNewRoute
   '/tanks/new': typeof TanksNewRoute
   '/beers/': typeof BeersIndexRoute
+  '/fermentation-records/': typeof FermentationRecordsIndexRoute
   '/tanks/': typeof TanksIndexRoute
   '/beers/$beerId/edit': typeof BeersBeerIdEditRoute
   '/beers/$beerId/parameters': typeof BeersBeerIdParametersRoute
+  '/fermentation-records/$recordId/edit': typeof FermentationRecordsRecordIdEditRoute
   '/tanks/$tankId/edit': typeof TanksTankIdEditRoute
 }
 export interface FileRouteTypes {
@@ -95,42 +124,54 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/beers/new'
+    | '/fermentation-records/new'
     | '/tanks/new'
     | '/beers/'
+    | '/fermentation-records/'
     | '/tanks/'
     | '/beers/$beerId/edit'
     | '/beers/$beerId/parameters'
+    | '/fermentation-records/$recordId/edit'
     | '/tanks/$tankId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/beers/new'
+    | '/fermentation-records/new'
     | '/tanks/new'
     | '/beers'
+    | '/fermentation-records'
     | '/tanks'
     | '/beers/$beerId/edit'
     | '/beers/$beerId/parameters'
+    | '/fermentation-records/$recordId/edit'
     | '/tanks/$tankId/edit'
   id:
     | '__root__'
     | '/'
     | '/beers/new'
+    | '/fermentation-records/new'
     | '/tanks/new'
     | '/beers/'
+    | '/fermentation-records/'
     | '/tanks/'
     | '/beers/$beerId/edit'
     | '/beers/$beerId/parameters'
+    | '/fermentation-records/$recordId/edit'
     | '/tanks/$tankId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BeersNewRoute: typeof BeersNewRoute
+  FermentationRecordsNewRoute: typeof FermentationRecordsNewRoute
   TanksNewRoute: typeof TanksNewRoute
   BeersIndexRoute: typeof BeersIndexRoute
+  FermentationRecordsIndexRoute: typeof FermentationRecordsIndexRoute
   TanksIndexRoute: typeof TanksIndexRoute
   BeersBeerIdEditRoute: typeof BeersBeerIdEditRoute
   BeersBeerIdParametersRoute: typeof BeersBeerIdParametersRoute
+  FermentationRecordsRecordIdEditRoute: typeof FermentationRecordsRecordIdEditRoute
   TanksTankIdEditRoute: typeof TanksTankIdEditRoute
 }
 
@@ -150,6 +191,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TanksIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/fermentation-records/': {
+      id: '/fermentation-records/'
+      path: '/fermentation-records'
+      fullPath: '/fermentation-records/'
+      preLoaderRoute: typeof FermentationRecordsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/beers/': {
       id: '/beers/'
       path: '/beers'
@@ -164,6 +212,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TanksNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/fermentation-records/new': {
+      id: '/fermentation-records/new'
+      path: '/fermentation-records/new'
+      fullPath: '/fermentation-records/new'
+      preLoaderRoute: typeof FermentationRecordsNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/beers/new': {
       id: '/beers/new'
       path: '/beers/new'
@@ -176,6 +231,13 @@ declare module '@tanstack/react-router' {
       path: '/tanks/$tankId/edit'
       fullPath: '/tanks/$tankId/edit'
       preLoaderRoute: typeof TanksTankIdEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fermentation-records/$recordId/edit': {
+      id: '/fermentation-records/$recordId/edit'
+      path: '/fermentation-records/$recordId/edit'
+      fullPath: '/fermentation-records/$recordId/edit'
+      preLoaderRoute: typeof FermentationRecordsRecordIdEditRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/beers/$beerId/parameters': {
@@ -198,11 +260,14 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BeersNewRoute: BeersNewRoute,
+  FermentationRecordsNewRoute: FermentationRecordsNewRoute,
   TanksNewRoute: TanksNewRoute,
   BeersIndexRoute: BeersIndexRoute,
+  FermentationRecordsIndexRoute: FermentationRecordsIndexRoute,
   TanksIndexRoute: TanksIndexRoute,
   BeersBeerIdEditRoute: BeersBeerIdEditRoute,
   BeersBeerIdParametersRoute: BeersBeerIdParametersRoute,
+  FermentationRecordsRecordIdEditRoute: FermentationRecordsRecordIdEditRoute,
   TanksTankIdEditRoute: TanksTankIdEditRoute,
 }
 export const routeTree = rootRouteImport

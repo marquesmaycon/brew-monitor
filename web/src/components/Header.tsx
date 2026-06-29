@@ -38,6 +38,13 @@ export default function Header() {
           >
             Tanques
           </Link>
+          <Link
+            to="/fermentation-records"
+            className="nav-link"
+            activeProps={{ className: 'nav-link is-active' }}
+          >
+            Fermentacao
+          </Link>
           <a
             href="https://tanstack.com/start/latest/docs/framework/react/overview"
             className="nav-link"

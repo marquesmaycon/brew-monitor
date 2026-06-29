@@ -2,12 +2,16 @@ import { api } from '@/lib/api'
 import type {
   FermentationRecord,
   FermentationRecordPayload,
+  Paginated,
+  Pagination,
 } from '@/types/api'
 
 const resource = 'fermentation-records'
 
-export function listFermentationRecords() {
-  return api.get(resource).json<Array<FermentationRecord>>()
+export function listFermentationRecords(pagination: Pagination) {
+  return api
+    .get(resource, { searchParams: pagination })
+    .json<Paginated<FermentationRecord>>()
 }
 
 export function getFermentationRecord(id: string) {

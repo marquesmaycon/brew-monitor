@@ -1,4 +1,5 @@
 using BrewMonitor.Api.Data;
+using BrewMonitor.Api.DTOs.Beers;
 using BrewMonitor.Api.DTOs.Common;
 using BrewMonitor.Api.DTOs.FermentationRecords;
 using BrewMonitor.Api.Enums;
@@ -30,11 +31,19 @@ public class FermentationRecordService(AppDbContext context) : IFermentationReco
         Id = record.Id,
         RegisteredAt = record.RegisteredAt,
         BeerId = record.BeerId,
-        BeerName = record.Beer.Name,
-        BeerStyle = record.Beer.Style,
+        Beer = new FermentationRecordBeerResponse
+        {
+          Id = record.Beer.Id,
+          Name = record.Beer.Name,
+          Style = record.Beer.Style,
+        },
         TankId = record.TankId,
-        TankName = record.Tank.Name,
-        TankCapacityLiters = record.Tank.CapacityLiters,
+        Tank = new FermentationRecordTankResponse
+        {
+          Id = record.Tank.Id,
+          Name = record.Tank.Name,
+          CapacityLiters = record.Tank.CapacityLiters,
+        },
         BatchNumber = record.BatchNumber,
         Temperature = record.Temperature,
         Ph = record.Ph,
@@ -65,11 +74,30 @@ public class FermentationRecordService(AppDbContext context) : IFermentationReco
         Id = record.Id,
         RegisteredAt = record.RegisteredAt,
         BeerId = record.BeerId,
-        BeerName = record.Beer.Name,
-        BeerStyle = record.Beer.Style,
+        Beer = new FermentationRecordBeerResponse
+        {
+          Id = record.Beer.Id,
+          Name = record.Beer.Name,
+          Style = record.Beer.Style,
+          FermentationParameter = record.Beer.FermentationParameter == null
+            ? null
+            : new BeerFermentationParameterResponse
+            {
+              MinTemperature = record.Beer.FermentationParameter.MinTemperature,
+              MaxTemperature = record.Beer.FermentationParameter.MaxTemperature,
+              MinPh = record.Beer.FermentationParameter.MinPh,
+              MaxPh = record.Beer.FermentationParameter.MaxPh,
+              MinExtract = record.Beer.FermentationParameter.MinExtract,
+              MaxExtract = record.Beer.FermentationParameter.MaxExtract
+            }
+        },
         TankId = record.TankId,
-        TankName = record.Tank.Name,
-        TankCapacityLiters = record.Tank.CapacityLiters,
+        Tank = new FermentationRecordTankResponse
+        {
+          Id = record.Tank.Id,
+          Name = record.Tank.Name,
+          CapacityLiters = record.Tank.CapacityLiters
+        },
         BatchNumber = record.BatchNumber,
         Temperature = record.Temperature,
         Ph = record.Ph,

@@ -1,4 +1,6 @@
 using BrewMonitor.Api.Data;
+using BrewMonitor.Api.DTOs.Common;
+using BrewMonitor.Api.DTOs.FermentationRecords;
 using BrewMonitor.Api.Enums;
 using BrewMonitor.Api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -11,16 +13,73 @@ public class FermentationRecordService(AppDbContext context) : IFermentationReco
   private const decimal PhTolerance = 0.2m;
   private const decimal ExtractTolerancePercentage = 0.05m;
 
-  public Task<List<FermentationRecord>> GetAllAsync()
+  public async Task<PaginatedResult<FermentationRecordResponse>> GetAllAsync(int page, int limit)
   {
-    return context.FermentationRecords
-      .OrderByDescending(record => record.RegisteredAt)
+    page = Math.Max(page, 1);
+    limit = Math.Max(limit, 1);
+
+    var query = context.FermentationRecords
+      .OrderByDescending(record => record.RegisteredAt);
+
+    var total = await query.CountAsync();
+    var records = await query
+      .Skip((page - 1) * limit)
+      .Take(limit)
+      .Select(record => new FermentationRecordResponse
+      {
+        Id = record.Id,
+        RegisteredAt = record.RegisteredAt,
+        BeerId = record.BeerId,
+        BeerName = record.Beer.Name,
+        BeerStyle = record.Beer.Style,
+        TankId = record.TankId,
+        TankName = record.Tank.Name,
+        TankCapacityLiters = record.Tank.CapacityLiters,
+        BatchNumber = record.BatchNumber,
+        Temperature = record.Temperature,
+        Ph = record.Ph,
+        Extract = record.Extract,
+        Notes = record.Notes,
+        Classification = record.Classification,
+        CreatedAt = record.CreatedAt,
+        UpdatedAt = record.UpdatedAt
+      })
       .ToListAsync();
+
+    return new PaginatedResult<FermentationRecordResponse>
+    {
+      Data = records,
+      Meta = new PaginationMeta
+      {
+        Total = total
+      }
+    };
   }
 
-  public Task<FermentationRecord?> GetByIdAsync(Guid id)
+  public Task<FermentationRecordResponse?> GetByIdAsync(Guid id)
   {
-    return context.FermentationRecords.FindAsync(id).AsTask();
+    return context.FermentationRecords
+      .Where(record => record.Id == id)
+      .Select(record => new FermentationRecordResponse
+      {
+        Id = record.Id,
+        RegisteredAt = record.RegisteredAt,
+        BeerId = record.BeerId,
+        BeerName = record.Beer.Name,
+        BeerStyle = record.Beer.Style,
+        TankId = record.TankId,
+        TankName = record.Tank.Name,
+        TankCapacityLiters = record.Tank.CapacityLiters,
+        BatchNumber = record.BatchNumber,
+        Temperature = record.Temperature,
+        Ph = record.Ph,
+        Extract = record.Extract,
+        Notes = record.Notes,
+        Classification = record.Classification,
+        CreatedAt = record.CreatedAt,
+        UpdatedAt = record.UpdatedAt
+      })
+      .FirstOrDefaultAsync();
   }
 
   public async Task<FermentationRecord> CreateAsync(FermentationRecord record)

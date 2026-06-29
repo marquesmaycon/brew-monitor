@@ -1,11 +1,13 @@
+using BrewMonitor.Api.DTOs.Common;
+using BrewMonitor.Api.DTOs.FermentationRecords;
 using BrewMonitor.Api.Models;
 
 namespace BrewMonitor.Api.Services;
 
 public interface IFermentationRecordService
 {
-  Task<List<FermentationRecord>> GetAllAsync();
-  Task<FermentationRecord?> GetByIdAsync(Guid id);
+  Task<PaginatedResult<FermentationRecordResponse>> GetAllAsync(int page, int limit);
+  Task<FermentationRecordResponse?> GetByIdAsync(Guid id);
   Task<FermentationRecord> CreateAsync(FermentationRecord record);
   Task<FermentationRecord?> UpdateAsync(Guid id, FermentationRecord record);
   Task<bool> DeleteAsync(Guid id);

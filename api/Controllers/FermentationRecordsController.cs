@@ -1,3 +1,5 @@
+using BrewMonitor.Api.DTOs.Common;
+using BrewMonitor.Api.DTOs.FermentationRecords;
 using BrewMonitor.Api.Models;
 using BrewMonitor.Api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -9,15 +11,18 @@ namespace BrewMonitor.Api.Controllers;
 public class FermentationRecordsController(IFermentationRecordService fermentationRecordService) : ControllerBase
 {
   [HttpGet]
-  public async Task<ActionResult<List<FermentationRecord>>> GetAll()
+  public async Task<ActionResult<PaginatedResult<FermentationRecordResponse>>> GetAll(
+    [FromQuery] int page = 1,
+    [FromQuery] int limit = 20
+  )
   {
-    var records = await fermentationRecordService.GetAllAsync();
+    var records = await fermentationRecordService.GetAllAsync(page, limit);
 
     return Ok(records);
   }
 
   [HttpGet("{id:guid}")]
-  public async Task<ActionResult<FermentationRecord>> GetById(Guid id)
+  public async Task<ActionResult<FermentationRecordResponse>> GetById(Guid id)
   {
     var record = await fermentationRecordService.GetByIdAsync(id);
 

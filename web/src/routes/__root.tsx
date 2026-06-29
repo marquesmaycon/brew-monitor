@@ -52,7 +52,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body className="container mx-auto min-h-screen font-sans wrap-anywhere antialiased">
         <Header />
-        <main className="">{children}</main>
+        <main className="px-4">{children}</main>
         <Footer />
         <Toaster richColors />
         <TanStackDevtools

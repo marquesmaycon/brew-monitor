@@ -10,23 +10,21 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import type { Beer } from '@/types/api'
+import type { Tank } from '@/types/api'
 
-type BeerCardProps = {
-  beer: Beer
+type TankCardProps = {
+  tank: Tank
 }
 
-export default function BeerCard({ beer }: BeerCardProps) {
+export default function TankCard({ tank }: TankCardProps) {
   return (
     <Card className="w-full lg:max-w-md">
       <CardHeader>
-        <CardTitle>Informações da cerveja</CardTitle>
-        <CardDescription>
-          Nome e estilo para identificação da cerveja
-        </CardDescription>
+        <CardTitle>Informacoes do tanque</CardTitle>
+        <CardDescription>Nome e capacidade em litros do tanque</CardDescription>
         <CardAction>
           <Button asChild variant="link" className="h-auto justify-start p-0">
-            <Link to="/beers/$beerId/edit" params={{ beerId: beer.id }}>
+            <Link to="/tanks/$tankId/edit" params={{ tankId: tank.id }}>
               Abrir <ArrowRight />
             </Link>
           </Button>
@@ -36,11 +34,11 @@ export default function BeerCard({ beer }: BeerCardProps) {
         <dl className="mt-5 grid gap-4 sm:grid-cols-2">
           <div>
             <dt className="text-muted-foreground">Nome</dt>
-            <dd className="font-medium">{beer.name}</dd>
+            <dd className="font-medium">{tank.name}</dd>
           </div>
           <div>
-            <dt className="text-muted-foreground">Estilo</dt>
-            <dd className="font-medium">{beer.style}</dd>
+            <dt className="text-muted-foreground">Capacidade</dt>
+            <dd className="font-medium">{tank.capacityLiters} L</dd>
           </div>
         </dl>
       </CardContent>

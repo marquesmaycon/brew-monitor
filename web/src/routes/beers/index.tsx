@@ -2,8 +2,8 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { Plus } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
-import { listBeersOptions } from '#/features/beers/api/options'
-import { BeerList } from '#/features/beers/components/beer-list'
+import { listBeersOptions } from '@/features/beers/api/options'
+import { BeerList } from '@/features/beers/components/beer-list'
 
 export const Route = createFileRoute('/beers/')({
   loader: ({ context }) =>

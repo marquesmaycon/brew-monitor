@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowLeftIcon } from 'lucide-react'
 
+import { Button } from '@/components/ui/button'
 import { BeerForm } from '@/features/beers/components/beer-form'
-import { Button } from '#/components/ui/button'
 
 export const Route = createFileRoute('/beers/new')({
   component: CreateBeerPage,

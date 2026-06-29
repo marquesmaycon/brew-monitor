@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { listBeersOptions } from '@/features/beers/api/options'
 import { getFermentationRecordOptions } from '@/features/fermentation-records/api/options'
 import { FermentationRecordForm } from '@/features/fermentation-records/components/fermentation-record-form'
+import { FermentationRecordSummary } from '@/features/fermentation-records/components/fermentation-record-summary'
 import { listTanksOptions } from '@/features/tanks/api/options'
 
 export const Route = createFileRoute('/fermentation-records/$recordId/edit')({
@@ -42,7 +43,10 @@ function EditFermentationRecordPage() {
         </p>
       </div>
 
-      <FermentationRecordForm record={record} />
+      <div className="flex flex-col items-start justify-between gap-8 lg:flex-row-reverse">
+        <FermentationRecordSummary record={record} />
+        <FermentationRecordForm record={record} />
+      </div>
     </div>
   )
 }

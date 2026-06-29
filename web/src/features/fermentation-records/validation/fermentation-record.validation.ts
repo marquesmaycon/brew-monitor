@@ -13,8 +13,8 @@ function toDatetimeLocalValue(value?: string) {
 
 export const fermentationRecordSchema = z.object({
   registeredAt: z.string().min(1),
-  beerId: z.string().uuid(),
-  tankId: z.string().uuid(),
+  beerId: z.guid(),
+  tankId: z.guid(),
   batchNumber: z.string().min(1),
   temperature: z.coerce.number<number>(),
   ph: z.coerce.number<number>().positive(),

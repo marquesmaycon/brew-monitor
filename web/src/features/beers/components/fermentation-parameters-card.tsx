@@ -6,7 +6,7 @@ import {
   ThermometerSnowflake,
 } from 'lucide-react'
 
-import { Button } from '#/components/ui/button'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardAction,
@@ -14,8 +14,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '#/components/ui/card'
-import type { Beer } from '#/types/api'
+} from '@/components/ui/card'
+import type { Beer } from '@/types/api'
 
 type FermentationParametersCardProps = {
   beer: Beer

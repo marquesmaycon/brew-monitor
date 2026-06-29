@@ -13,7 +13,6 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import {
-  ArrowUpDown,
   FlaskConical,
   Pipette,
   SquarePen,
@@ -21,10 +20,11 @@ import {
 } from 'lucide-react'
 import { useState } from 'react'
 
-import { DataTable } from '#/components/data-table'
-import { Button } from '#/components/ui/button'
-import { Input } from '#/components/ui/input'
-import type { Beer } from '#/types/api'
+import { DataTable } from '@/components/data-table'
+import { sortableHeader } from '@/components/table/sortable-header'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import type { Beer } from '@/types/api'
 
 import { listBeersOptions } from '../api/options'
 
@@ -79,48 +79,15 @@ const columnHelper = createColumnHelper<Beer>()
 
 const columns = [
   columnHelper.accessor('name', {
-    header: ({ column }) => (
-      <div className="flex items-center gap-2">
-        Nome
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          <ArrowUpDown className="" />
-        </Button>
-      </div>
-    ),
+    header: sortableHeader('Nome'),
     cell: (info) => info.row.original.name,
   }),
   columnHelper.accessor('style', {
-    header: ({ column }) => (
-      <div className="flex items-center gap-2">
-        Estilo
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          <ArrowUpDown className="" />
-        </Button>
-      </div>
-    ),
+    header: sortableHeader('Estilo'),
     cell: (info) => info.row.original.style,
   }),
   columnHelper.accessor('createdAt', {
-    header: ({ column }) => (
-      <div className="flex items-center gap-2">
-        Criado em
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          <ArrowUpDown className="" />
-        </Button>
-      </div>
-    ),
+    header: sortableHeader('Criado em'),
     cell: ({ row }) => {
       const isoDate = row.original.createdAt
       return isoDate ? new Date(isoDate).toLocaleDateString() : null

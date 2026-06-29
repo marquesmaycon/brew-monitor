@@ -1,0 +1,81 @@
+import { useFieldContext } from '@/hooks/form-context'
+
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from '../ui/combobox'
+import { Field, FieldError, FieldLabel } from '../ui/field'
+import { Item, ItemContent, ItemDescription, ItemTitle } from '../ui/item'
+
+type ComboboxFieldOption = {
+  label: string
+  value: string
+  description?: string
+}
+
+type ComboboxFieldProps = {
+  disabled?: boolean
+  label: string
+  options: Array<ComboboxFieldOption>
+  placeholder?: string
+}
+
+export function ComboboxField({
+  label,
+  options,
+  placeholder,
+  ...props
+}: ComboboxFieldProps) {
+  const field = useFieldContext<string>()
+  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+
+  return (
+    <Field data-invalid={isInvalid}>
+      <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
+      <Combobox
+        items={options.map((option) => option.value)}
+        value={field.state.value || null}
+        onValueChange={(value) => {
+          console.log(value)
+          field.handleChange(value ?? '')
+        }}
+        itemToStringLabel={(value) =>
+          options.find((option) => option.value === value)?.label ?? value
+        }
+        {...props}
+      >
+        <ComboboxInput
+          id={field.name}
+          name={field.name}
+          placeholder={placeholder}
+          className="w-full"
+          showClear
+          aria-invalid={isInvalid}
+          onBlur={field.handleBlur}
+        />
+        <ComboboxContent>
+          <ComboboxEmpty>Nenhum resultado encontrado.</ComboboxEmpty>
+          <ComboboxList>
+            {options.map((option) => (
+              <ComboboxItem key={option.value} value={option.value}>
+                <Item size="xs" className="p-0">
+                  <ItemContent>
+                    <ItemTitle className="whitespace-nowrap">
+                      {option.label}
+                    </ItemTitle>
+                    <ItemDescription>{option.description}</ItemDescription>
+                  </ItemContent>
+                </Item>
+              </ComboboxItem>
+            ))}
+          </ComboboxList>
+        </ComboboxContent>
+      </Combobox>
+      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+    </Field>
+  )
+}

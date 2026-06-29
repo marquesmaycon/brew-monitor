@@ -2,13 +2,13 @@ import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowLeftIcon } from 'lucide-react'
 
+import { Button } from '@/components/ui/button'
 import {
   getBeerFermentationParameterOptions,
   getBeerOptions,
 } from '@/features/beers/api/options'
 import BeerCard from '@/features/beers/components/beer-card'
 import { FermentationParametersForm } from '@/features/beers/components/fermentation-parameters-form'
-import { Button } from '#/components/ui/button'
 
 export const Route = createFileRoute('/beers/$beerId/parameters')({
   loader: ({ context, params }) =>

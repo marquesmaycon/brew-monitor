@@ -5,7 +5,7 @@ import { ArrowLeftIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { getBeerOptions } from '@/features/beers/api/options'
 import { BeerForm } from '@/features/beers/components/beer-form'
-import FermentationParametersCard from '#/features/beers/components/fermentation-parameters-card'
+import FermentationParametersCard from '@/features/beers/components/fermentation-parameters-card'
 
 export const Route = createFileRoute('/beers/$beerId/edit')({
   loader: ({ context, params }) =>

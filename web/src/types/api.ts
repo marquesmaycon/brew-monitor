@@ -65,11 +65,9 @@ export type FermentationRecord = EntityTimestamps & {
   id: string
   registeredAt: string
   beerId: string
-  beerName: string
-  beerStyle: string
+  beer: Beer
   tankId: string
-  tankName: string
-  tankCapacityLiters: number
+  tank: Tank
   batchNumber: string
   temperature: number
   ph: number

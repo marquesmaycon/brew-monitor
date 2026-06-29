@@ -17,10 +17,10 @@ function FermentationRecordsPage() {
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="font-heading text-3xl font-semibold tracking-normal">
-            Registros de fermentacao
+            Registros de fermentação
           </h1>
           <p className="text-muted-foreground mt-2 text-sm">
-            Acompanhe medicoes de lote por cerveja, tanque e classificacao.
+            Acompanhe medições de lote por cerveja, tanque e classificação.
           </p>
         </div>
         <Button asChild>

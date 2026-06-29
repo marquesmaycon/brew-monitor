@@ -1,8 +1,8 @@
 import { Link } from '@tanstack/react-router'
 
-import ThemeToggle from './ThemeToggle'
+import { ThemeToggler } from './theme-toggler'
 
-export default function Header() {
+export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b px-4 backdrop-blur-lg">
       <nav className="page-wrap flex flex-wrap items-center gap-x-3 gap-y-2 py-3 sm:py-4">
@@ -56,7 +56,7 @@ export default function Header() {
         </div>
 
         <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
-          <ThemeToggle />
+          <ThemeToggler />
         </div>
       </nav>
     </header>

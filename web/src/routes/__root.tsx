@@ -8,8 +8,8 @@ import {
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { Toaster } from 'sonner'
 
-import Footer from '../components/Footer'
-import Header from '../components/Header'
+import { Footer } from '../components/layout/footer'
+import { Header } from '../components/layout/header'
 import TanStackQueryDevtools from '../lib/tanstack-devtools'
 import appCss from '../styles.css?url'
 

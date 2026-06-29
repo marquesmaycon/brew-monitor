@@ -25,7 +25,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from './ui/select'
+} from '../ui/select'
 
 interface DataTableProps<TData> {
   table: TableType<TData>

@@ -15,7 +15,7 @@ import {
 import { SquarePen } from 'lucide-react'
 import { useState } from 'react'
 
-import { DataTable } from '@/components/data-table'
+import { DataTable } from '#/components/table/data-table'
 import { sortableHeader } from '@/components/table/sortable-header'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'

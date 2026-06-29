@@ -1,4 +1,5 @@
 using BrewMonitor.Api.Data;
+using BrewMonitor.Api.DTOs.Common;
 using BrewMonitor.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,11 +7,28 @@ namespace BrewMonitor.Api.Services;
 
 public class TankService(AppDbContext context) : ITankService
 {
-  public Task<List<Tank>> GetAllAsync()
+  public async Task<PaginatedResult<Tank>> GetAllAsync(int page, int limit)
   {
-    return context.Tanks
-      .OrderBy(tank => tank.Name)
+    page = Math.Max(page, 1);
+    limit = Math.Max(limit, 1);
+
+    var query = context.Tanks
+      .OrderBy(tank => tank.Name);
+
+    var total = await query.CountAsync();
+    var tanks = await query
+      .Skip((page - 1) * limit)
+      .Take(limit)
       .ToListAsync();
+
+    return new PaginatedResult<Tank>
+    {
+      Data = tanks,
+      Meta = new PaginationMeta
+      {
+        Total = total
+      }
+    };
   }
 
   public Task<Tank?> GetByIdAsync(Guid id)

@@ -13,7 +13,7 @@ public class BeersController(IBeerService beerService) : ControllerBase
   [HttpGet]
   public async Task<ActionResult<PaginatedResult<BeerResponse>>> GetAll(
     [FromQuery] int page = 1,
-    [FromQuery] int limit = 10
+    [FromQuery] int limit = 20
   )
   {
     var beers = await beerService.GetAllAsync(page, limit);

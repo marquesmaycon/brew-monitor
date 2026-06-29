@@ -1,3 +1,4 @@
+using BrewMonitor.Api.DTOs.Common;
 using BrewMonitor.Api.Models;
 using BrewMonitor.Api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -9,9 +10,12 @@ namespace BrewMonitor.Api.Controllers;
 public class TanksController(ITankService tankService) : ControllerBase
 {
   [HttpGet]
-  public async Task<ActionResult<List<Tank>>> GetAll()
+  public async Task<ActionResult<PaginatedResult<Tank>>> GetAll(
+    [FromQuery] int page = 1,
+    [FromQuery] int limit = 20
+  )
   {
-    var tanks = await tankService.GetAllAsync();
+    var tanks = await tankService.GetAllAsync(page, limit);
 
     return Ok(tanks);
   }

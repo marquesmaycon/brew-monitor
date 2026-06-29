@@ -1,4 +1,4 @@
-namespace BrewMonitor.Api.Models;
+namespace BrewMonitor.Api.DTOs.Common;
 
 public class PaginatedResult<T>
 {

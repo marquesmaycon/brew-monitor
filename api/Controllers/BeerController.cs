@@ -1,3 +1,5 @@
+using BrewMonitor.Api.DTOs.Beers;
+using BrewMonitor.Api.DTOs.Common;
 using BrewMonitor.Api.Models;
 using BrewMonitor.Api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +11,7 @@ namespace BrewMonitor.Api.Controllers;
 public class BeersController(IBeerService beerService) : ControllerBase
 {
   [HttpGet]
-  public async Task<ActionResult<PaginatedResult<Beer>>> GetAll(
+  public async Task<ActionResult<PaginatedResult<BeerResponse>>> GetAll(
     [FromQuery] int page = 1,
     [FromQuery] int limit = 10
   )
@@ -20,7 +22,7 @@ public class BeersController(IBeerService beerService) : ControllerBase
   }
 
   [HttpGet("{id:guid}")]
-  public async Task<ActionResult<Beer>> GetById(Guid id)
+  public async Task<ActionResult<BeerResponse>> GetById(Guid id)
   {
     var beer = await beerService.GetByIdAsync(id);
 

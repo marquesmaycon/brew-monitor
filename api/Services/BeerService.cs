@@ -1,4 +1,6 @@
 using BrewMonitor.Api.Data;
+using BrewMonitor.Api.DTOs.Beers;
+using BrewMonitor.Api.DTOs.Common;
 using BrewMonitor.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,7 +8,7 @@ namespace BrewMonitor.Api.Services;
 
 public class BeerService(AppDbContext context) : IBeerService
 {
-  public async Task<PaginatedResult<Beer>> GetAllAsync(int page, int limit)
+  public async Task<PaginatedResult<BeerResponse>> GetAllAsync(int page, int limit)
   {
     page = Math.Max(page, 1);
     limit = Math.Max(limit, 1);
@@ -18,9 +20,28 @@ public class BeerService(AppDbContext context) : IBeerService
     var beers = await query
       .Skip((page - 1) * limit)
       .Take(limit)
+      .Select(beer => new BeerResponse
+      {
+        Id = beer.Id,
+        Name = beer.Name,
+        Style = beer.Style,
+        CreatedAt = beer.CreatedAt,
+        UpdatedAt = beer.UpdatedAt,
+        FermentationParameter = beer.FermentationParameter == null
+          ? null
+          : new BeerFermentationParameterResponse
+          {
+            MinTemperature = beer.FermentationParameter.MinTemperature,
+            MaxTemperature = beer.FermentationParameter.MaxTemperature,
+            MinPh = beer.FermentationParameter.MinPh,
+            MaxPh = beer.FermentationParameter.MaxPh,
+            MinExtract = beer.FermentationParameter.MinExtract,
+            MaxExtract = beer.FermentationParameter.MaxExtract
+          }
+      })
       .ToListAsync();
 
-    return new PaginatedResult<Beer>
+    return new PaginatedResult<BeerResponse>
     {
       Data = beers,
       Meta = new PaginationMeta
@@ -30,9 +51,30 @@ public class BeerService(AppDbContext context) : IBeerService
     };
   }
 
-  public Task<Beer?> GetByIdAsync(Guid id)
+  public Task<BeerResponse?> GetByIdAsync(Guid id)
   {
-    return context.Beers.FindAsync(id).AsTask();
+    return context.Beers
+      .Where(beer => beer.Id == id)
+      .Select(beer => new BeerResponse
+      {
+        Id = beer.Id,
+        Name = beer.Name,
+        Style = beer.Style,
+        CreatedAt = beer.CreatedAt,
+        UpdatedAt = beer.UpdatedAt,
+        FermentationParameter = beer.FermentationParameter == null
+          ? null
+          : new BeerFermentationParameterResponse
+          {
+            MinTemperature = beer.FermentationParameter.MinTemperature,
+            MaxTemperature = beer.FermentationParameter.MaxTemperature,
+            MinPh = beer.FermentationParameter.MinPh,
+            MaxPh = beer.FermentationParameter.MaxPh,
+            MinExtract = beer.FermentationParameter.MinExtract,
+            MaxExtract = beer.FermentationParameter.MaxExtract
+          }
+      })
+      .FirstOrDefaultAsync();
   }
 
   public Task<bool> ExistsAsync(Guid id)

@@ -1,11 +1,13 @@
+using BrewMonitor.Api.DTOs.Beers;
+using BrewMonitor.Api.DTOs.Common;
 using BrewMonitor.Api.Models;
 
 namespace BrewMonitor.Api.Services;
 
 public interface IBeerService
 {
-  Task<PaginatedResult<Beer>> GetAllAsync(int page, int limit);
-  Task<Beer?> GetByIdAsync(Guid id);
+  Task<PaginatedResult<BeerResponse>> GetAllAsync(int page, int limit);
+  Task<BeerResponse?> GetByIdAsync(Guid id);
   Task<bool> ExistsAsync(Guid id);
   Task<Beer> CreateAsync(Beer beer);
   Task<Beer?> UpdateAsync(Guid id, Beer beer);

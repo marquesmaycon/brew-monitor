@@ -1,6 +1,10 @@
-import { mutationOptions, queryOptions } from '@tanstack/react-query'
+import {
+  keepPreviousData,
+  mutationOptions,
+  queryOptions,
+} from '@tanstack/react-query'
 
-import type { FermentationParameterPayload } from '@/types/api'
+import type { FermentationParameterPayload, Pagination } from '@/types/api'
 
 import type { BeerSchema } from '../validation/beer.validation'
 import {
@@ -17,6 +21,9 @@ import {
 
 export const beerKeys = {
   root: ['beers'] as const,
+  list: function (pagination: Pagination) {
+    return [...beerKeys.root, pagination] as const
+  },
   detail: function (id: string) {
     return [...beerKeys.root, id] as const
   },
@@ -25,12 +32,16 @@ export const beerKeys = {
   },
 }
 
-export function listBeersOptions() {
+export function listBeersOptions(
+  pagination: Pagination = { limit: 20, page: 1 },
+) {
   return queryOptions({
-    queryKey: beerKeys.root,
+    queryKey: beerKeys.list(pagination),
     queryFn: function () {
-      return listBeers()
+      return listBeers(pagination)
     },
+    placeholderData: keepPreviousData,
+    refetchOnMount: false,
   })
 }
 

@@ -3,14 +3,16 @@ import type {
   Beer,
   FermentationParameter,
   FermentationParameterPayload,
+  Paginated,
+  Pagination,
 } from '@/types/api'
 
 import type { BeerSchema } from '../validation/beer.validation'
 
 const resource = 'beers'
 
-export function listBeers() {
-  return api.get(resource).json<Array<Beer>>()
+export function listBeers(pagination: Pagination) {
+  return api.get(resource, { searchParams: pagination }).json<Paginated<Beer>>()
 }
 
 export function getBeer(id: string) {

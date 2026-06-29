@@ -1,3 +1,15 @@
+export type Pagination = {
+  limit: number
+  page: number
+}
+
+export type Paginated<T> = {
+  data: Array<T>
+  meta: {
+    total: number
+  }
+}
+
 export type EntityTimestamps = {
   createdAt: string
   updatedAt: string | null
@@ -36,9 +48,7 @@ export type FermentationParameterPayload = Omit<
 >
 
 export type FermentationRecordClassification =
-  | 'WithinStandard'
-  | 'Attention'
-  | 'OutOfStandard'
+  'WithinStandard' | 'Attention' | 'OutOfStandard'
 
 export type FermentationRecord = EntityTimestamps & {
   id: string

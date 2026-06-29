@@ -12,23 +12,17 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import {
-  ArrowUpDown,
-  FlaskConical,
-  Pipette,
-  SquarePen,
-  ThermometerSnowflake,
-} from 'lucide-react'
+import { ArrowUpDown, SquarePen } from 'lucide-react'
 import { useState } from 'react'
 
-import { DataTable } from '#/components/data-table'
-import { Button } from '#/components/ui/button'
-import { Input } from '#/components/ui/input'
-import type { Beer } from '#/types/api'
+import { DataTable } from '@/components/data-table'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import type { Tank } from '@/types/api'
 
-import { listBeersOptions } from '../api/options'
+import { listTanksOptions } from '../api/options'
 
-export function BeerList() {
+export function TankList() {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [pagination, setPagination] = useState<PaginationState>({
@@ -39,14 +33,14 @@ export function BeerList() {
   const page = pagination.pageIndex + 1
   const limit = pagination.pageSize
 
-  const { data: beers, isFetching } = useQuery(
-    listBeersOptions({ limit, page }),
+  const { data: tanks, isFetching } = useQuery(
+    listTanksOptions({ limit, page }),
   )
 
   const table = useReactTable({
-    data: beers?.data ?? [],
+    data: tanks?.data ?? [],
     columns,
-    rowCount: beers?.meta.total,
+    rowCount: tanks?.meta.total,
     state: { pagination, sorting, columnFilters },
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
@@ -55,14 +49,13 @@ export function BeerList() {
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     manualPagination: true,
-    debugTable: true,
   })
 
   return (
     <div className="flex flex-1 flex-col gap-4">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter products..."
+          placeholder="Filtrar tanques..."
           value={table.getColumn('name')?.getFilterValue() as string}
           onChange={(event) =>
             table.getColumn('name')?.setFilterValue(event.target.value)
@@ -75,7 +68,7 @@ export function BeerList() {
   )
 }
 
-const columnHelper = createColumnHelper<Beer>()
+const columnHelper = createColumnHelper<Tank>()
 
 const columns = [
   columnHelper.accessor('name', {
@@ -87,26 +80,26 @@ const columns = [
           size="icon"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          <ArrowUpDown className="" />
+          <ArrowUpDown />
         </Button>
       </div>
     ),
     cell: (info) => info.row.original.name,
   }),
-  columnHelper.accessor('style', {
+  columnHelper.accessor('capacityLiters', {
     header: ({ column }) => (
       <div className="flex items-center gap-2">
-        Estilo
+        Capacidade
         <Button
           variant="ghost"
           size="icon"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          <ArrowUpDown className="" />
+          <ArrowUpDown />
         </Button>
       </div>
     ),
-    cell: (info) => info.row.original.style,
+    cell: (info) => `${info.row.original.capacityLiters} L`,
   }),
   columnHelper.accessor('createdAt', {
     header: ({ column }) => (
@@ -117,7 +110,7 @@ const columns = [
           size="icon"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          <ArrowUpDown className="" />
+          <ArrowUpDown />
         </Button>
       </div>
     ),
@@ -126,38 +119,16 @@ const columns = [
       return isoDate ? new Date(isoDate).toLocaleDateString() : null
     },
   }),
-  columnHelper.accessor('fermentationParameter', {
-    header: () => 'Parâmetros (Temperatura | PH | Extrato)',
-    cell: ({ row }) => {
-      const params = row.original.fermentationParameter
-
-      return (
-        <Button asChild variant="secondary" aria-label="Editar parâmetros">
-          <Link
-            to="/beers/$beerId/parameters"
-            params={{ beerId: row.original.id }}
-            title="Editar parâmetros"
-          >
-            <ThermometerSnowflake /> {params?.minTemperature} -{' '}
-            {params?.maxTemperature} | <Pipette /> {params?.minPh} -{' '}
-            {params?.maxPh} | <FlaskConical />
-            {params?.minExtract} - {params?.maxExtract}
-            <span className="sr-only">Editar parâmetros</span>
-          </Link>
-        </Button>
-      )
-    },
-  }),
   columnHelper.display({
     id: 'actions',
     header: () => <div className="text-right">Ações</div>,
     cell: ({ row }) => (
       <div className="flex justify-end">
-        <Button asChild variant="link" aria-label="Editar cerveja">
+        <Button asChild variant="link" aria-label="Editar tanque">
           <Link
-            to="/beers/$beerId/edit"
-            params={{ beerId: row.original.id }}
-            title="Editar cerveja"
+            to="/tanks/$tankId/edit"
+            params={{ tankId: row.original.id }}
+            title="Editar tanque"
           >
             <SquarePen />
             <span>Editar</span>

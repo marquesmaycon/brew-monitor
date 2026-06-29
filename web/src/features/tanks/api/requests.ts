@@ -1,10 +1,12 @@
 import { api } from '@/lib/api'
-import type { Tank, TankPayload } from '@/types/api'
+import type { Paginated, Pagination, Tank, TankPayload } from '@/types/api'
 
 const resource = 'tanks'
 
-export function listTanks() {
-  return api.get(resource).json<Array<Tank>>()
+export function listTanks(pagination: Pagination) {
+  return api
+    .get(resource, { searchParams: pagination })
+    .json<Paginated<Tank>>()
 }
 
 export function getTank(id: string) {

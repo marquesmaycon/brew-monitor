@@ -1,6 +1,6 @@
 import { mutationOptions, queryOptions } from '@tanstack/react-query'
 
-import type { TankPayload } from '@/types/api'
+import type { Pagination, TankPayload } from '@/types/api'
 
 import {
   createTank,
@@ -12,19 +12,21 @@ import {
 
 export const tankKeys = {
   root: ['tanks'] as const,
-  list: function () {
-    return [...tankKeys.root, 'list'] as const
+  list: function (pagination: Pagination) {
+    return [...tankKeys.root, pagination] as const
   },
   detail: function (id: string) {
     return [...tankKeys.root, id] as const
   },
 }
 
-export function listTanksOptions() {
+export function listTanksOptions(
+  pagination: Pagination = { limit: 20, page: 1 },
+) {
   return queryOptions({
-    queryKey: tankKeys.list(),
+    queryKey: tankKeys.list(pagination),
     queryFn: function () {
-      return listTanks()
+      return listTanks(pagination)
     },
   })
 }

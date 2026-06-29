@@ -10,8 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TanksIndexRouteImport } from './routes/tanks/index'
 import { Route as BeersIndexRouteImport } from './routes/beers/index'
+import { Route as TanksNewRouteImport } from './routes/tanks/new'
 import { Route as BeersNewRouteImport } from './routes/beers/new'
+import { Route as TanksTankIdEditRouteImport } from './routes/tanks/$tankId/edit'
 import { Route as BeersBeerIdParametersRouteImport } from './routes/beers/$beerId/parameters'
 import { Route as BeersBeerIdEditRouteImport } from './routes/beers/$beerId/edit'
 
@@ -20,14 +23,29 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TanksIndexRoute = TanksIndexRouteImport.update({
+  id: '/tanks/',
+  path: '/tanks/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BeersIndexRoute = BeersIndexRouteImport.update({
   id: '/beers/',
   path: '/beers/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TanksNewRoute = TanksNewRouteImport.update({
+  id: '/tanks/new',
+  path: '/tanks/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BeersNewRoute = BeersNewRouteImport.update({
   id: '/beers/new',
   path: '/beers/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TanksTankIdEditRoute = TanksTankIdEditRouteImport.update({
+  id: '/tanks/$tankId/edit',
+  path: '/tanks/$tankId/edit',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BeersBeerIdParametersRoute = BeersBeerIdParametersRouteImport.update({
@@ -44,55 +62,76 @@ const BeersBeerIdEditRoute = BeersBeerIdEditRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/beers/new': typeof BeersNewRoute
+  '/tanks/new': typeof TanksNewRoute
   '/beers/': typeof BeersIndexRoute
+  '/tanks/': typeof TanksIndexRoute
   '/beers/$beerId/edit': typeof BeersBeerIdEditRoute
   '/beers/$beerId/parameters': typeof BeersBeerIdParametersRoute
+  '/tanks/$tankId/edit': typeof TanksTankIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/beers/new': typeof BeersNewRoute
+  '/tanks/new': typeof TanksNewRoute
   '/beers': typeof BeersIndexRoute
+  '/tanks': typeof TanksIndexRoute
   '/beers/$beerId/edit': typeof BeersBeerIdEditRoute
   '/beers/$beerId/parameters': typeof BeersBeerIdParametersRoute
+  '/tanks/$tankId/edit': typeof TanksTankIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/beers/new': typeof BeersNewRoute
+  '/tanks/new': typeof TanksNewRoute
   '/beers/': typeof BeersIndexRoute
+  '/tanks/': typeof TanksIndexRoute
   '/beers/$beerId/edit': typeof BeersBeerIdEditRoute
   '/beers/$beerId/parameters': typeof BeersBeerIdParametersRoute
+  '/tanks/$tankId/edit': typeof TanksTankIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/beers/new'
+    | '/tanks/new'
     | '/beers/'
+    | '/tanks/'
     | '/beers/$beerId/edit'
     | '/beers/$beerId/parameters'
+    | '/tanks/$tankId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/beers/new'
+    | '/tanks/new'
     | '/beers'
+    | '/tanks'
     | '/beers/$beerId/edit'
     | '/beers/$beerId/parameters'
+    | '/tanks/$tankId/edit'
   id:
     | '__root__'
     | '/'
     | '/beers/new'
+    | '/tanks/new'
     | '/beers/'
+    | '/tanks/'
     | '/beers/$beerId/edit'
     | '/beers/$beerId/parameters'
+    | '/tanks/$tankId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BeersNewRoute: typeof BeersNewRoute
+  TanksNewRoute: typeof TanksNewRoute
   BeersIndexRoute: typeof BeersIndexRoute
+  TanksIndexRoute: typeof TanksIndexRoute
   BeersBeerIdEditRoute: typeof BeersBeerIdEditRoute
   BeersBeerIdParametersRoute: typeof BeersBeerIdParametersRoute
+  TanksTankIdEditRoute: typeof TanksTankIdEditRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -104,6 +143,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tanks/': {
+      id: '/tanks/'
+      path: '/tanks'
+      fullPath: '/tanks/'
+      preLoaderRoute: typeof TanksIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/beers/': {
       id: '/beers/'
       path: '/beers'
@@ -111,11 +157,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BeersIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tanks/new': {
+      id: '/tanks/new'
+      path: '/tanks/new'
+      fullPath: '/tanks/new'
+      preLoaderRoute: typeof TanksNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/beers/new': {
       id: '/beers/new'
       path: '/beers/new'
       fullPath: '/beers/new'
       preLoaderRoute: typeof BeersNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tanks/$tankId/edit': {
+      id: '/tanks/$tankId/edit'
+      path: '/tanks/$tankId/edit'
+      fullPath: '/tanks/$tankId/edit'
+      preLoaderRoute: typeof TanksTankIdEditRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/beers/$beerId/parameters': {
@@ -138,9 +198,12 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BeersNewRoute: BeersNewRoute,
+  TanksNewRoute: TanksNewRoute,
   BeersIndexRoute: BeersIndexRoute,
+  TanksIndexRoute: TanksIndexRoute,
   BeersBeerIdEditRoute: BeersBeerIdEditRoute,
   BeersBeerIdParametersRoute: BeersBeerIdParametersRoute,
+  TanksTankIdEditRoute: TanksTankIdEditRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

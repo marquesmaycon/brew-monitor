@@ -2,6 +2,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import BeerCard from '@/features/beers/components/beer-card'
 import TankCard from '@/features/tanks/components/tank-card'
 import type { FermentationRecord } from '@/types/api'
+import FermentationParametersCard from '#/features/beers/components/fermentation-parameters-card'
 import { cn } from '#/lib/utils'
 
 import {
@@ -30,6 +31,8 @@ export function FermentationRecordSummary({
         <AlertTitle>{classificationLabels[classification]}</AlertTitle>
         <AlertDescription>descrever</AlertDescription>
       </Alert>
+
+      <FermentationParametersCard beer={beer} />
 
       <BeerCard beer={beer} />
 

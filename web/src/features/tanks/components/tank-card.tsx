@@ -13,7 +13,7 @@ import {
 import type { Tank } from '@/types/api'
 
 type TankCardProps = {
-  tank: Tank
+  tank: Pick<Tank, 'id' | 'name' | 'capacityLiters'>
 }
 
 export default function TankCard({ tank }: TankCardProps) {

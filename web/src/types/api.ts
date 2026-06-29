@@ -61,13 +61,23 @@ export type FermentationParameterPayload = Omit<
 export type FermentationRecordClassification =
   'WITHIN_STANDARD' | 'ATTENTION' | 'OUT_OF_STANDARD'
 
+export type FermentationRecordBeer = Pick<
+  Beer,
+  'id' | 'name' | 'style' | 'fermentationParameter'
+>
+
+export type FermentationRecordTank = Pick<
+  Tank,
+  'id' | 'name' | 'capacityLiters'
+>
+
 export type FermentationRecord = EntityTimestamps & {
   id: string
   registeredAt: string
   beerId: string
-  beer: Beer
+  beer: FermentationRecordBeer
   tankId: string
-  tank: Tank
+  tank: FermentationRecordTank
   batchNumber: string
   temperature: number
   ph: number

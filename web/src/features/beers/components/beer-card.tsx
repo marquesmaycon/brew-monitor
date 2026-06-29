@@ -13,7 +13,7 @@ import {
 import type { Beer } from '@/types/api'
 
 type BeerCardProps = {
-  beer: Beer
+  beer: Pick<Beer, 'id' | 'name' | 'style'>
 }
 
 export default function BeerCard({ beer }: BeerCardProps) {

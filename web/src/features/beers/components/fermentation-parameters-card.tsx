@@ -18,7 +18,7 @@ import {
 import type { Beer } from '@/types/api'
 
 type FermentationParametersCardProps = {
-  beer: Beer
+  beer: Pick<Beer, 'id' | 'fermentationParameter'>
 }
 
 export default function FermentationParametersCard({
@@ -34,7 +34,7 @@ export default function FermentationParametersCard({
         <CardAction>
           <Button asChild variant="link" className="h-auto justify-start p-0">
             <Link to="/beers/$beerId/parameters" params={{ beerId: beer.id }}>
-              Editar <ArrowRight />
+              Abrir <ArrowRight />
             </Link>
           </Button>
         </CardAction>

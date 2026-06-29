@@ -6,6 +6,7 @@ import {
   Scripts,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
+import { Toaster } from 'sonner'
 
 import Footer from '../components/Footer'
 import Header from '../components/Header'
@@ -49,10 +50,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <HeadContent />
       </head>
-      <body className="font-sans antialiased wrap-anywhere container min-h-screen mx-auto ">
+      <body className="container mx-auto min-h-screen font-sans wrap-anywhere antialiased">
         <Header />
         <main className="">{children}</main>
         <Footer />
+        <Toaster richColors />
         <TanStackDevtools
           config={{
             position: 'bottom-right',

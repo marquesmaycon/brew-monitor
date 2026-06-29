@@ -3,7 +3,7 @@ import z from 'zod'
 
 export const beerSchema = z.object({
   name: z.string().min(2),
-  style: z.string().min(8),
+  style: z.string().min(3),
 })
 
 export type BeerSchema = z.infer<typeof beerSchema>

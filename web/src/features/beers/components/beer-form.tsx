@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
+import { toast } from 'sonner'
 
 import { Field, FieldGroup } from '@/components/ui/field'
 import { useAppForm } from '@/hooks/form'
@@ -24,14 +25,25 @@ export function BeerForm({ beer }: BeerFormProps) {
   const form = useAppForm({
     ...beerFormOptions(beer),
     onSubmit: async ({ value }) => {
-      if (beer) {
-        await update(value)
-      } else {
-        await create(value)
-      }
+      try {
+        if (beer) {
+          await update(value)
+        } else {
+          await create(value)
+        }
 
-      await queryClient.invalidateQueries(listBeersOptions())
-      await navigate({ to: '/beers' })
+        toast.success(
+          `Cerveja ${isEditing ? 'atualizada' : 'criada'} com sucesso`,
+        )
+
+        await queryClient.invalidateQueries(listBeersOptions())
+        await navigate({ to: '/beers' })
+      } catch (err) {
+        toast.error(
+          `Erro ao ${isEditing ? 'atualizar' : 'criar'} nova cerveja`,
+          { description: err instanceof Error && err.message },
+        )
+      }
     },
   })
 

@@ -50,7 +50,11 @@ function BeersPage() {
                 {beer.style}
               </span>
               <Button variant="ghost" size="icon-sm" asChild>
-                <Link to="/beers/$beerId/edit" params={{ beerId: beer.id }}>
+                <Link
+                  to="/beers/$beerId/edit"
+                  params={{ beerId: beer.id }}
+                  preload={false}
+                >
                   <Edit />
                   <span className="sr-only">Editar {beer.name}</span>
                 </Link>

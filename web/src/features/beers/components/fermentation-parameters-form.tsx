@@ -51,6 +51,9 @@ export function FermentationParametersForm({
         await queryClient.invalidateQueries({
           queryKey: beerKeys.fermentationParameter(beerId),
         })
+        await queryClient.invalidateQueries({
+          queryKey: beerKeys.detail(beerId),
+        })
         await navigate({ to: '/beers' })
       } catch (err) {
         toast.error(
@@ -72,7 +75,7 @@ export function FermentationParametersForm({
 
   return (
     <form
-      className="max-w-2xl"
+      className="w-full lg:max-w-3xl"
       onSubmit={(ev) => {
         ev.preventDefault()
         form.handleSubmit()

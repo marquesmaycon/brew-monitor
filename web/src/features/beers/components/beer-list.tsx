@@ -12,7 +12,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { ArrowUpDown, Pencil } from 'lucide-react'
+import {
+  ArrowUpDown,
+  FlaskConical,
+  Pipette,
+  SquarePen,
+  ThermometerSnowflake,
+} from 'lucide-react'
 import { useState } from 'react'
 
 import { DataTable } from '#/components/data-table'
@@ -120,39 +126,41 @@ const columns = [
       return isoDate ? new Date(isoDate).toLocaleDateString() : null
     },
   }),
-  columnHelper.display({
-    id: 'parameters',
-    header: () => 'Parâmetros',
-    cell: ({ row }) => (
-      <div>
-        <Button asChild variant="ghost" size="icon" aria-label="Editar cerveja">
+  columnHelper.accessor('fermentationParameter', {
+    header: () => 'Parâmetros (Temperatura | PH | Extrato)',
+    cell: ({ row }) => {
+      const params = row.original.fermentationParameter
+
+      return (
+        <Button asChild variant="secondary" aria-label="Editar parâmetros">
           <Link
             to="/beers/$beerId/parameters"
             params={{ beerId: row.original.id }}
-            title="Editar cerveja"
+            title="Editar parâmetros"
           >
-            <Pencil />
-            <span className="sr-only">Editar cerveja</span>
+            <ThermometerSnowflake /> {params?.minTemperature} -{' '}
+            {params?.maxTemperature} | <Pipette /> {params?.minPh} -{' '}
+            {params?.maxPh} | <FlaskConical />
+            {params?.minExtract} - {params?.maxExtract}
+            <span className="sr-only">Editar parâmetros</span>
           </Link>
         </Button>
-      </div>
-    ),
-    enableSorting: false,
-    enableColumnFilter: false,
+      )
+    },
   }),
   columnHelper.display({
     id: 'actions',
-    header: () => <div className="text-right">Actions</div>,
+    header: () => <div className="text-right">Ações</div>,
     cell: ({ row }) => (
       <div className="flex justify-end">
-        <Button asChild variant="ghost" size="icon" aria-label="Editar cerveja">
+        <Button asChild variant="outline" aria-label="Editar cerveja">
           <Link
             to="/beers/$beerId/edit"
             params={{ beerId: row.original.id }}
             title="Editar cerveja"
           >
-            <Pencil />
-            <span className="sr-only">Editar cerveja</span>
+            <SquarePen />
+            <span>Editar</span>
           </Link>
         </Button>
       </div>

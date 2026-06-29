@@ -19,6 +19,7 @@ export type Beer = EntityTimestamps & {
   id: string
   name: string
   style: string
+  fermentationParameter: BeerFermentationParameter | null
 }
 
 export type BeerPayload = Pick<Beer, 'name' | 'style'>
@@ -41,6 +42,16 @@ export type FermentationParameter = EntityTimestamps & {
   minExtract: number
   maxExtract: number
 }
+
+export type BeerFermentationParameter = Pick<
+  FermentationParameter,
+  | 'minTemperature'
+  | 'maxTemperature'
+  | 'minPh'
+  | 'maxPh'
+  | 'minExtract'
+  | 'maxExtract'
+>
 
 export type FermentationParameterPayload = Omit<
   FermentationParameter,

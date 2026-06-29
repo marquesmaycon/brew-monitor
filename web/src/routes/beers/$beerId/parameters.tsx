@@ -1,12 +1,14 @@
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { HTTPError } from 'ky'
+import { ArrowLeftIcon } from 'lucide-react'
 
 import {
   getBeerFermentationParameterOptions,
   getBeerOptions,
 } from '@/features/beers/api/options'
+import BeerCard from '@/features/beers/components/beer-card'
 import { FermentationParametersForm } from '@/features/beers/components/fermentation-parameters-form'
+import { Button } from '#/components/ui/button'
 
 export const Route = createFileRoute('/beers/$beerId/parameters')({
   loader: ({ context, params }) =>
@@ -19,38 +21,18 @@ function RouteComponent() {
 
   const { data: beer } = useSuspenseQuery(getBeerOptions(beerId))
 
-  const parameterQuery = useQuery({
+  const { data: parameters } = useQuery({
     ...getBeerFermentationParameterOptions(beerId),
     retry: false,
   })
 
-  const parameterNotFound =
-    parameterQuery.error instanceof HTTPError &&
-    parameterQuery.error.response.status === 404
-
-  if (parameterQuery.isError && !parameterNotFound) {
-    return (
-      <section className="page-wrap px-4 py-10">
-        <Link to="/beers" className="text-sm font-medium">
-          Voltar para cervejas
-        </Link>
-        <div className="mt-6">
-          <h1 className="font-heading text-3xl font-semibold tracking-normal">
-            Parametros de fermentacao
-          </h1>
-          <p className="text-muted-foreground mt-2 text-sm">
-            Nao foi possivel carregar os parametros desta cerveja.
-          </p>
-        </div>
-      </section>
-    )
-  }
-
   return (
-    <section className="page-wrap px-4 py-10">
-      <Link to="/beers" className="text-sm font-medium">
-        Voltar para cervejas
-      </Link>
+    <div className="px-4 py-10">
+      <Button asChild variant="link">
+        <Link to="/beers" className="text-sm font-medium">
+          <ArrowLeftIcon /> Voltar para cervejas
+        </Link>
+      </Button>
       <div className="mt-6">
         <h1 className="font-heading text-3xl font-semibold tracking-normal">
           Parametros de fermentacao
@@ -59,12 +41,11 @@ function RouteComponent() {
           Configure os limites de temperatura, pH e extrato para {beer.name}.
         </p>
       </div>
-      <div className="mt-8">
-        <FermentationParametersForm
-          beerId={beerId}
-          parameters={parameterQuery.data}
-        />
+      <div className="mt-8 flex flex-col items-start justify-between gap-8 lg:flex-row-reverse">
+        <BeerCard beer={beer} />
+
+        <FermentationParametersForm beerId={beerId} parameters={parameters} />
       </div>
-    </section>
+    </div>
   )
 }

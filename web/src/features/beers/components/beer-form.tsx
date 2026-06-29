@@ -52,7 +52,7 @@ export function BeerForm({ beer }: BeerFormProps) {
 
   return (
     <form
-      className="max-w-xl"
+      className="w-full max-w-3xl"
       onSubmit={(ev) => {
         ev.preventDefault()
         form.handleSubmit()

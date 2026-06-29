@@ -1,0 +1,14 @@
+{
+  "name": "brew-monitor",
+  "private": true,
+  "scripts": {
+    "db:up": "docker compose -f api/docker-compose.yml up -d postgres",
+    "db:down": "docker compose -f api/docker-compose.yml down",
+    "api:restore": "dotnet restore api/BrewMonitor.Api.csproj",
+    "api:migrate": "dotnet ef database update --project api/BrewMonitor.Api.csproj",
+    "api:dev": "dotnet run --project api/BrewMonitor.Api.csproj --launch-profile http",
+    "web:install": "npm --prefix web ci",
+    "web:dev": "npm --prefix web run dev",
+    "dev": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/dev.ps1"
+  }
+}

@@ -6,7 +6,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-var frontendOrigin = "http://localhost:3000";
+string frontendOrigin = "http://localhost:3000";
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -27,10 +27,10 @@ builder.Services.AddControllers()
         )
     );
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options
-        .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
-        .UseSnakeCaseNamingConvention()
-);
+        options
+            .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+            .UseSnakeCaseNamingConvention()
+    );
 builder.Services.AddScoped<IBeerService, BeerService>();
 builder.Services.AddScoped<ITankService, TankService>();
 builder.Services.AddScoped<IFermentationRecordService, FermentationRecordService>();
@@ -49,9 +49,13 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseCors("Frontend");
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
-app.MapControllers();
+app.UseCors("Frontend");
+
+app.MapControllers().RequireCors("Frontend");
 
 app.Run();

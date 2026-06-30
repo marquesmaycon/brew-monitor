@@ -18,6 +18,7 @@ import { useState } from 'react'
 import { sortableHeader } from '@/components/table/sortable-header'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { formatDate } from '@/lib/date-format'
 import type { Beer } from '@/types/api'
 import { DataTable } from '#/components/table/data-table'
 
@@ -83,10 +84,7 @@ const columns = [
   }),
   columnHelper.accessor('createdAt', {
     header: sortableHeader('Criado em'),
-    cell: ({ row }) => {
-      const isoDate = row.original.createdAt
-      return isoDate ? new Date(isoDate).toLocaleDateString() : null
-    },
+    cell: ({ row }) => formatDate(row.original.createdAt),
   }),
   columnHelper.accessor('fermentationParameter', {
     header: () => 'Parâmetros (Temperatura | PH | Extrato)',

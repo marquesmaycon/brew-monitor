@@ -15,11 +15,12 @@ import {
 import { SquarePen } from 'lucide-react'
 import { useState } from 'react'
 
-import { DataTable } from '#/components/table/data-table'
 import { sortableHeader } from '@/components/table/sortable-header'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { formatDate } from '@/lib/date-format'
 import type { Tank } from '@/types/api'
+import { DataTable } from '#/components/table/data-table'
 
 import { listTanksOptions } from '../api/options'
 
@@ -82,10 +83,7 @@ const columns = [
   }),
   columnHelper.accessor('createdAt', {
     header: sortableHeader('Criado em'),
-    cell: ({ row }) => {
-      const isoDate = row.original.createdAt
-      return isoDate ? new Date(isoDate).toLocaleDateString() : null
-    },
+    cell: ({ row }) => formatDate(row.original.createdAt),
   }),
   columnHelper.display({
     id: 'actions',

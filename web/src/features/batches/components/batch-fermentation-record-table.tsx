@@ -14,6 +14,7 @@ import { DataTable } from '@/components/table/data-table'
 import { sortableHeader } from '@/components/table/sortable-header'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { formatDateTime } from '@/lib/date-format'
 import type { BatchFermentationRecord } from '@/types/api'
 import {
   classificationClasses,
@@ -63,7 +64,7 @@ const columnHelper = createColumnHelper<BatchFermentationRecord>()
 const columns = [
   columnHelper.accessor('registeredAt', {
     header: sortableHeader('Registro'),
-    cell: ({ row }) => new Date(row.original.registeredAt).toLocaleString(),
+    cell: ({ row }) => formatDateTime(row.original.registeredAt),
   }),
   columnHelper.accessor('tankName', {
     header: sortableHeader('Tanque'),

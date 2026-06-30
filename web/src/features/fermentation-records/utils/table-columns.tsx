@@ -5,6 +5,7 @@ import { SquarePen } from 'lucide-react'
 import { sortableHeader } from '#/components/table/sortable-header'
 import { Badge } from '#/components/ui/badge'
 import { Button } from '#/components/ui/button'
+import { formatDateTime } from '#/lib/date-format'
 import type { FermentationRecord } from '#/types/api'
 
 import {
@@ -32,7 +33,7 @@ export const columns = [
   }),
   columnHelper.accessor('registeredAt', {
     header: sortableHeader('Registro'),
-    cell: ({ row }) => new Date(row.original.registeredAt).toLocaleString(),
+    cell: ({ row }) => formatDateTime(row.original.registeredAt),
   }),
   columnHelper.accessor('beer.name', {
     header: sortableHeader('Cerveja'),

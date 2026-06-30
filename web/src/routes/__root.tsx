@@ -9,8 +9,9 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { Toaster } from 'sonner'
 
 import { AppSidebar } from '#/components/layout/sidebar/app-sidebar'
-import { SidebarInset, SidebarProvider } from '#/components/ui/sidebar'
-import { TooltipProvider } from '#/components/ui/tooltip'
+import { Provider } from '#/components/provider'
+import { SidebarInset } from '#/components/ui/sidebar'
+import { createMetadata } from '#/lib/metadata'
 
 import { Footer } from '../components/layout/footer'
 import { Header } from '../components/layout/header'
@@ -33,9 +34,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         name: 'viewport',
         content: 'width=device-width, initial-scale=1',
       },
-      {
-        title: 'TanStack Start Starter',
-      },
+      ...createMetadata(),
     ],
     links: [
       {
@@ -55,19 +54,17 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="font-sans wrap-anywhere antialiased">
-        <TooltipProvider>
-          <SidebarProvider>
-            <AppSidebar />
-            <SidebarInset>
-              <Header />
-              <main className="container mx-auto mt-2 max-w-full min-w-0 flex-1 p-4 pt-8 md:p-6 lg:p-8">
-                {children}
-              </main>
-              <Footer />
-              <Toaster richColors />
-            </SidebarInset>
-          </SidebarProvider>
-        </TooltipProvider>
+        <Provider>
+          <AppSidebar />
+          <SidebarInset>
+            <Header />
+            <main className="container mx-auto mt-2 max-w-full min-w-0 flex-1 p-4 pt-8 md:p-6 lg:p-8">
+              {children}
+            </main>
+            <Footer />
+            <Toaster richColors />
+          </SidebarInset>
+        </Provider>
         <TanStackDevtools
           config={{
             position: 'bottom-right',

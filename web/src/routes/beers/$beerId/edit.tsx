@@ -6,11 +6,20 @@ import { Button } from '@/components/ui/button'
 import { getBeerOptions } from '@/features/beers/api/options'
 import { BeerForm } from '@/features/beers/components/beer-form'
 import FermentationParametersCard from '@/features/beers/components/fermentation-parameters-card'
+import { createMetadata } from '@/lib/metadata'
 
 export const Route = createFileRoute('/beers/$beerId/edit')({
   loader: ({ context, params }) =>
     context.queryClient.ensureQueryData(getBeerOptions(params.beerId)),
   component: EditBeerPage,
+  head: ({ loaderData }) => ({
+    meta: createMetadata({
+      title: loaderData ? `Editar ${loaderData.name}` : 'Editar cerveja',
+      description: loaderData
+        ? `Atualize a cerveja ${loaderData.name}, do estilo ${loaderData.style}.`
+        : 'Atualize os dados de uma cerveja monitorada.',
+    }),
+  }),
 })
 
 function EditBeerPage() {

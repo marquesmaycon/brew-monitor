@@ -5,11 +5,20 @@ import { ArrowLeftIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { getTankOptions } from '@/features/tanks/api/options'
 import { TankForm } from '@/features/tanks/components/tank-form'
+import { createMetadata } from '@/lib/metadata'
 
 export const Route = createFileRoute('/tanks/$tankId/edit')({
   loader: ({ context, params }) =>
     context.queryClient.ensureQueryData(getTankOptions(params.tankId)),
   component: EditTankPage,
+  head: ({ loaderData }) => ({
+    meta: createMetadata({
+      title: loaderData ? `Editar ${loaderData.name}` : 'Editar tanque',
+      description: loaderData
+        ? `Atualize o tanque ${loaderData.name}, com capacidade de ${loaderData.capacityLiters} litros.`
+        : 'Atualize os dados de um tanque monitorado.',
+    }),
+  }),
 })
 
 function EditTankPage() {

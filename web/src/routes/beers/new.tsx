@@ -3,9 +3,17 @@ import { ArrowLeftIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { BeerForm } from '@/features/beers/components/beer-form'
+import { createMetadata } from '@/lib/metadata'
 
 export const Route = createFileRoute('/beers/new')({
   component: CreateBeerPage,
+  head: () => ({
+    meta: createMetadata({
+      title: 'Nova cerveja',
+      description:
+        'Cadastre uma receita para acompanhar seus parametros de fermentacao.',
+    }),
+  }),
 })
 
 function CreateBeerPage() {

@@ -4,11 +4,19 @@ import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { listTanksOptions } from '@/features/tanks/api/options'
 import { TankList } from '@/features/tanks/components/tank-list'
+import { createMetadata } from '@/lib/metadata'
 
 export const Route = createFileRoute('/tanks/')({
   loader: ({ context }) =>
     context.queryClient.ensureQueryData(listTanksOptions()),
   component: TanksPage,
+  head: () => ({
+    meta: createMetadata({
+      title: 'Tanques',
+      description:
+        'Gerencie os tanques usados no monitoramento de fermentacao.',
+    }),
+  }),
 })
 
 function TanksPage() {

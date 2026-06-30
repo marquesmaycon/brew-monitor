@@ -14,12 +14,21 @@ import { BatchClassificationPieChart } from '@/features/batches/components/batch
 import { BatchFermentationRecordSheet } from '@/features/batches/components/batch-fermentation-record-sheet'
 import { BatchFermentationRecordTable } from '@/features/batches/components/batch-fermentation-record-table'
 import { FermentationMetricsChart } from '@/features/fermentation-records/components/fermentation-metrics-chart'
+import { createMetadata } from '@/lib/metadata'
 
 export const Route = createFileRoute('/batches/$batchNumber')({
   loader: ({ context, params }) =>
     context.queryClient.ensureQueryData(getBatchOptions(params.batchNumber)),
   component: BatchPage,
   errorComponent: BatchNotFound,
+  head: ({ loaderData, params }) => ({
+    meta: createMetadata({
+      title: `Lote ${loaderData?.batchNumber ?? params.batchNumber}`,
+      description: loaderData
+        ? `Historico fermentativo do lote ${loaderData.batchNumber} da cerveja ${loaderData.beerName}.`
+        : `Historico fermentativo do lote ${params.batchNumber}.`,
+    }),
+  }),
 })
 
 function BatchPage() {

@@ -9,11 +9,22 @@ import {
 } from '@/features/beers/api/options'
 import BeerCard from '@/features/beers/components/beer-card'
 import { FermentationParametersForm } from '@/features/beers/components/fermentation-parameters-form'
+import { createMetadata } from '@/lib/metadata'
 
 export const Route = createFileRoute('/beers/$beerId/parameters')({
   loader: ({ context, params }) =>
     context.queryClient.ensureQueryData(getBeerOptions(params.beerId)),
   component: RouteComponent,
+  head: ({ loaderData }) => ({
+    meta: createMetadata({
+      title: loaderData
+        ? `Parametros de ${loaderData.name}`
+        : 'Parametros de fermentacao',
+      description: loaderData
+        ? `Configure limites de temperatura, pH e extrato para ${loaderData.name}.`
+        : 'Configure os parametros de fermentacao de uma cerveja.',
+    }),
+  }),
 })
 
 function RouteComponent() {

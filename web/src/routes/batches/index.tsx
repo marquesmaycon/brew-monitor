@@ -2,11 +2,18 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { listBatchesOptions } from '@/features/batches/api/options'
 import { BatchList } from '@/features/batches/components/batch-list'
+import { createMetadata } from '@/lib/metadata'
 
 export const Route = createFileRoute('/batches/')({
   loader: ({ context }) =>
     context.queryClient.ensureQueryData(listBatchesOptions()),
   component: BatchesPage,
+  head: () => ({
+    meta: createMetadata({
+      title: 'Lotes',
+      description: 'Consulte lotes identificados nos registros de fermentacao.',
+    }),
+  }),
 })
 
 function BatchesPage() {

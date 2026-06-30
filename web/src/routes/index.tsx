@@ -6,6 +6,7 @@ import {
 } from '#/features/dashboard/api/options'
 import { DashboardCards } from '#/features/dashboard/components/dashboard-cards'
 import { FermentationHistoryChart } from '#/features/dashboard/components/fermentation-history-chart'
+import { createMetadata } from '#/lib/metadata'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -14,6 +15,13 @@ export const Route = createFileRoute('/')({
       context.queryClient.ensureQueryData(getDashboardMetricsOptions()),
       context.queryClient.ensureQueryData(getFermentationHistoryOptions()),
     ]),
+  head: () => ({
+    meta: createMetadata({
+      title: 'Dashboard',
+      description:
+        'Acompanhe indicadores e historico dos apontamentos fermentativos cadastrados.',
+    }),
+  }),
 })
 
 function App() {

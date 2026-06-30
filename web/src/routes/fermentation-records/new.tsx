@@ -5,14 +5,26 @@ import { Button } from '@/components/ui/button'
 import { listBeersOptions } from '@/features/beers/api/options'
 import { FermentationRecordForm } from '@/features/fermentation-records/components/fermentation-record-form'
 import { listTanksOptions } from '@/features/tanks/api/options'
+import { createMetadata } from '@/lib/metadata'
 
 export const Route = createFileRoute('/fermentation-records/new')({
   loader: ({ context }) =>
     Promise.all([
-      context.queryClient.ensureQueryData(listBeersOptions({ limit: 100, page: 1 })),
-      context.queryClient.ensureQueryData(listTanksOptions({ limit: 100, page: 1 })),
+      context.queryClient.ensureQueryData(
+        listBeersOptions({ limit: 100, page: 1 }),
+      ),
+      context.queryClient.ensureQueryData(
+        listTanksOptions({ limit: 100, page: 1 }),
+      ),
     ]),
   component: CreateFermentationRecordPage,
+  head: () => ({
+    meta: createMetadata({
+      title: 'Novo registro',
+      description:
+        'Cadastre uma medicao de fermentacao para um lote em tanque.',
+    }),
+  }),
 })
 
 function CreateFermentationRecordPage() {

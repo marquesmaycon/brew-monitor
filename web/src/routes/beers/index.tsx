@@ -4,11 +4,19 @@ import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { listBeersOptions } from '@/features/beers/api/options'
 import { BeerList } from '@/features/beers/components/beer-list'
+import { createMetadata } from '@/lib/metadata'
 
 export const Route = createFileRoute('/beers/')({
   loader: ({ context }) =>
     context.queryClient.ensureQueryData(listBeersOptions()),
   component: BeersPage,
+  head: () => ({
+    meta: createMetadata({
+      title: 'Cervejas',
+      description:
+        'Consulte e gerencie o catalogo de cervejas monitoradas na fermentacao.',
+    }),
+  }),
 })
 
 function BeersPage() {

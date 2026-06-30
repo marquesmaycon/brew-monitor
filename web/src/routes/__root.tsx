@@ -60,7 +60,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             <AppSidebar />
             <SidebarInset>
               <Header />
-              <main className="container mx-auto mt-2 flex-1 p-4 pt-8 md:p-6 lg:p-8">
+              <main className="container mx-auto mt-2 max-w-full min-w-0 flex-1 p-4 pt-8 md:p-6 lg:p-8">
                 {children}
               </main>
               <Footer />

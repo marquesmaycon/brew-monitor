@@ -5,7 +5,7 @@ import { ThemeToggler } from './theme-toggler'
 
 export function Header() {
   return (
-    <header className="bg-sidebar sticky top-0 z-50 h-(--header-height) shrink-0">
+    <header className="md:bg-sidebar md:dark:bg-sidebar sticky top-0 z-50 h-(--header-height) shrink-0 bg-white dark:bg-slate-800">
       <div className="flex h-full items-center gap-2 rounded-t-2xl border-b bg-white px-4 dark:bg-slate-800">
         <SidebarTrigger className="-ml-1" />
         <Separator

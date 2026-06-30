@@ -35,7 +35,7 @@ interface DataTableProps<TData> {
 export function DataTable<TData>({ table, isFetching }: DataTableProps<TData>) {
   return (
     <>
-      <div className="bg-card/33 h-full overflow-hidden rounded-md border">
+      <div className="bg-card/33 h-full max-w-full min-w-0 overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -85,7 +85,7 @@ export function DataTable<TData>({ table, isFetching }: DataTableProps<TData>) {
           </TableBody>
         </Table>
       </div>
-      <nav className="mt-auto flex flex-wrap items-center justify-between gap-8 pt-2 sm:flex-nowrap">
+      <nav className="mt-auto flex flex-wrap items-center justify-between gap-8 pt-2">
         <div className="flex flex-1 items-center gap-1">
           <Button
             variant="outline"
@@ -105,7 +105,7 @@ export function DataTable<TData>({ table, isFetching }: DataTableProps<TData>) {
             <ChevronLeft />
           </Button>
 
-          <div className="mx-auto px-9 sm:mx-4">
+          <div className="mx-auto px-2 sm:mx-4 lg:px-9">
             <p className="flex items-center gap-1 text-sm font-semibold text-nowrap">
               {table.getState().pagination.pageIndex + 1} /{' '}
               {table.getPageCount().toLocaleString()}

@@ -2,11 +2,11 @@
 
 @import 'tailwindcss';
 @import 'tw-animate-css';
-@import "shadcn/tailwind.css";
+@import 'shadcn/tailwind.css';
 @plugin '@tailwindcss/typography';
 
-@import "@fontsource-variable/inter";
-@import "@fontsource-variable/roboto-slab";
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/roboto-slab';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -54,7 +54,7 @@
   --sidebar-border: color-mix(in oklch, var(--mist-blue) 35%, transparent);
   --sidebar-ring: var(--amber);
 
-  --header-height: 4rem
+  --header-height: 4rem;
 }
 
 .dark {
@@ -165,7 +165,7 @@ body,
 @layer base {
   * {
     scrollbar-width: thin;
-     @apply border-border outline-ring/50;
+    @apply border-border outline-ring/50;
   }
 
   html {
@@ -183,13 +183,14 @@ body,
     @apply text-foreground bg-card;
   }
 
-  button:not(:disabled), [role="button"]:not(:disabled) {
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
     cursor: pointer;
   }
 }
 
 @layer utilities {
   .page-wrapper {
-    @apply space-y-2;
+    @apply max-w-full min-w-0 space-y-2;
   }
 }

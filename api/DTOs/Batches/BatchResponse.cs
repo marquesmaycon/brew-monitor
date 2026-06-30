@@ -5,6 +5,7 @@ using BrewMonitor.Api.Enums;
 public class BatchResponse
 {
   public string BatchNumber { get; set; } = string.Empty;
+  public Guid BeerId { get; set; }
   public string BeerName { get; set; } = string.Empty;
   public string BeerStyle { get; set; } = string.Empty;
   public int FermentationRecordCount { get; set; }

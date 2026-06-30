@@ -25,6 +25,10 @@ public class BatchesController(AppDbContext context) : ControllerBase
       .Select(group => new BatchResponse
       {
         BatchNumber = group.Key,
+        BeerId = group
+          .OrderBy(record => record.RegisteredAt)
+          .Select(record => record.BeerId)
+          .First(),
         BeerName = group
           .OrderBy(record => record.RegisteredAt)
           .Select(record => record.Beer.Name)
@@ -93,6 +97,7 @@ public class BatchesController(AppDbContext context) : ControllerBase
       .Select(record => new BatchDetailResponse
       {
         BatchNumber = record.BatchNumber,
+        BeerId = record.BeerId,
         BeerName = record.Beer.Name,
         BeerStyle = record.Beer.Style
       })

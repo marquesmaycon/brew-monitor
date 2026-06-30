@@ -50,7 +50,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <HeadContent />
       </head>
-      <body className="container mx-auto min-h-screen font-sans wrap-anywhere antialiased">
+      <body className="container mx-auto min-h-screen max-w-7xl font-sans wrap-anywhere antialiased">
         <Header />
         <main className="px-4">{children}</main>
         <Footer />

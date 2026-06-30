@@ -12,12 +12,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import {
-  FlaskConical,
-  Pipette,
-  SquarePen,
-  ThermometerSnowflake,
-} from 'lucide-react'
+import { SquarePen } from 'lucide-react'
 import { useState } from 'react'
 
 import { sortableHeader } from '@/components/table/sortable-header'
@@ -97,18 +92,18 @@ const columns = [
     header: () => 'Parâmetros (Temperatura | PH | Extrato)',
     cell: ({ row }) => {
       const params = row.original.fermentationParameter
+      const temp = `${params?.minTemperature} - ${params?.maxTemperature}`
+      const pH = `${params?.minPh} - ${params?.maxPh}`
+      const extract = `${params?.minExtract} - ${params?.maxExtract}`
 
       return (
-        <Button asChild variant="secondary" aria-label="Editar parâmetros">
+        <Button asChild variant="link" aria-label="Editar parâmetros">
           <Link
             to="/beers/$beerId/parameters"
             params={{ beerId: row.original.id }}
             title="Editar parâmetros"
           >
-            <ThermometerSnowflake /> {params?.minTemperature} -{' '}
-            {params?.maxTemperature} | <Pipette /> {params?.minPh} -{' '}
-            {params?.maxPh} | <FlaskConical />
-            {params?.minExtract} - {params?.maxExtract}
+            {temp} | {pH} | {extract}
             <span className="sr-only">Editar parâmetros</span>
           </Link>
         </Button>

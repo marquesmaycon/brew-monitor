@@ -130,6 +130,7 @@ export type BatchFermentationRecord = Pick<
   | 'extract'
   | 'notes'
   | 'classification'
+  | 'tankId'
 > & {
   tankName: string
   tankCapacityLiters: number

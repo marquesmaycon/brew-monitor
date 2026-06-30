@@ -38,6 +38,7 @@ public class BatchFermentationRecordResponse
 {
   public Guid Id { get; set; }
   public DateTime RegisteredAt { get; set; }
+  public Guid TankId { get; set; }
   public string TankName { get; set; } = string.Empty;
   public decimal TankCapacityLiters { get; set; }
   public decimal Temperature { get; set; }

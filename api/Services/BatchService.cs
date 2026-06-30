@@ -119,6 +119,7 @@ public class BatchService(AppDbContext context) : IBatchService
       {
         Id = record.Id,
         RegisteredAt = record.RegisteredAt,
+        TankId = record.TankId,
         TankName = record.Tank.Name,
         TankCapacityLiters = record.Tank.CapacityLiters,
         Temperature = record.Temperature,

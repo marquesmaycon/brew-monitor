@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { Link } from '@tanstack/react-router'
 import type { PaginationState, SortingState } from '@tanstack/react-table'
 import {
   createColumnHelper,
@@ -6,11 +7,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { SquarePen } from 'lucide-react'
 import { useState } from 'react'
 
 import { DataTable } from '@/components/table/data-table'
 import { sortableHeader } from '@/components/table/sortable-header'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import type { BatchFermentationRecord } from '@/types/api'
 import {
   classificationClasses,
@@ -64,8 +67,17 @@ const columns = [
   }),
   columnHelper.accessor('tankName', {
     header: sortableHeader('Tanque'),
-    cell: ({ row }) =>
-      `${row.original.tankName} (${row.original.tankCapacityLiters} L)`,
+    cell: ({ row }) => (
+      <Button asChild variant="link" className="px-0">
+        <Link
+          to="/tanks/$tankId/edit"
+          params={{ tankId: row.original.tankId }}
+          aria-label="Abrir tanque"
+        >
+          {`${row.original.tankName} (${row.original.tankCapacityLiters} L)`}
+        </Link>
+      </Button>
+    ),
   }),
   columnHelper.accessor('temperature', {
     header: sortableHeader('Temp.'),
@@ -104,5 +116,25 @@ const columns = [
       </span>
     ),
     enableSorting: false,
+  }),
+  columnHelper.display({
+    id: 'actions',
+    header: () => <div className="text-right">Acoes</div>,
+    cell: ({ row }) => (
+      <div className="flex justify-end">
+        <Button asChild variant="link" aria-label="Editar registro">
+          <Link
+            to="/fermentation-records/$recordId/edit"
+            params={{ recordId: row.original.id }}
+            title="Editar registro"
+          >
+            <SquarePen />
+            <span>Editar</span>
+          </Link>
+        </Button>
+      </div>
+    ),
+    enableSorting: false,
+    enableColumnFilter: false,
   }),
 ]

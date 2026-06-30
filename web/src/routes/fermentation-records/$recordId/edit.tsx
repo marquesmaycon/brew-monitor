@@ -28,7 +28,7 @@ function EditFermentationRecordPage() {
   )
 
   return (
-    <div className="space-y-6 py-10">
+    <div className="page-wrapper">
       <Button asChild variant="link">
         <Link to="/fermentation-records" className="text-sm font-medium">
           <ArrowLeftIcon /> Voltar para registros

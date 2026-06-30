@@ -18,7 +18,7 @@ export const Route = createFileRoute('/')({
 
 function App() {
   return (
-    <section className="flex flex-col gap-6 py-8">
+    <div className="page-wrapper">
       <div className="flex flex-col gap-1">
         <h1 className="font-heading text-3xl font-semibold tracking-tight">
           Dashboard
@@ -28,8 +28,10 @@ function App() {
         </p>
       </div>
 
-      <DashboardCards />
-      <FermentationHistoryChart />
-    </section>
+      <section className="flex flex-col gap-8">
+        <DashboardCards />
+        <FermentationHistoryChart />
+      </section>
+    </div>
   )
 }

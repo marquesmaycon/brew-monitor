@@ -15,15 +15,15 @@ function BatchPage() {
   const batch = Route.useLoaderData()
 
   return (
-    <section className="px-4 py-10">
+    <div className="page-wrapper">
       <BatchDetail batch={batch} />
-    </section>
+    </div>
   )
 }
 
 function BatchNotFound() {
   return (
-    <section className="px-4 py-10">
+    <div className="page-wrapper">
       <div className="flex min-h-72 flex-col items-center justify-center gap-4 rounded-md border border-dashed text-center">
         <div>
           <h1 className="font-heading text-2xl font-semibold">
@@ -37,6 +37,6 @@ function BatchNotFound() {
           <Link to="/batches">Voltar para lotes</Link>
         </Button>
       </div>
-    </section>
+    </div>
   )
 }

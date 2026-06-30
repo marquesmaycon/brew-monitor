@@ -17,7 +17,7 @@ function EditTankPage() {
   const { data: tank } = useSuspenseQuery(getTankOptions(tankId))
 
   return (
-    <div className="space-y-6 py-10">
+    <div className="page-wrapper">
       <Button asChild variant="link">
         <Link to="/tanks" className="text-sm font-medium">
           <ArrowLeftIcon /> Voltar para tanques

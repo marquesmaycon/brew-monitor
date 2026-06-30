@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import { Beer } from 'lucide-react'
 
 import { ThemeToggler } from './theme-toggler'
 
@@ -12,7 +13,7 @@ export function Header() {
             className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm no-underline shadow-[0_8px_24px_rgba(30,90,72,0.08)] sm:px-4 sm:py-2"
           >
             <span className="h-2 w-2 rounded-full bg-[linear-gradient(90deg,#56c6be,#7ed3bf)]" />
-            TanStack Start
+            Brew Monitor <Beer />
           </Link>
         </h2>
 
@@ -39,20 +40,19 @@ export function Header() {
             Tanques
           </Link>
           <Link
+            to="/batches"
+            className="nav-link"
+            activeProps={{ className: 'nav-link is-active' }}
+          >
+            Lotes
+          </Link>
+          <Link
             to="/fermentation-records"
             className="nav-link"
             activeProps={{ className: 'nav-link is-active' }}
           >
             Fermentacao
           </Link>
-          <a
-            href="https://tanstack.com/start/latest/docs/framework/react/overview"
-            className="nav-link"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Docs
-          </a>
         </div>
 
         <div className="ml-auto flex items-center gap-1.5 sm:gap-2">

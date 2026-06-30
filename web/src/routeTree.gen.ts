@@ -13,9 +13,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as TanksIndexRouteImport } from './routes/tanks/index'
 import { Route as FermentationRecordsIndexRouteImport } from './routes/fermentation-records/index'
 import { Route as BeersIndexRouteImport } from './routes/beers/index'
+import { Route as BatchesIndexRouteImport } from './routes/batches/index'
 import { Route as TanksNewRouteImport } from './routes/tanks/new'
 import { Route as FermentationRecordsNewRouteImport } from './routes/fermentation-records/new'
 import { Route as BeersNewRouteImport } from './routes/beers/new'
+import { Route as BatchesBatchNumberRouteImport } from './routes/batches/$batchNumber'
 import { Route as TanksTankIdEditRouteImport } from './routes/tanks/$tankId/edit'
 import { Route as FermentationRecordsRecordIdEditRouteImport } from './routes/fermentation-records/$recordId/edit'
 import { Route as BeersBeerIdParametersRouteImport } from './routes/beers/$beerId/parameters'
@@ -42,6 +44,11 @@ const BeersIndexRoute = BeersIndexRouteImport.update({
   path: '/beers/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BatchesIndexRoute = BatchesIndexRouteImport.update({
+  id: '/batches/',
+  path: '/batches/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TanksNewRoute = TanksNewRouteImport.update({
   id: '/tanks/new',
   path: '/tanks/new',
@@ -55,6 +62,11 @@ const FermentationRecordsNewRoute = FermentationRecordsNewRouteImport.update({
 const BeersNewRoute = BeersNewRouteImport.update({
   id: '/beers/new',
   path: '/beers/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BatchesBatchNumberRoute = BatchesBatchNumberRouteImport.update({
+  id: '/batches/$batchNumber',
+  path: '/batches/$batchNumber',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TanksTankIdEditRoute = TanksTankIdEditRouteImport.update({
@@ -81,9 +93,11 @@ const BeersBeerIdEditRoute = BeersBeerIdEditRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/batches/$batchNumber': typeof BatchesBatchNumberRoute
   '/beers/new': typeof BeersNewRoute
   '/fermentation-records/new': typeof FermentationRecordsNewRoute
   '/tanks/new': typeof TanksNewRoute
+  '/batches/': typeof BatchesIndexRoute
   '/beers/': typeof BeersIndexRoute
   '/fermentation-records/': typeof FermentationRecordsIndexRoute
   '/tanks/': typeof TanksIndexRoute
@@ -94,9 +108,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/batches/$batchNumber': typeof BatchesBatchNumberRoute
   '/beers/new': typeof BeersNewRoute
   '/fermentation-records/new': typeof FermentationRecordsNewRoute
   '/tanks/new': typeof TanksNewRoute
+  '/batches': typeof BatchesIndexRoute
   '/beers': typeof BeersIndexRoute
   '/fermentation-records': typeof FermentationRecordsIndexRoute
   '/tanks': typeof TanksIndexRoute
@@ -108,9 +124,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/batches/$batchNumber': typeof BatchesBatchNumberRoute
   '/beers/new': typeof BeersNewRoute
   '/fermentation-records/new': typeof FermentationRecordsNewRoute
   '/tanks/new': typeof TanksNewRoute
+  '/batches/': typeof BatchesIndexRoute
   '/beers/': typeof BeersIndexRoute
   '/fermentation-records/': typeof FermentationRecordsIndexRoute
   '/tanks/': typeof TanksIndexRoute
@@ -123,9 +141,11 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/batches/$batchNumber'
     | '/beers/new'
     | '/fermentation-records/new'
     | '/tanks/new'
+    | '/batches/'
     | '/beers/'
     | '/fermentation-records/'
     | '/tanks/'
@@ -136,9 +156,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/batches/$batchNumber'
     | '/beers/new'
     | '/fermentation-records/new'
     | '/tanks/new'
+    | '/batches'
     | '/beers'
     | '/fermentation-records'
     | '/tanks'
@@ -149,9 +171,11 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/batches/$batchNumber'
     | '/beers/new'
     | '/fermentation-records/new'
     | '/tanks/new'
+    | '/batches/'
     | '/beers/'
     | '/fermentation-records/'
     | '/tanks/'
@@ -163,9 +187,11 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BatchesBatchNumberRoute: typeof BatchesBatchNumberRoute
   BeersNewRoute: typeof BeersNewRoute
   FermentationRecordsNewRoute: typeof FermentationRecordsNewRoute
   TanksNewRoute: typeof TanksNewRoute
+  BatchesIndexRoute: typeof BatchesIndexRoute
   BeersIndexRoute: typeof BeersIndexRoute
   FermentationRecordsIndexRoute: typeof FermentationRecordsIndexRoute
   TanksIndexRoute: typeof TanksIndexRoute
@@ -205,6 +231,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BeersIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/batches/': {
+      id: '/batches/'
+      path: '/batches'
+      fullPath: '/batches/'
+      preLoaderRoute: typeof BatchesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tanks/new': {
       id: '/tanks/new'
       path: '/tanks/new'
@@ -224,6 +257,13 @@ declare module '@tanstack/react-router' {
       path: '/beers/new'
       fullPath: '/beers/new'
       preLoaderRoute: typeof BeersNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/batches/$batchNumber': {
+      id: '/batches/$batchNumber'
+      path: '/batches/$batchNumber'
+      fullPath: '/batches/$batchNumber'
+      preLoaderRoute: typeof BatchesBatchNumberRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tanks/$tankId/edit': {
@@ -259,9 +299,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BatchesBatchNumberRoute: BatchesBatchNumberRoute,
   BeersNewRoute: BeersNewRoute,
   FermentationRecordsNewRoute: FermentationRecordsNewRoute,
   TanksNewRoute: TanksNewRoute,
+  BatchesIndexRoute: BatchesIndexRoute,
   BeersIndexRoute: BeersIndexRoute,
   FermentationRecordsIndexRoute: FermentationRecordsIndexRoute,
   TanksIndexRoute: TanksIndexRoute,

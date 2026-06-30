@@ -37,6 +37,13 @@ export type FermentationHistory = {
   data: Array<FermentationHistoryPoint>
 }
 
+export type Batch = {
+  batchNumber: string
+  beerName: string
+  beerStyle: string
+  fermentationRecordCount: number
+}
+
 export type EntityTimestamps = {
   createdAt: string
   updatedAt: string | null
@@ -111,6 +118,24 @@ export type FermentationRecord = EntityTimestamps & {
   extract: number
   notes: string | null
   classification: FermentationRecordClassification
+}
+
+export type BatchFermentationRecord = Pick<
+  FermentationRecord,
+  | 'id'
+  | 'registeredAt'
+  | 'temperature'
+  | 'ph'
+  | 'extract'
+  | 'notes'
+  | 'classification'
+> & {
+  tankName: string
+  tankCapacityLiters: number
+}
+
+export type BatchDetail = Batch & {
+  fermentationRecords: Array<BatchFermentationRecord>
 }
 
 export type FermentationRecordPayload = Pick<

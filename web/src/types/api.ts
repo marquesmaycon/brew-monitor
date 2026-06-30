@@ -146,7 +146,10 @@ export type BatchClassificationCount = {
   count: number
 }
 
-export type BatchOverview = Pick<Batch, 'batchNumber' | 'beerName' | 'beerStyle'> & {
+export type BatchOverview = Pick<
+  Batch,
+  'batchNumber' | 'beerId' | 'beerName' | 'beerStyle'
+> & {
   metricPoints: Array<BatchFermentationMetricPoint>
   classificationCounts: Array<BatchClassificationCount>
 }

@@ -59,6 +59,10 @@ public class BatchService(AppDbContext context) : IBatchService
       .Select(group => new BatchOverviewResponse
       {
         BatchNumber = group.Key,
+        BeerId = group
+          .OrderBy(record => record.RegisteredAt)
+          .Select(record => record.BeerId)
+          .First(),
         BeerName = group
           .OrderBy(record => record.RegisteredAt)
           .Select(record => record.Beer.Name)

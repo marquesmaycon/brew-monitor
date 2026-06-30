@@ -13,14 +13,19 @@ import {
   fermentationRecordKeys,
   updateFermentationRecordOptions,
 } from '../api/options'
+import type { FermentationRecordSchema } from '../validation/fermentation-record.validation'
 import { fermentationRecordFormOptions } from '../validation/fermentation-record.validation'
 
 type FermentationRecordFormProps = {
   record?: FermentationRecord
+  defaultValues?: Partial<FermentationRecordSchema>
+  onSuccess?: () => Promise<void> | void
 }
 
 export function FermentationRecordForm({
   record,
+  defaultValues,
+  onSuccess,
 }: FermentationRecordFormProps) {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
@@ -32,9 +37,16 @@ export function FermentationRecordForm({
   const { mutateAsync: update } = useMutation(
     updateFermentationRecordOptions(record?.id ?? ''),
   )
+  const formOptions = fermentationRecordFormOptions(record)
+  const isBeerReadonly = Boolean(defaultValues?.beerId)
+  const isBatchReadonly = Boolean(defaultValues?.batchNumber)
 
   const form = useAppForm({
-    ...fermentationRecordFormOptions(record),
+    ...formOptions,
+    defaultValues: {
+      ...formOptions.defaultValues,
+      ...defaultValues,
+    },
     onSubmit: async ({ value }) => {
       const payload: FermentationRecordPayload = {
         ...value,
@@ -56,7 +68,12 @@ export function FermentationRecordForm({
         await queryClient.invalidateQueries({
           queryKey: fermentationRecordKeys.root,
         })
-        await navigate({ to: '/fermentation-records' })
+
+        if (onSuccess) {
+          await onSuccess()
+        } else {
+          await navigate({ to: '/fermentation-records' })
+        }
       } catch (err) {
         toast.error(`Erro ao ${isEditing ? 'atualizar' : 'criar'} registro`, {
           description: err instanceof Error && err.message,
@@ -85,6 +102,7 @@ export function FermentationRecordForm({
               <ComboboxField
                 label="Cerveja"
                 placeholder="Selecione a cerveja"
+                disabled={isBeerReadonly}
                 options={(beers?.data ?? []).map((beer) => ({
                   label: beer.name,
                   value: beer.id,
@@ -107,14 +125,19 @@ export function FermentationRecordForm({
           </form.AppField>
           <form.AppField name="batchNumber">
             {({ InputField }) => (
-              <InputField label="Lote" type="text" placeholder="Ex.: IPA-001" />
+              <InputField
+                label="Lote"
+                type="text"
+                placeholder="Ex.: IPA-001"
+                readOnly={isBatchReadonly}
+              />
             )}
           </form.AppField>
           <div className="grid gap-4 sm:grid-cols-3">
             <form.AppField name="temperature">
               {({ InputField }) => (
                 <InputField
-                  label="Temperatura (C)"
+                  label="Temperatura"
                   type="number"
                   step="0.1"
                   placeholder="Ex.: 18.5"

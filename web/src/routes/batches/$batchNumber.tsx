@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowLeft, Loader2 } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/card'
 import { getBatchOptions } from '@/features/batches/api/options'
 import { BatchClassificationPieChart } from '@/features/batches/components/batch-classification-pie-chart'
+import { BatchFermentationRecordSheet } from '@/features/batches/components/batch-fermentation-record-sheet'
 import { BatchFermentationRecordTable } from '@/features/batches/components/batch-fermentation-record-table'
 import { FermentationMetricsChart } from '@/features/fermentation-records/components/fermentation-metrics-chart'
 
@@ -49,6 +50,7 @@ function BatchPage() {
               {batch.beerName} - {batch.beerStyle}
             </p>
           </div>
+          <BatchFermentationRecordSheet batch={batch} />
         </div>
 
         <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(320px,420px)]">

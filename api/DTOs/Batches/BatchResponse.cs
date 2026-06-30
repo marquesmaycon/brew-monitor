@@ -14,6 +14,7 @@ public class BatchResponse
 public class BatchOverviewResponse
 {
   public string BatchNumber { get; set; } = string.Empty;
+  public Guid BeerId { get; set; }
   public string BeerName { get; set; } = string.Empty;
   public string BeerStyle { get; set; } = string.Empty;
   public List<BatchFermentationMetricPointResponse> MetricPoints { get; set; } = [];

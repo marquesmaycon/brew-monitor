@@ -10,7 +10,7 @@ export const Route = createFileRoute('/beers/new')({
 
 function CreateBeerPage() {
   return (
-    <div className="space-y-6 py-10">
+    <div className="page-wrapper">
       <Button asChild variant="link">
         <Link to="/beers" className="text-sm font-medium">
           <ArrowLeftIcon /> Voltar para cervejas

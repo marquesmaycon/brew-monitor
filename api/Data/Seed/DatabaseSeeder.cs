@@ -9,8 +9,11 @@ public static class DatabaseSeeder
   private const decimal TemperatureTolerancePercentage = 0.05m;
   private const decimal PhTolerance = 0.2m;
   private const decimal ExtractTolerancePercentage = 0.05m;
+  private const int RecordsPerBatch = 16;
 
   private static readonly DateTime BaseDate = new(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+  private static readonly DateTime FirstRecordDate = new(2026, 6, 1, 8, 0, 0, DateTimeKind.Utc);
+  private static readonly DateTime MaxRecordDate = new(2026, 7, 6, 23, 59, 59, DateTimeKind.Utc);
 
   private static readonly (string Name, string Style)[] BeerCatalog =
   [
@@ -94,7 +97,7 @@ public static class DatabaseSeeder
           Id = CreateId(1, index + 1),
           Name = beer.Name,
           Style = beer.Style,
-          CreatedAt = BaseDate.AddDays(index),
+          CreatedAt = BaseDate,
           UpdatedAt = null
         }
       )
@@ -109,7 +112,7 @@ public static class DatabaseSeeder
           Id = CreateId(2, index),
           Name = $"Tank {index:000}",
           CapacityLiters = 500m + (index % 20) * 500m,
-          CreatedAt = BaseDate.AddDays(index % 30).AddHours(6),
+          CreatedAt = BaseDate,
           UpdatedAt = null
         }
       )
@@ -121,22 +124,19 @@ public static class DatabaseSeeder
     return [.. beers
       .Select((beer, index) =>
         {
-          var profile = index % 5;
-          var minTemperature = 8m + profile * 2m;
-          var minPh = 4.1m + profile * 0.1m;
-          var minExtract = 2.5m + profile * 0.4m;
+          var profile = GetFermentationProfile(beer.Style);
 
           return new FermentationParameter
           {
             Id = CreateId(3, index + 1),
             BeerId = beer.Id,
-            MinTemperature = minTemperature,
-            MaxTemperature = minTemperature + 4m,
-            MinPh = minPh,
-            MaxPh = minPh + 0.5m,
-            MinExtract = minExtract,
-            MaxExtract = minExtract + 1.8m,
-            CreatedAt = beer.CreatedAt.AddDays(1),
+            MinTemperature = profile.MinTemperature,
+            MaxTemperature = profile.MaxTemperature,
+            MinPh = profile.MinPh,
+            MaxPh = profile.MaxPh,
+            MinExtract = profile.MinExtract,
+            MaxExtract = profile.MaxExtract,
+            CreatedAt = BaseDate,
             UpdatedAt = null
           };
         }
@@ -150,20 +150,26 @@ public static class DatabaseSeeder
     IReadOnlyList<FermentationParameter> parameters
   )
   {
-    return [.. Enumerable.Range(1, 200)
+    return [.. Enumerable.Range(1, beers.Count * RecordsPerBatch)
       .Select(index =>
         {
-          var beerIndex = (index - 1) / 4;
+          var beerIndex = (index - 1) / RecordsPerBatch;
           var beer = beers[beerIndex];
           var tank = tanks[(index - 1) % tanks.Count];
           var parameter = parameters[beerIndex];
-          var (Temperature, Ph, Extract, Notes) = BuildMeasurement(parameter, (index - 1) % 4);
-          var createdAt = BaseDate.AddDays(90 + index).AddHours(index % 24);
+          var (Temperature, Ph, Extract, Notes) = BuildMeasurement(parameter, (index - 1) % 4, index);
+          var registeredAt = FirstRecordDate.AddHours(index - 1);
+          var createdAt = registeredAt.AddMinutes(5 + index % 25);
+
+          if (registeredAt > MaxRecordDate || createdAt > MaxRecordDate)
+          {
+            throw new InvalidOperationException("Seeded fermentation records cannot be dated after 2026-07-06.");
+          }
 
           return new FermentationRecord
           {
             Id = CreateId(4, index),
-            RegisteredAt = createdAt.AddMinutes(-30),
+            RegisteredAt = registeredAt,
             BeerId = beer.Id,
             TankId = tank.Id,
             BatchNumber = BuildBatchNumber(beer.Style, beerIndex + 1),
@@ -182,20 +188,82 @@ public static class DatabaseSeeder
 
   private static (decimal Temperature, decimal Ph, decimal Extract, string Notes) BuildMeasurement(
     FermentationParameter parameter,
-    int scenario
+    int scenario,
+    int index
   )
   {
-    var temperatureMidpoint = (parameter.MinTemperature + parameter.MaxTemperature) / 2m;
-    var phMidpoint = (parameter.MinPh + parameter.MaxPh) / 2m;
-    var extractMidpoint = (parameter.MinExtract + parameter.MaxExtract) / 2m;
+    var temperatureRange = parameter.MaxTemperature - parameter.MinTemperature;
+    var phRange = parameter.MaxPh - parameter.MinPh;
+    var extractRange = parameter.MaxExtract - parameter.MinExtract;
+
+    var temperatureVariation = ((index % 5) - 2) * 0.25m;
+    var phVariation = ((index % 3) - 1) * 0.03m;
+    var extractVariation = ((index % 7) - 3) * 0.12m;
+
+    var normalTemperature = Clamp(
+      parameter.MinTemperature + temperatureRange * 0.55m + temperatureVariation,
+      parameter.MinTemperature,
+      parameter.MaxTemperature
+    );
+    var normalPh = Clamp(parameter.MinPh + phRange * 0.5m + phVariation, parameter.MinPh, parameter.MaxPh);
+    var normalExtract = Clamp(
+      parameter.MinExtract + extractRange * 0.5m + extractVariation,
+      parameter.MinExtract,
+      parameter.MaxExtract
+    );
 
     return scenario switch
     {
-      0 => (temperatureMidpoint, phMidpoint, extractMidpoint, "Fermentacao dentro do padrao esperado."),
-      1 => (parameter.MaxTemperature * 1.03m, phMidpoint, extractMidpoint, "Temperatura em faixa de atencao."),
-      2 => (temperatureMidpoint, parameter.MinPh - 0.1m, extractMidpoint, "pH em faixa de atencao."),
-      _ => (parameter.MaxTemperature * 1.12m, parameter.MaxPh + 0.4m, parameter.MaxExtract * 1.12m, "Leitura fora do padrao aceitavel.")
+      0 => (normalTemperature, normalPh, normalExtract, "Fermentacao dentro do padrao esperado."),
+      1 => (parameter.MaxTemperature + 0.6m, normalPh, normalExtract, "Temperatura em faixa de atencao."),
+      2 => (normalTemperature, parameter.MinPh - 0.1m, normalExtract, "pH em faixa de atencao."),
+      _ => (parameter.MaxTemperature + 1.8m, parameter.MaxPh + 0.35m, parameter.MaxExtract + 0.8m, "Leitura fora do padrao aceitavel.")
     };
+  }
+
+  private static FermentationProfile GetFermentationProfile(string style)
+  {
+    if (ContainsAny(style, "Sour", "Gose"))
+    {
+      return new FermentationProfile(18m, 24m, 3.2m, 3.8m, 1.8m, 4.2m);
+    }
+
+    if (ContainsAny(style, "Imperial Stout", "Baltic Porter"))
+    {
+      return new FermentationProfile(18m, 22m, 4.2m, 4.8m, 5.5m, 10.5m);
+    }
+
+    if (ContainsAny(style, "Double IPA", "Tripel", "Dubbel"))
+    {
+      return new FermentationProfile(18m, 24m, 4.0m, 4.7m, 4.8m, 8.5m);
+    }
+
+    if (ContainsAny(style, "Pilsen", "Pilsner", "Lager", "Kolsch", "Bock", "Marzen", "Vienna", "Schwarzbier", "Rauchbier"))
+    {
+      return new FermentationProfile(8m, 13m, 4.0m, 4.5m, 2.0m, 4.8m);
+    }
+
+    if (ContainsAny(style, "Witbier", "Weiss", "Wheat", "Hefeweizen"))
+    {
+      return new FermentationProfile(17m, 23m, 4.0m, 4.6m, 2.2m, 5.2m);
+    }
+
+    if (ContainsAny(style, "IPA", "Pale Ale", "Session", "NEIPA"))
+    {
+      return new FermentationProfile(16m, 21m, 4.1m, 4.6m, 2.5m, 5.8m);
+    }
+
+    if (ContainsAny(style, "Stout", "Porter", "Brown", "Amber", "Red Ale", "Irish Red Ale"))
+    {
+      return new FermentationProfile(17m, 22m, 4.2m, 4.7m, 3.2m, 7.2m);
+    }
+
+    if (ContainsAny(style, "Belgian", "Saison", "Golden", "Blonde", "Altbier"))
+    {
+      return new FermentationProfile(18m, 26m, 4.0m, 4.7m, 2.8m, 7.0m);
+    }
+
+    return new FermentationProfile(16m, 22m, 4.1m, 4.6m, 2.4m, 5.6m);
   }
 
   private static FermentationRecordClassification Classify(
@@ -299,4 +367,23 @@ public static class DatabaseSeeder
 
     return value >= lowerBound && value <= upperBound;
   }
+
+  private static bool ContainsAny(string value, params string[] terms)
+  {
+    return terms.Any(term => value.Contains(term, StringComparison.OrdinalIgnoreCase));
+  }
+
+  private static decimal Clamp(decimal value, decimal min, decimal max)
+  {
+    return Math.Min(Math.Max(value, min), max);
+  }
+
+  private readonly record struct FermentationProfile(
+    decimal MinTemperature,
+    decimal MaxTemperature,
+    decimal MinPh,
+    decimal MaxPh,
+    decimal MinExtract,
+    decimal MaxExtract
+  );
 }

@@ -66,14 +66,16 @@ export function FermentationHistoryChart() {
             ))}
           </SelectContent>
         </Select>
-        <Button variant="link" className="flex items-center gap-2" asChild>
-          <Link
-            to="/batches/$batchNumber"
-            params={{ batchNumber: batchNumber ?? '' }}
-          >
-            Ver histórico completo <ArrowRight />
-          </Link>
-        </Button>
+        {selectedBatchNumber && (
+          <Button variant="link" className="flex items-center gap-2" asChild>
+            <Link
+              to="/batches/$batchNumber"
+              params={{ batchNumber: selectedBatchNumber }}
+            >
+              Ver histórico completo <ArrowRight />
+            </Link>
+          </Button>
+        )}
       </CardHeader>
       <CardContent>
         {isError ? (

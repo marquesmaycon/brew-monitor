@@ -42,7 +42,7 @@ export function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="bg-card/33 mt-12 rounded-b-2xl border-t px-4 py-6 shadow-[inset_0_1px_0_color-mix(in_oklch,var(--amber)_18%,transparent)] backdrop-blur md:px-6">
+    <footer className="mt-12 rounded-b-2xl border-t px-4 py-6 shadow-[inset_0_1px_0_color-mix(in_oklch,var(--amber)_18%,transparent)] backdrop-blur md:px-6">
       <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
         <div className="max-w-xl space-y-3">
           <div className="flex items-center gap-4">

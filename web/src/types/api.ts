@@ -39,6 +39,7 @@ export type FermentationHistory = {
 
 export type Batch = {
   batchNumber: string
+  beerId: string
   beerName: string
   beerStyle: string
   fermentationRecordCount: number

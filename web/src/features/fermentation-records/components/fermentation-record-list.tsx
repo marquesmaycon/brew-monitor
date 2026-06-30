@@ -12,8 +12,8 @@ import {
 } from '@tanstack/react-table'
 import { useState } from 'react'
 
-import { DataTable } from '#/components/table/data-table'
 import { Input } from '@/components/ui/input'
+import { DataTable } from '#/components/table/data-table'
 
 import { listFermentationRecordsOptions } from '../api/options'
 import { columns } from '../utils/table-columns'

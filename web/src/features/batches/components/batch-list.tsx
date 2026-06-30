@@ -78,11 +78,17 @@ const columns = [
   }),
   columnHelper.accessor('beerName', {
     header: sortableHeader('Cerveja'),
-    cell: ({ row }) => row.original.beerName,
-  }),
-  columnHelper.accessor('beerStyle', {
-    header: sortableHeader('Estilo'),
-    cell: ({ row }) => row.original.beerStyle,
+    cell: ({ row }) => (
+      <Button asChild variant="link" className="px-0">
+        <Link
+          to="/beers/$beerId/edit"
+          params={{ beerId: row.original.beerId }}
+          aria-label="Abrir cerveja"
+        >
+          {`${row.original.beerName} - ${row.original.beerStyle}`}
+        </Link>
+      </Button>
+    ),
   }),
   columnHelper.accessor('fermentationRecordCount', {
     header: sortableHeader('Registros'),

@@ -18,7 +18,17 @@ const columnHelper = createColumnHelper<FermentationRecord>()
 export const columns = [
   columnHelper.accessor('batchNumber', {
     header: sortableHeader('Lote'),
-    cell: (info) => info.row.original.batchNumber,
+    cell: ({ row }) => (
+      <Button asChild variant="link" className="px-0">
+        <Link
+          to="/batches/$batchNumber"
+          params={{ batchNumber: row.original.batchNumber }}
+          aria-label="Detalhar lote"
+        >
+          {row.original.batchNumber}
+        </Link>
+      </Button>
+    ),
   }),
   columnHelper.accessor('registeredAt', {
     header: sortableHeader('Registro'),
@@ -26,12 +36,31 @@ export const columns = [
   }),
   columnHelper.accessor('beer.name', {
     header: sortableHeader('Cerveja'),
-    cell: ({ row }) => `${row.original.beer.name} - ${row.original.beer.style}`,
+    cell: ({ row }) => (
+      <Button asChild variant="link" className="px-0">
+        <Link
+          to="/beers/$beerId/edit"
+          params={{ beerId: row.original.beerId }}
+          aria-label="Abrir cerveja"
+        >
+          {`${row.original.beer.name} - ${row.original.beer.style}`}
+        </Link>
+      </Button>
+    ),
   }),
   columnHelper.accessor('tank.name', {
     header: sortableHeader('Tanque'),
-    cell: ({ row }) =>
-      `${row.original.tank.name} (${row.original.tank.capacityLiters} L)`,
+    cell: ({ row }) => (
+      <Button asChild variant="link" className="px-0">
+        <Link
+          to="/tanks/$tankId/edit"
+          params={{ tankId: row.original.tankId }}
+          aria-label="Abrir tanque"
+        >
+          {`${row.original.tank.name} (${row.original.tank.capacityLiters} L)`}
+        </Link>
+      </Button>
+    ),
   }),
   columnHelper.accessor('temperature', {
     header: sortableHeader('Temp.'),

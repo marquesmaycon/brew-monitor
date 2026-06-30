@@ -39,7 +39,7 @@ function EditFermentationRecordPage() {
           {record.batchNumber}
         </h1>
         <p className="text-muted-foreground mt-2 text-sm">
-          Atualize a medicao e permita que a classificacao seja recalculada.
+          Atualize a medicao e permita que a classificação seja recalculada.
         </p>
       </div>
 

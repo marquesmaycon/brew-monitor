@@ -28,7 +28,7 @@ function CreateFermentationRecordPage() {
           Novo registro
         </h1>
         <p className="text-muted-foreground mt-2 text-sm">
-          Cadastre uma medicao de fermentacao para um lote em tanque.
+          Cadastre uma medicao de fermentação para um lote em tanque.
         </p>
       </div>
 

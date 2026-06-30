@@ -41,7 +41,7 @@ export function FermentationHistoryChart() {
     <Card className="shadow-none">
       <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-1">
-          <CardTitle>Historico de fermentacao por lote</CardTitle>
+          <CardTitle>Historico de fermentação por lote</CardTitle>
           <CardDescription>
             Temperatura, pH e extrato ao longo dos apontamentos.
           </CardDescription>

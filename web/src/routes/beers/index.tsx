@@ -20,7 +20,7 @@ function BeersPage() {
             Cervejas
           </h1>
           <p className="text-muted-foreground mt-2 text-sm">
-            Catalogo de receitas monitoradas na fermentacao.
+            Catalogo de receitas monitoradas na fermentação.
           </p>
         </div>
         <Button asChild>

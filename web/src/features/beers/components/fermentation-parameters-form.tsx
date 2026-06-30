@@ -42,7 +42,7 @@ export function FermentationParametersForm({
         }
 
         toast.success(
-          `Parametros de fermentacao ${
+          `Parametros de fermentação ${
             isEditing ? 'atualizados' : 'criados'
           } com sucesso`,
         )
@@ -59,7 +59,7 @@ export function FermentationParametersForm({
         toast.error(
           `Erro ao ${
             isEditing ? 'atualizar' : 'criar'
-          } parametros de fermentacao`,
+          } parametros de fermentação`,
           { description: err instanceof Error && err.message },
         )
       }

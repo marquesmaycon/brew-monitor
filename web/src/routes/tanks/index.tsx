@@ -20,7 +20,7 @@ function TanksPage() {
             Tanques
           </h1>
           <p className="text-muted-foreground mt-2 text-sm">
-            Cadastro dos tanques usados no monitoramento de fermentacao.
+            Cadastro dos tanques usados no monitoramento de fermentação.
           </p>
         </div>
         <Button asChild>

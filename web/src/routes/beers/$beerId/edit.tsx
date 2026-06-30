@@ -29,7 +29,7 @@ function EditBeerPage() {
           {beer.name} - {beer.style}
         </h1>
         <p className="text-muted-foreground mt-2 text-sm">
-          Atualize o nome e o estilo usados nos registros de fermentacao.
+          Atualize o nome e o estilo usados nos registros de fermentação.
         </p>
       </div>
 

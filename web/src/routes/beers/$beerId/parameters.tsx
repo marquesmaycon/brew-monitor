@@ -35,7 +35,7 @@ function RouteComponent() {
       </Button>
       <div className="mt-6">
         <h1 className="font-heading text-3xl font-semibold tracking-normal">
-          Parametros de fermentacao
+          Parametros de fermentação
         </h1>
         <p className="text-muted-foreground mt-2 text-sm">
           Configure os limites de temperatura, pH e extrato para {beer.name}.

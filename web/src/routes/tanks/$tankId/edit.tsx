@@ -28,7 +28,7 @@ function EditTankPage() {
           {tank.name}
         </h1>
         <p className="text-muted-foreground mt-2 text-sm">
-          Atualize o nome e a capacidade usados nos registros de fermentacao.
+          Atualize o nome e a capacidade usados nos registros de fermentação.
         </p>
       </div>
 

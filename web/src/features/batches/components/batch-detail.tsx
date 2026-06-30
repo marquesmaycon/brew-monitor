@@ -62,7 +62,7 @@ export function BatchDetail({ batch }: BatchDetailProps) {
       <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(320px,420px)]">
         <Card className="shadow-none">
           <CardHeader>
-            <CardTitle>Historico de fermentacao</CardTitle>
+            <CardTitle>Historico de fermentação</CardTitle>
             <CardDescription>
               Temperatura, pH e extrato ao longo dos apontamentos.
             </CardDescription>
@@ -80,9 +80,9 @@ export function BatchDetail({ batch }: BatchDetailProps) {
 
         <Card className="shadow-none">
           <CardHeader>
-            <CardTitle>Classificacao</CardTitle>
+            <CardTitle>Classificação</CardTitle>
             <CardDescription>
-              Distribuicao dos registros deste lote.
+              Distribução dos registros deste lote.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -100,7 +100,7 @@ export function BatchDetail({ batch }: BatchDetailProps) {
               <TableHead>Temp.</TableHead>
               <TableHead>pH</TableHead>
               <TableHead>Extrato</TableHead>
-              <TableHead>Classificacao</TableHead>
+              <TableHead>Classificação</TableHead>
               <TableHead>Observacoes</TableHead>
             </TableRow>
           </TableHeader>

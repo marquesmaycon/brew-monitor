@@ -68,7 +68,7 @@ export function BatchClassificationPieChart({
   if (!totalRecords) {
     return (
       <div className="text-muted-foreground flex h-72 items-center justify-center rounded-lg border border-dashed text-sm">
-        Nenhuma classificacao encontrada.
+        Nenhuma classificação encontrada.
       </div>
     )
   }

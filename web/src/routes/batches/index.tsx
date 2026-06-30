@@ -18,7 +18,7 @@ function BatchesPage() {
             Lotes
           </h1>
           <p className="text-muted-foreground mt-2 text-sm">
-            Lotes encontrados nos registros de fermentacao.
+            Lotes encontrados nos registros de fermentação.
           </p>
         </div>
       </div>

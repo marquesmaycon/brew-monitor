@@ -21,7 +21,7 @@ function CreateBeerPage() {
           Nova cerveja
         </h1>
         <p className="text-muted-foreground mt-2 text-sm">
-          Cadastre uma receita para acompanhar os parametros de fermentacao.
+          Cadastre uma receita para acompanhar os parametros de fermentação.
         </p>
       </div>
 

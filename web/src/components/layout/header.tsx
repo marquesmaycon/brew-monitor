@@ -51,7 +51,7 @@ export function Header() {
             className="nav-link"
             activeProps={{ className: 'nav-link is-active' }}
           >
-            Fermentacao
+            Fermentação
           </Link>
         </div>
 

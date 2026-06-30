@@ -105,7 +105,7 @@ function DashboardMetricCard({
             {card.description}
           </CardDescription>
         </div>
-        <div className="bg-background/70 flex size-10 items-center justify-center rounded-full ring-1 ring-current/10">
+        <div className="dark:bg-background bg-card flex size-10 items-center justify-center rounded-full ring-1 ring-current/10">
           <Icon className="size-5" aria-hidden="true" />
         </div>
       </CardHeader>

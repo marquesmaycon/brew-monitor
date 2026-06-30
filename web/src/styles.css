@@ -38,7 +38,7 @@
   --destructive-foreground: var(--dark-blue);
   --border: var(--mist-blue);
   --input: var(--mist-blue);
-  --ring: var(--amber);
+  --ring: var(--deep-blue);
   --chart-1: var(--amber);
   --chart-2: var(--deep-blue);
   --chart-3: var(--fresh-green);
@@ -76,7 +76,7 @@
   --destructive-foreground: var(--dark-blue);
   --border: color-mix(in oklch, var(--mist-blue) 22%, transparent);
   --input: color-mix(in oklch, var(--mist-blue) 28%, transparent);
-  --ring: var(--amber);
+  --ring: var(--deep-blue);
   --chart-1: var(--amber);
   --chart-2: var(--mist-blue);
   --chart-3: var(--fresh-green);

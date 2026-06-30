@@ -8,6 +8,10 @@ import {
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { Toaster } from 'sonner'
 
+import { AppSidebar } from '#/components/layout/sidebar/app-sidebar'
+import { SidebarInset, SidebarProvider } from '#/components/ui/sidebar'
+import { TooltipProvider } from '#/components/ui/tooltip'
+
 import { Footer } from '../components/layout/footer'
 import { Header } from '../components/layout/header'
 import TanStackQueryDevtools from '../lib/tanstack-devtools'
@@ -50,11 +54,18 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <HeadContent />
       </head>
-      <body className="container mx-auto min-h-screen max-w-7xl font-sans wrap-anywhere antialiased">
-        <Header />
-        <main className="px-4">{children}</main>
-        <Footer />
-        <Toaster richColors />
+      <body className="min-h-screen font-sans wrap-anywhere antialiased">
+        <TooltipProvider>
+          <SidebarProvider>
+            <AppSidebar />
+            <SidebarInset>
+              <Header />
+              <main className="container mx-auto px-4 pt-8">{children}</main>
+              <Footer />
+              <Toaster richColors />
+            </SidebarInset>
+          </SidebarProvider>
+        </TooltipProvider>
         <TanStackDevtools
           config={{
             position: 'bottom-right',

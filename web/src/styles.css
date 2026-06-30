@@ -44,6 +44,8 @@
   --sidebar-accent-foreground: oklch(0.239 0.03 283.9);
   --sidebar-border: oklch(0.786 0.031 253 / 35%);
   --sidebar-ring: oklch(0.852 0.168 86);
+
+  --header-height: 4rem
 }
 
 .dark {
@@ -168,9 +170,8 @@ body,
   }
 
   body {
-    background-color: red;
     color: var(--foreground);
-    @apply bg-background text-foreground;
+    @apply text-foreground bg-card;
   }
 
   button:not(:disabled), [role="button"]:not(:disabled) {
@@ -180,6 +181,6 @@ body,
 
 @layer utilities {
   .page-wrapper {
-    @apply space-y-6 py-10
+    @apply space-y-6;
   }
 }

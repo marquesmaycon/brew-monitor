@@ -1,21 +1,13 @@
-import { TanStackDevtools } from '@tanstack/react-devtools'
 import type { QueryClient } from '@tanstack/react-query'
-import {
-  createRootRouteWithContext,
-  HeadContent,
-  Scripts,
-} from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { Toaster } from 'sonner'
+import { createRootRouteWithContext, HeadContent } from '@tanstack/react-router'
 
 import { AppSidebar } from '#/components/layout/sidebar/app-sidebar'
-import { Provider } from '#/components/provider'
+import { Providers } from '#/components/provider'
 import { SidebarInset } from '#/components/ui/sidebar'
 import { createMetadata } from '#/lib/metadata'
 
 import { Footer } from '../components/layout/footer'
 import { Header } from '../components/layout/header'
-import TanStackQueryDevtools from '../lib/tanstack-devtools'
 import appCss from '../styles.css?url'
 
 interface MyRouterContext {
@@ -54,7 +46,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="font-sans wrap-anywhere antialiased">
-        <Provider>
+        <Providers>
           <AppSidebar />
           <SidebarInset>
             <Header />
@@ -62,22 +54,8 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               {children}
             </main>
             <Footer />
-            <Toaster richColors />
           </SidebarInset>
-        </Provider>
-        <TanStackDevtools
-          config={{
-            position: 'bottom-right',
-          }}
-          plugins={[
-            {
-              name: 'Tanstack Router',
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-            TanStackQueryDevtools,
-          ]}
-        />
-        <Scripts />
+        </Providers>
       </body>
     </html>
   )

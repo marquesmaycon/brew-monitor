@@ -64,7 +64,7 @@ export function Footer() {
 
         <nav aria-label="Links do autor" className="flex flex-wrap gap-2">
           {authorLinks.map((link) => (
-            <Button asChild variant="outline">
+            <Button asChild variant="outline" key={link.href}>
               <a
                 key={link.label}
                 href={link.href}

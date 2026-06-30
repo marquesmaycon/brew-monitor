@@ -26,7 +26,6 @@ const data = {
   user: {
     name: 'Brew Monitor',
     email: 'monitoramento de fermentacao',
-    avatar: '/avatars/shadcn.jpg',
   },
   navMain: [
     {

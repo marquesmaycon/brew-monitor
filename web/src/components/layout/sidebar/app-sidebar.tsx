@@ -3,7 +3,6 @@
 import { Link } from '@tanstack/react-router'
 import {
   BeerIcon,
-  ChartNoAxesCombinedIcon,
   ClipboardListIcon,
   ContainerIcon,
   HouseIcon,
@@ -66,8 +65,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link to="/">
-                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                  <ChartNoAxesCombinedIcon className="size-4" />
+                <div className="text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+                  <img
+                    src="/logo-white.svg"
+                    alt="Brew Monitor"
+                    className="size-8 shrink-0 object-contain"
+                  />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">Brew Monitor</span>

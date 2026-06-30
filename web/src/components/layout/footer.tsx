@@ -1,4 +1,4 @@
-import { ActivityIcon, ExternalLinkIcon, GlobeIcon } from 'lucide-react'
+import { ExternalLinkIcon, GlobeIcon } from 'lucide-react'
 
 import { Button } from '../ui/button'
 
@@ -45,18 +45,13 @@ export function Footer() {
     <footer className="bg-card/33 mt-12 rounded-b-2xl border-t px-4 py-6 shadow-[inset_0_1px_0_color-mix(in_oklch,var(--amber)_18%,transparent)] backdrop-blur md:px-6">
       <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
         <div className="max-w-xl space-y-3">
-          <div className="flex items-center gap-3">
-            <span className="bg-primary text-primary-foreground flex size-9 items-center justify-center rounded-lg">
-              <ActivityIcon className="size-4" aria-hidden="true" />
-            </span>
-            <div>
-              <p className="font-heading text-lg leading-none font-semibold">
-                Brew Monitor
-              </p>
-              <p className="text-muted-foreground text-xs">
-                Monitoramento de fermentacao
-              </p>
-            </div>
+          <div className="flex items-center gap-4">
+            <img
+              src="/logo-gray.svg"
+              alt="Brew Monitor"
+              className="h-12 w-auto object-contain"
+            />
+            <span className="truncate font-medium">Brew Monitor</span>
           </div>
           <p className="text-muted-foreground m-0 max-w-md text-sm">
             Controle de lotes, tanques e apontamentos fermentativos para manter

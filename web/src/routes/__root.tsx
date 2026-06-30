@@ -54,14 +54,16 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <HeadContent />
       </head>
-      <body className="min-h-screen font-sans wrap-anywhere antialiased">
+      <body className="h-svh overflow-hidden font-sans wrap-anywhere antialiased">
         <TooltipProvider>
-          <SidebarProvider>
+          <SidebarProvider className="h-svh min-h-0 overflow-hidden">
             <AppSidebar />
-            <SidebarInset>
+            <SidebarInset className="min-h-0 overflow-hidden">
               <Header />
-              <main className="container mx-auto px-4 pt-8">{children}</main>
-              <Footer />
+              <main className="min-h-0 flex-1 overflow-y-auto">
+                <div className="container mx-auto px-4 pt-8">{children}</div>
+                <Footer />
+              </main>
               <Toaster richColors />
             </SidebarInset>
           </SidebarProvider>

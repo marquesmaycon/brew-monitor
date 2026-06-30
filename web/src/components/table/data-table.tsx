@@ -35,7 +35,7 @@ interface DataTableProps<TData> {
 export function DataTable<TData>({ table, isFetching }: DataTableProps<TData>) {
   return (
     <>
-      <div className="h-full overflow-hidden rounded-md border">
+      <div className="bg-card/33 h-full overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

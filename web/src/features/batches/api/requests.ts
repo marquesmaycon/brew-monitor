@@ -1,10 +1,12 @@
 import { api } from '@/lib/api'
-import type { Batch, BatchDetail } from '@/types/api'
+import type { Batch, BatchDetail, Paginated, Pagination } from '@/types/api'
 
 const resource = 'batches'
 
-export function listBatches() {
-  return api.get(resource).json<Array<Batch>>()
+export function listBatches(pagination: Pagination) {
+  return api
+    .get(resource, { searchParams: pagination })
+    .json<Paginated<Batch>>()
 }
 
 export function getBatch(batchNumber: string) {

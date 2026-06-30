@@ -1,21 +1,27 @@
 import { queryOptions } from '@tanstack/react-query'
 
+import type { Pagination } from '@/types/api'
+
 import { getBatch, listBatches } from './requests'
 
 export const batchKeys = {
   root: ['batches'] as const,
-  list: function () {
-    return [...batchKeys.root, 'list'] as const
+  list: function (pagination: Pagination) {
+    return [...batchKeys.root, pagination] as const
   },
   detail: function (batchNumber: string) {
     return [...batchKeys.root, 'detail', batchNumber] as const
   },
 }
 
-export function listBatchesOptions() {
+export function listBatchesOptions(
+  pagination: Pagination = { limit: 20, page: 1 },
+) {
   return queryOptions({
-    queryKey: batchKeys.list(),
-    queryFn: listBatches,
+    queryKey: batchKeys.list(pagination),
+    queryFn: function () {
+      return listBatches(pagination)
+    },
   })
 }
 

@@ -9,7 +9,6 @@ import {
   createColumnHelper,
   getCoreRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
@@ -32,12 +31,17 @@ export function BatchList() {
     pageSize: 20,
   })
 
-  const { data: batches, isFetching } = useQuery(listBatchesOptions())
+  const page = pagination.pageIndex + 1
+  const limit = pagination.pageSize
+
+  const { data: batches, isFetching } = useQuery(
+    listBatchesOptions({ limit, page }),
+  )
 
   const table = useReactTable({
-    data: batches ?? [],
+    data: batches?.data ?? [],
     columns,
-    rowCount: batches?.length ?? 0,
+    rowCount: batches?.meta.total,
     state: { pagination, sorting, columnFilters },
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
@@ -45,7 +49,7 @@ export function BatchList() {
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    manualPagination: true,
   })
 
   return (

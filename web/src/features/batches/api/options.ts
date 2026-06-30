@@ -1,16 +1,28 @@
-import { queryOptions } from '@tanstack/react-query'
+import { keepPreviousData, queryOptions } from '@tanstack/react-query'
 
 import type { Pagination } from '@/types/api'
 
-import { getBatch, listBatches } from './requests'
+import {
+  getBatchOverview,
+  listBatches,
+  listBatchFermentationRecords,
+} from './requests'
 
 export const batchKeys = {
   root: ['batches'] as const,
   list: function (pagination: Pagination) {
     return [...batchKeys.root, pagination] as const
   },
-  detail: function (batchNumber: string) {
-    return [...batchKeys.root, 'detail', batchNumber] as const
+  overview: function (batchNumber: string) {
+    return [...batchKeys.root, batchNumber, 'overview'] as const
+  },
+  fermentationRecords: function (batchNumber: string, pagination: Pagination) {
+    return [
+      ...batchKeys.root,
+      batchNumber,
+      'fermentation-records',
+      pagination,
+    ] as const
   },
 }
 
@@ -27,9 +39,22 @@ export function listBatchesOptions(
 
 export function getBatchOptions(batchNumber: string) {
   return queryOptions({
-    queryKey: batchKeys.detail(batchNumber),
+    queryKey: batchKeys.overview(batchNumber),
     queryFn: function () {
-      return getBatch(batchNumber)
+      return getBatchOverview(batchNumber)
     },
+  })
+}
+
+export function listBatchFermentationRecordsOptions(
+  batchNumber: string,
+  pagination: Pagination = { limit: 20, page: 1 },
+) {
+  return queryOptions({
+    queryKey: batchKeys.fermentationRecords(batchNumber, pagination),
+    queryFn: function () {
+      return listBatchFermentationRecords(batchNumber, pagination)
+    },
+    placeholderData: keepPreviousData,
   })
 }

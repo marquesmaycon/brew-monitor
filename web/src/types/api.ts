@@ -135,8 +135,19 @@ export type BatchFermentationRecord = Pick<
   tankCapacityLiters: number
 }
 
-export type BatchDetail = Batch & {
-  fermentationRecords: Array<BatchFermentationRecord>
+export type BatchFermentationMetricPoint = Pick<
+  FermentationRecord,
+  'registeredAt' | 'temperature' | 'ph' | 'extract'
+>
+
+export type BatchClassificationCount = {
+  classification: FermentationRecordClassification
+  count: number
+}
+
+export type BatchOverview = Pick<Batch, 'batchNumber' | 'beerName' | 'beerStyle'> & {
+  metricPoints: Array<BatchFermentationMetricPoint>
+  classificationCounts: Array<BatchClassificationCount>
 }
 
 export type FermentationRecordPayload = Pick<

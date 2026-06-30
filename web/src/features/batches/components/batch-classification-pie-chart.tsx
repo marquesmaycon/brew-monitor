@@ -9,13 +9,13 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart'
 import type {
-  BatchFermentationRecord,
+  BatchClassificationCount,
   FermentationRecordClassification,
 } from '@/types/api'
 import { classificationLabels } from '#/features/fermentation-records/utils/constants'
 
 type BatchClassificationPieChartProps = {
-  records: Array<BatchFermentationRecord>
+  classificationCounts: Array<BatchClassificationCount>
 }
 
 const classificationColors: Record<FermentationRecordClassification, string> = {
@@ -43,22 +43,14 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export function BatchClassificationPieChart({
-  records,
+  classificationCounts,
 }: BatchClassificationPieChartProps) {
   const labelYOffset = -38
 
-  const data = (
-    [
-      'WITHIN_STANDARD',
-      'ATTENTION',
-      'OUT_OF_STANDARD',
-    ] satisfies Array<FermentationRecordClassification>
-  )
-    .map((classification) => ({
+  const data = classificationCounts
+    .map(({ classification, count }) => ({
       classification,
-      count: records.filter(
-        (record) => record.classification === classification,
-      ).length,
+      count,
       fill: classificationColors[classification],
     }))
     .filter((item) => item.count > 0)

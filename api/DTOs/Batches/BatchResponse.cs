@@ -11,9 +11,27 @@ public class BatchResponse
   public int FermentationRecordCount { get; set; }
 }
 
-public class BatchDetailResponse : BatchResponse
+public class BatchOverviewResponse
 {
-  public List<BatchFermentationRecordResponse> FermentationRecords { get; set; } = [];
+  public string BatchNumber { get; set; } = string.Empty;
+  public string BeerName { get; set; } = string.Empty;
+  public string BeerStyle { get; set; } = string.Empty;
+  public List<BatchFermentationMetricPointResponse> MetricPoints { get; set; } = [];
+  public List<BatchClassificationCountResponse> ClassificationCounts { get; set; } = [];
+}
+
+public class BatchFermentationMetricPointResponse
+{
+  public DateTime RegisteredAt { get; set; }
+  public decimal Temperature { get; set; }
+  public decimal Ph { get; set; }
+  public decimal Extract { get; set; }
+}
+
+public class BatchClassificationCountResponse
+{
+  public FermentationRecordClassification Classification { get; set; }
+  public int Count { get; set; }
 }
 
 public class BatchFermentationRecordResponse

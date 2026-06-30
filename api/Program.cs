@@ -32,6 +32,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
             .UseSnakeCaseNamingConvention()
     );
 builder.Services.AddScoped<IBeerService, BeerService>();
+builder.Services.AddScoped<IBatchService, BatchService>();
 builder.Services.AddScoped<ITankService, TankService>();
 builder.Services.AddScoped<IFermentationRecordService, FermentationRecordService>();
 

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
@@ -18,22 +19,32 @@ import {
 } from '@/components/ui/table'
 import type { BatchDetail as BatchDetailType } from '@/types/api'
 import { Badge } from '#/components/ui/badge'
+import { FermentationMetricsChart } from '#/features/fermentation-records/components/fermentation-metrics-chart'
 import {
   classificationClasses,
   classificationLabels,
   getClassificationIcon,
 } from '#/features/fermentation-records/utils/constants'
 
+import { BatchClassificationPieChart } from './batch-classification-pie-chart'
+
 type BatchDetailProps = {
   batch: BatchDetailType
 }
 
 export function BatchDetail({ batch }: BatchDetailProps) {
+  const metricData = batch.fermentationRecords.map((record) => ({
+    registeredAt: record.registeredAt,
+    temperature: record.temperature,
+    ph: record.ph,
+    extract: record.extract,
+  }))
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <Button asChild variant="link" className="-ml-4 mb-2">
+          <Button asChild variant="link" className="mb-2 -ml-4">
             <Link to="/batches">
               <ArrowLeft />
               Voltar para lotes
@@ -48,29 +59,34 @@ export function BatchDetail({ batch }: BatchDetailProps) {
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(320px,420px)]">
         <Card className="shadow-none">
           <CardHeader>
-            <CardTitle className="text-sm">Cerveja</CardTitle>
+            <CardTitle>Historico de fermentacao</CardTitle>
+            <CardDescription>
+              Temperatura, pH e extrato ao longo dos apontamentos.
+            </CardDescription>
           </CardHeader>
-          <CardContent className="text-2xl font-semibold">
-            {batch.beerName}
+          <CardContent>
+            {metricData.length ? (
+              <FermentationMetricsChart data={metricData} />
+            ) : (
+              <div className="text-muted-foreground flex h-72 items-center justify-center rounded-lg border border-dashed text-sm">
+                Nenhum historico fermentativo encontrado.
+              </div>
+            )}
           </CardContent>
         </Card>
+
         <Card className="shadow-none">
           <CardHeader>
-            <CardTitle className="text-sm">Estilo</CardTitle>
+            <CardTitle>Classificacao</CardTitle>
+            <CardDescription>
+              Distribuicao dos registros deste lote.
+            </CardDescription>
           </CardHeader>
-          <CardContent className="text-2xl font-semibold">
-            {batch.beerStyle}
-          </CardContent>
-        </Card>
-        <Card className="shadow-none">
-          <CardHeader>
-            <CardTitle className="text-sm">Registros</CardTitle>
-          </CardHeader>
-          <CardContent className="text-2xl font-semibold">
-            {batch.fermentationRecordCount}
+          <CardContent>
+            <BatchClassificationPieChart records={batch.fermentationRecords} />
           </CardContent>
         </Card>
       </div>

@@ -9,10 +9,18 @@ public static class DatabaseSeeder
   private const decimal TemperatureTolerancePercentage = 0.05m;
   private const decimal PhTolerance = 0.2m;
   private const decimal ExtractTolerancePercentage = 0.05m;
-  private const int RecordsPerBatch = 16;
+  private const int RecordsPerBatch = 30;
+  private const decimal IndustryMinTemperature = -1m;
+  private const decimal IndustryMaxTemperature = 22m;
+  private const decimal IndustryMinPh = 3.9m;
+  private const decimal IndustryMaxPh = 5.4m;
+  private const decimal IndustryMinExtract = 1.8m;
+  private const decimal IndustryMaxExtract = 22m;
 
   private static readonly DateTime BaseDate = new(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-  private static readonly DateTime FirstRecordDate = new(2026, 6, 1, 8, 0, 0, DateTimeKind.Utc);
+  private static readonly DateTime DeliveryDate = new(2026, 7, 6, 0, 0, 0, DateTimeKind.Utc);
+  private static readonly DateTime FirstRecordDate = DeliveryDate.AddDays(-60).AddHours(8);
+  private static readonly DateTime LastRecordDate = DeliveryDate.AddHours(8);
   private static readonly DateTime MaxRecordDate = new(2026, 7, 6, 23, 59, 59, DateTimeKind.Utc);
 
   private static readonly (string Name, string Style)[] BeerCatalog =
@@ -154,11 +162,12 @@ public static class DatabaseSeeder
       .Select(index =>
         {
           var beerIndex = (index - 1) / RecordsPerBatch;
+          var recordIndex = (index - 1) % RecordsPerBatch;
           var beer = beers[beerIndex];
           var tank = tanks[(index - 1) % tanks.Count];
           var parameter = parameters[beerIndex];
           var (Temperature, Ph, Extract, Notes) = BuildMeasurement(parameter, (index - 1) % 4, index);
-          var registeredAt = FirstRecordDate.AddHours(index - 1);
+          var registeredAt = BuildRegisteredAt(recordIndex, beerIndex);
           var createdAt = registeredAt.AddMinutes(5 + index % 25);
 
           if (registeredAt > MaxRecordDate || createdAt > MaxRecordDate)
@@ -184,6 +193,16 @@ public static class DatabaseSeeder
         }
       )
     ];
+  }
+
+  private static DateTime BuildRegisteredAt(int recordIndex, int beerIndex)
+  {
+    var windowTicks = LastRecordDate.Ticks - FirstRecordDate.Ticks;
+    var recordOffsetTicks = windowTicks * recordIndex / (RecordsPerBatch - 1);
+
+    return FirstRecordDate
+      .AddTicks(recordOffsetTicks)
+      .AddMinutes((beerIndex % 8) * 7);
   }
 
   private static (decimal Temperature, decimal Ph, decimal Extract, string Notes) BuildMeasurement(
@@ -212,58 +231,60 @@ public static class DatabaseSeeder
       parameter.MaxExtract
     );
 
-    return scenario switch
+    var measurement = scenario switch
     {
       0 => (normalTemperature, normalPh, normalExtract, "Fermentacao dentro do padrao esperado."),
       1 => (parameter.MaxTemperature + 0.6m, normalPh, normalExtract, "Temperatura em faixa de atencao."),
       2 => (normalTemperature, parameter.MinPh - 0.1m, normalExtract, "pH em faixa de atencao."),
       _ => (parameter.MaxTemperature + 1.8m, parameter.MaxPh + 0.35m, parameter.MaxExtract + 0.8m, "Leitura fora do padrao aceitavel.")
     };
+
+    return ClampMeasurementToIndustry(measurement);
   }
 
   private static FermentationProfile GetFermentationProfile(string style)
   {
     if (ContainsAny(style, "Sour", "Gose"))
     {
-      return new FermentationProfile(18m, 24m, 3.2m, 3.8m, 1.8m, 4.2m);
+      return new FermentationProfile(18m, 22m, 3.9m, 4.2m, 1.8m, 4.2m);
     }
 
     if (ContainsAny(style, "Imperial Stout", "Baltic Porter"))
     {
-      return new FermentationProfile(18m, 22m, 4.2m, 4.8m, 5.5m, 10.5m);
+      return new FermentationProfile(18m, 22m, 4.2m, 4.9m, 8.5m, 22m);
     }
 
     if (ContainsAny(style, "Double IPA", "Tripel", "Dubbel"))
     {
-      return new FermentationProfile(18m, 24m, 4.0m, 4.7m, 4.8m, 8.5m);
+      return new FermentationProfile(18m, 22m, 4.0m, 4.8m, 6.5m, 16m);
     }
 
     if (ContainsAny(style, "Pilsen", "Pilsner", "Lager", "Kolsch", "Bock", "Marzen", "Vienna", "Schwarzbier", "Rauchbier"))
     {
-      return new FermentationProfile(8m, 13m, 4.0m, 4.5m, 2.0m, 4.8m);
+      return new FermentationProfile(-1m, 13m, 4.1m, 4.7m, 1.8m, 8.5m);
     }
 
     if (ContainsAny(style, "Witbier", "Weiss", "Wheat", "Hefeweizen"))
     {
-      return new FermentationProfile(17m, 23m, 4.0m, 4.6m, 2.2m, 5.2m);
+      return new FermentationProfile(17m, 22m, 4.0m, 4.7m, 2.2m, 8.5m);
     }
 
     if (ContainsAny(style, "IPA", "Pale Ale", "Session", "NEIPA"))
     {
-      return new FermentationProfile(16m, 21m, 4.1m, 4.6m, 2.5m, 5.8m);
+      return new FermentationProfile(16m, 21m, 4.1m, 4.8m, 3.0m, 12m);
     }
 
     if (ContainsAny(style, "Stout", "Porter", "Brown", "Amber", "Red Ale", "Irish Red Ale"))
     {
-      return new FermentationProfile(17m, 22m, 4.2m, 4.7m, 3.2m, 7.2m);
+      return new FermentationProfile(17m, 22m, 4.2m, 5.0m, 4.0m, 14m);
     }
 
     if (ContainsAny(style, "Belgian", "Saison", "Golden", "Blonde", "Altbier"))
     {
-      return new FermentationProfile(18m, 26m, 4.0m, 4.7m, 2.8m, 7.0m);
+      return new FermentationProfile(18m, 22m, 4.0m, 4.9m, 3.2m, 13m);
     }
 
-    return new FermentationProfile(16m, 22m, 4.1m, 4.6m, 2.4m, 5.6m);
+    return new FermentationProfile(16m, 22m, 4.1m, 4.8m, 2.4m, 10m);
   }
 
   private static FermentationRecordClassification Classify(
@@ -376,6 +397,18 @@ public static class DatabaseSeeder
   private static decimal Clamp(decimal value, decimal min, decimal max)
   {
     return Math.Min(Math.Max(value, min), max);
+  }
+
+  private static (decimal Temperature, decimal Ph, decimal Extract, string Notes) ClampMeasurementToIndustry(
+    (decimal Temperature, decimal Ph, decimal Extract, string Notes) measurement
+  )
+  {
+    return (
+      Clamp(measurement.Temperature, IndustryMinTemperature, IndustryMaxTemperature),
+      Clamp(measurement.Ph, IndustryMinPh, IndustryMaxPh),
+      Clamp(measurement.Extract, IndustryMinExtract, IndustryMaxExtract),
+      measurement.Notes
+    );
   }
 
   private readonly record struct FermentationProfile(

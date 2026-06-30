@@ -15,7 +15,7 @@ function BatchPage() {
   const batch = Route.useLoaderData()
 
   return (
-    <section className="page-wrap px-4 py-10">
+    <section className="px-4 py-10">
       <BatchDetail batch={batch} />
     </section>
   )
@@ -23,7 +23,7 @@ function BatchPage() {
 
 function BatchNotFound() {
   return (
-    <section className="page-wrap px-4 py-10">
+    <section className="px-4 py-10">
       <div className="flex min-h-72 flex-col items-center justify-center gap-4 rounded-md border border-dashed text-center">
         <div>
           <h1 className="font-heading text-2xl font-semibold">

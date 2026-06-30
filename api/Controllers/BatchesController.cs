@@ -1,5 +1,6 @@
 using BrewMonitor.Api.Data;
 using BrewMonitor.Api.DTOs.Batches;
+using BrewMonitor.Api.DTOs.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,9 +11,15 @@ namespace BrewMonitor.Api.Controllers;
 public class BatchesController(AppDbContext context) : ControllerBase
 {
   [HttpGet]
-  public async Task<ActionResult<List<BatchResponse>>> GetAll()
+  public async Task<ActionResult<PaginatedResult<BatchResponse>>> GetAll(
+    [FromQuery] int page = 1,
+    [FromQuery] int limit = 20
+  )
   {
-    var batches = await context.FermentationRecords
+    page = Math.Max(page, 1);
+    limit = Math.Max(limit, 1);
+
+    var query = context.FermentationRecords
       .AsNoTracking()
       .GroupBy(record => record.BatchNumber)
       .Select(group => new BatchResponse
@@ -28,10 +35,22 @@ public class BatchesController(AppDbContext context) : ControllerBase
           .First(),
         FermentationRecordCount = group.Count()
       })
-      .OrderBy(batch => batch.BatchNumber)
+      .OrderBy(batch => batch.BatchNumber);
+
+    var total = await query.CountAsync();
+    var batches = await query
+      .Skip((page - 1) * limit)
+      .Take(limit)
       .ToListAsync();
 
-    return Ok(batches);
+    return Ok(new PaginatedResult<BatchResponse>
+    {
+      Data = batches,
+      Meta = new PaginationMeta
+      {
+        Total = total
+      }
+    });
   }
 
   [HttpGet("{batchNumber}")]

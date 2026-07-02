@@ -3,37 +3,25 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowLeftIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
-import { listBeersOptions } from '@/features/beers/api/options'
 import { getFermentationRecordOptions } from '@/features/fermentation-records/api/options'
 import { FermentationRecordForm } from '@/features/fermentation-records/components/fermentation-record-form'
 import { FermentationRecordSummary } from '@/features/fermentation-records/components/fermentation-record-summary'
-import { listTanksOptions } from '@/features/tanks/api/options'
 import { createMetadata } from '@/lib/metadata'
 
 export const Route = createFileRoute('/fermentation-records/$recordId/edit')({
   loader: ({ context, params }) =>
-    Promise.all([
-      context.queryClient.ensureQueryData(
-        getFermentationRecordOptions(params.recordId),
-      ),
-      context.queryClient.ensureQueryData(
-        listBeersOptions({ limit: 100, page: 1 }),
-      ),
-      context.queryClient.ensureQueryData(
-        listTanksOptions({ limit: 100, page: 1 }),
-      ),
-    ]),
+    context.queryClient.ensureQueryData(
+      getFermentationRecordOptions(params.recordId),
+    ),
   component: EditFermentationRecordPage,
   head: ({ loaderData, params }) => {
-    const record = loaderData?.[0]
-
     return {
       meta: createMetadata({
-        title: record
-          ? `Editar registro do lote ${record.batchNumber}`
+        title: loaderData
+          ? `Editar registro do lote ${loaderData.batchNumber}`
           : 'Editar registro',
-        description: record
-          ? `Atualize a medicao do lote ${record.batchNumber} para ${record.beer.name} no tanque ${record.tank.name}.`
+        description: loaderData
+          ? `Atualize a medicao do lote ${loaderData.batchNumber} para ${loaderData.beer.name} no tanque ${loaderData.tank.name}.`
           : `Atualize a medicao do registro ${params.recordId}.`,
       }),
     }

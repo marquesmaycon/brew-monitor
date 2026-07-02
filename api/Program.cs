@@ -59,4 +59,6 @@ app.UseCors("Frontend");
 
 app.MapControllers().RequireCors("Frontend");
 
+app.MapGet("/", () => "API rodando no Render");
+
 app.Run();

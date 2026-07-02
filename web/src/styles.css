@@ -134,6 +134,16 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+
+  --dark-blue: var(--dark-blue);
+  --color-deep-blue:var(--deep-blue);
+  --color-mist-blue:var(--mist-blue);
+  --color-neutral-gray: var(--neutral-gray);
+  --color-soft-gray: var(--soft-gray);
+  --color-amber: var(--amber);
+  --color-fresh-green: var(--fresh-green);
+  --color-coral: var(--coral);
 }
 
 html,

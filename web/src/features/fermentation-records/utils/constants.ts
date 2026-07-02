@@ -17,11 +17,11 @@ export const classificationClasses: Record<
   string
 > = {
   WITHIN_STANDARD:
-    'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900/60 dark:bg-emerald-950/40 dark:text-emerald-300',
+    'border-emerald-200 bg-fresh-green/50 text-emerald-700 dark:border-emerald-900/60 dark:bg-emerald-950/40 dark:text-fresh-green',
   ATTENTION:
-    'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber-300',
+    'border-amber-200 bg-amber/50 text-amber-700 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber',
   OUT_OF_STANDARD:
-    'border-red-200 bg-red-50 text-red-700 dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-300',
+    'border-red-600 bg-coral/50 text-red-700 dark:border-red-900 dark:bg-red-800/40 dark:text-coral',
 }
 
 export const classificationLabels: Record<

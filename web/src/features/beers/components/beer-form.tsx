@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 import { Field, FieldGroup } from '@/components/ui/field'
 import { useAppForm } from '@/hooks/form'
 import type { Beer } from '@/types/api'
+import { getErrorDescription } from '#/lib/utils'
 
 import {
   createBeerOptions,
@@ -41,7 +42,7 @@ export function BeerForm({ beer }: BeerFormProps) {
       } catch (err) {
         toast.error(
           `Erro ao ${isEditing ? 'atualizar' : 'criar'} nova cerveja`,
-          { description: err instanceof Error && err.message },
+          { description: await getErrorDescription(err) },
         )
       }
     },

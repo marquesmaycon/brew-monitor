@@ -3,8 +3,10 @@ import {
   mutationOptions,
   queryOptions,
 } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 import type { FermentationParameterPayload, Pagination } from '@/types/api'
+import { getErrorDescription } from '#/lib/utils'
 
 import type { BeerSchema } from '../validation/beer.validation'
 import {
@@ -74,6 +76,15 @@ export function deleteBeerOptions() {
   return mutationOptions({
     mutationFn: function (id: string) {
       return deleteBeer(id)
+    },
+    onSuccess: async (_, __, ___, { client }) => {
+      toast.success('Cerveja excluida com sucesso')
+      await client.invalidateQueries({ queryKey: beerKeys.root })
+    },
+    onError: async (err) => {
+      toast.error('Erro ao excluir cerveja', {
+        description: await getErrorDescription(err),
+      })
     },
   })
 }

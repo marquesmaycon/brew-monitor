@@ -12,10 +12,13 @@ import type { BeerSchema } from '../validation/beer.validation'
 const resource = 'beers'
 
 export function listBeers(pagination: Pagination) {
-  const { search, ...pageParams } = pagination
-  const searchParams = search?.trim()
-    ? { ...pageParams, search: search.trim() }
-    : pageParams
+  const { search, sortBy, sortDirection, ...pageParams } = pagination
+  const searchParams = {
+    ...pageParams,
+    ...(search?.trim() ? { search: search.trim() } : {}),
+    ...(sortBy ? { sortBy } : {}),
+    ...(sortDirection ? { sortDirection } : {}),
+  }
 
   return api.get(resource, { searchParams }).json<Paginated<Beer>>()
 }

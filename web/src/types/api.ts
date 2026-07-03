@@ -2,6 +2,8 @@ export type Pagination = {
   limit: number
   page: number
   search?: string
+  sortBy?: string
+  sortDirection?: 'asc' | 'desc'
 }
 
 export type Paginated<T> = {

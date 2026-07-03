@@ -53,14 +53,14 @@ export function BeerList() {
     pageIndex: 0,
     pageSize: 20,
   })
-  const [search, setSearch] = useDebouncedSearch()
+  const [debouncedSearch, search, setSearch] = useDebouncedSearch()
   const [sort] = sorting
 
   const { data: beers, isFetching } = useQuery(
     listBeersOptions({
       limit: pagination.pageSize,
       page: pagination.pageIndex + 1,
-      search,
+      search: debouncedSearch,
       sortBy: sort.id,
       sortDirection: sort.desc ? 'desc' : 'asc',
     }),

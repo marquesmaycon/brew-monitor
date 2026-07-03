@@ -12,7 +12,12 @@ import type { BeerSchema } from '../validation/beer.validation'
 const resource = 'beers'
 
 export function listBeers(pagination: Pagination) {
-  return api.get(resource, { searchParams: pagination }).json<Paginated<Beer>>()
+  const { search, ...pageParams } = pagination
+  const searchParams = search?.trim()
+    ? { ...pageParams, search: search.trim() }
+    : pageParams
+
+  return api.get(resource, { searchParams }).json<Paginated<Beer>>()
 }
 
 export function getBeer(id: string) {

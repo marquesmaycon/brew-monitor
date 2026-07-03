@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
+import { useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 
 import { Field, FieldGroup } from '@/components/ui/field'
@@ -29,10 +30,44 @@ export function FermentationRecordForm({
 }: FermentationRecordFormProps) {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
+
+  const [beerSearch, setBeerSearch] = useState('')
+  const [debouncedBeerSearch, setDebouncedBeerSearch] = useState('')
+  const [tankSearch, setTankSearch] = useState('')
+  const [debouncedTankSearch, setDebouncedTankSearch] = useState('')
+
   const isEditing = Boolean(record)
 
-  const { data: beers } = useQuery(listBeersOptions({ limit: 100, page: 1 }))
-  const { data: tanks } = useQuery(listTanksOptions({ limit: 100, page: 1 }))
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      setDebouncedBeerSearch(beerSearch.trim())
+    }, 300)
+
+    return () => window.clearTimeout(timeoutId)
+  }, [beerSearch])
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      setDebouncedTankSearch(tankSearch.trim())
+    }, 300)
+
+    return () => window.clearTimeout(timeoutId)
+  }, [tankSearch])
+
+  const { data: beers, isFetching: isFetchingBeers } = useQuery(
+    listBeersOptions({
+      limit: 100,
+      page: 1,
+      search: debouncedBeerSearch || undefined,
+    }),
+  )
+  const { data: tanks, isFetching: isFetchingTanks } = useQuery(
+    listTanksOptions({
+      limit: 100,
+      page: 1,
+      search: debouncedTankSearch || undefined,
+    }),
+  )
   const { mutateAsync: create } = useMutation(createFermentationRecordOptions())
   const { mutateAsync: update } = useMutation(
     updateFermentationRecordOptions(record?.id ?? ''),
@@ -40,6 +75,52 @@ export function FermentationRecordForm({
   const formOptions = fermentationRecordFormOptions(record)
   const isBeerReadonly = Boolean(defaultValues?.beerId)
   const isBatchReadonly = Boolean(defaultValues?.batchNumber)
+
+  const beerOptions = useMemo(() => {
+    const options = (beers?.data ?? []).map((beer) => ({
+      label: beer.name,
+      value: beer.id,
+      description: beer.style,
+    }))
+
+    if (
+      !record?.beer ||
+      options.some((option) => option.value === record.beer.id)
+    ) {
+      return options
+    }
+
+    return [
+      {
+        label: record.beer.name,
+        value: record.beer.id,
+        description: record.beer.style,
+      },
+      ...options,
+    ]
+  }, [beers?.data, record?.beer])
+
+  const tankOptions = useMemo(() => {
+    const options = (tanks?.data ?? []).map((tank) => ({
+      label: `${tank.name} (${tank.capacityLiters} L)`,
+      value: tank.id,
+    }))
+
+    if (
+      !record?.tank ||
+      options.some((option) => option.value === record.tank.id)
+    ) {
+      return options
+    }
+
+    return [
+      {
+        label: `${record.tank.name} (${record.tank.capacityLiters} L)`,
+        value: record.tank.id,
+      },
+      ...options,
+    ]
+  }, [record?.tank, tanks?.data])
 
   const form = useAppForm({
     ...formOptions,
@@ -101,13 +182,13 @@ export function FermentationRecordForm({
             {({ ComboboxField }) => (
               <ComboboxField
                 label="Cerveja"
-                placeholder="Selecione a cerveja"
+                placeholder="Busque por nome ou estilo"
                 disabled={isBeerReadonly}
-                options={(beers?.data ?? []).map((beer) => ({
-                  label: beer.name,
-                  value: beer.id,
-                  description: beer.style,
-                }))}
+                emptyMessage="Nenhuma cerveja encontrada."
+                isLoading={isFetchingBeers}
+                onSearchChange={setBeerSearch}
+                options={beerOptions}
+                shouldFilter={false}
               />
             )}
           </form.AppField>
@@ -115,11 +196,12 @@ export function FermentationRecordForm({
             {({ ComboboxField }) => (
               <ComboboxField
                 label="Tanque"
-                placeholder="Selecione o tanque"
-                options={(tanks?.data ?? []).map((tank) => ({
-                  label: `${tank.name} (${tank.capacityLiters} L)`,
-                  value: tank.id,
-                }))}
+                placeholder="Busque por nome do tanque"
+                emptyMessage="Nenhum tanque encontrado."
+                isLoading={isFetchingTanks}
+                onSearchChange={setTankSearch}
+                options={tankOptions}
+                shouldFilter={false}
               />
             )}
           </form.AppField>

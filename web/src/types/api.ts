@@ -1,6 +1,7 @@
 export type Pagination = {
   limit: number
   page: number
+  search?: string
 }
 
 export type Paginated<T> = {

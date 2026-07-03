@@ -1,3 +1,5 @@
+import { Loader2 } from 'lucide-react'
+
 import { useFieldContext } from '@/hooks/form-context'
 
 import {
@@ -19,15 +21,23 @@ type ComboboxFieldOption = {
 
 type ComboboxFieldProps = {
   disabled?: boolean
+  emptyMessage?: string
+  isLoading?: boolean
   label: string
+  onSearchChange?: (search: string) => void
   options: Array<ComboboxFieldOption>
   placeholder?: string
+  shouldFilter?: boolean
 }
 
 export function ComboboxField({
   label,
   options,
   placeholder,
+  emptyMessage = 'Nenhum resultado encontrado.',
+  isLoading = false,
+  onSearchChange,
+  shouldFilter = true,
   ...props
 }: ComboboxFieldProps) {
   const field = useFieldContext<string>()
@@ -37,11 +47,14 @@ export function ComboboxField({
     <Field data-invalid={isInvalid}>
       <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
       <Combobox
+        filter={shouldFilter ? undefined : null}
         items={options.map((option) => option.value)}
         value={field.state.value || null}
         onValueChange={(value) => {
-          console.log(value)
           field.handleChange(value ?? '')
+        }}
+        onInputValueChange={(value) => {
+          onSearchChange?.(value)
         }}
         itemToStringLabel={(value) =>
           options.find((option) => option.value === value)?.label ?? value
@@ -58,7 +71,13 @@ export function ComboboxField({
           onBlur={field.handleBlur}
         />
         <ComboboxContent>
-          <ComboboxEmpty>Nenhum resultado encontrado.</ComboboxEmpty>
+          <ComboboxEmpty>
+            {isLoading ? (
+              <Loader2 className="mx-auto size-4 animate-spin" />
+            ) : (
+              emptyMessage
+            )}
+          </ComboboxEmpty>
           <ComboboxList>
             {options.map((option) => (
               <ComboboxItem key={option.value} value={option.value}>

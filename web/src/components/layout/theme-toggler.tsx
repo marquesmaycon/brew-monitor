@@ -67,8 +67,8 @@ export function ThemeToggler() {
 
   const label =
     mode === 'auto'
-      ? 'Theme mode: auto (system). Click to switch to light mode.'
-      : `Theme mode: ${mode}. Click to switch mode.`
+      ? 'Tema: auto (system). Clique para alterar para o modo claro.'
+      : `Tema: ${mode}. Clique para alterar modo.`
 
   const Icon = mode === 'auto' ? SunMoon : mode === 'light' ? Sun : Moon
 
@@ -78,9 +78,9 @@ export function ThemeToggler() {
       aria-label={label}
       title={label}
       variant="ghost"
-      className="rounded-full border px-3 py-1.5 text-sm font-semibold shadow-[0_8px_22px_rgba(30,90,72,0.08)] transition hover:-translate-y-0.5"
+      size="sm"
     >
-      <Icon /> {mode === 'auto' ? 'Auto' : mode === 'dark' ? 'Escuro' : 'Claro'}
+      <Icon />
     </Button>
   )
 }

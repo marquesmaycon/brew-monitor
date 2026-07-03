@@ -1,6 +1,5 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
-import { toast } from 'sonner'
 
 import { Field, FieldGroup } from '@/components/ui/field'
 import { useAppForm } from '@/hooks/form'
@@ -10,9 +9,7 @@ import type {
 } from '@/types/api'
 
 import {
-  beerKeys,
   createBeerFermentationParameterOptions,
-  listBeersOptions,
   updateBeerFermentationParameterOptions,
 } from '../api/options'
 import type { FermentationParametersSchema } from '../validation/fermentation-parameters.validation'
@@ -28,41 +25,18 @@ export function FermentationParametersForm({
   parameters,
 }: FermentationParametersFormProps) {
   const navigate = useNavigate()
-  const queryClient = useQueryClient()
   const isEditing = Boolean(parameters)
 
   const form = useAppForm({
     ...fermentationParametersFormOptions(parameters),
     onSubmit: async ({ value }) => {
-      try {
-        if (parameters) {
-          await update(toPayload(value))
-        } else {
-          await create(toPayload(value))
-        }
-
-        toast.success(
-          `Parametros de fermentação ${
-            isEditing ? 'atualizados' : 'criados'
-          } com sucesso`,
-        )
-
-        await queryClient.invalidateQueries(listBeersOptions())
-        await queryClient.invalidateQueries({
-          queryKey: beerKeys.fermentationParameter(beerId),
-        })
-        await queryClient.invalidateQueries({
-          queryKey: beerKeys.detail(beerId),
-        })
-        await navigate({ to: '/beers' })
-      } catch (err) {
-        toast.error(
-          `Erro ao ${
-            isEditing ? 'atualizar' : 'criar'
-          } parametros de fermentação`,
-          { description: err instanceof Error && err.message },
-        )
+      if (parameters) {
+        await update(toPayload(value))
+      } else {
+        await create(toPayload(value))
       }
+
+      await navigate({ to: '/beers' })
     },
   })
 

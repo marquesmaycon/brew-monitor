@@ -1,17 +1,11 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
-import { toast } from 'sonner'
 
 import { Field, FieldGroup } from '@/components/ui/field'
 import { useAppForm } from '@/hooks/form'
 import type { Beer } from '@/types/api'
-import { getErrorDescription } from '#/lib/utils'
 
-import {
-  createBeerOptions,
-  listBeersOptions,
-  updateBeerOptions,
-} from '../api/options'
+import { createBeerOptions, updateBeerOptions } from '../api/options'
 import { beerFormOptions } from '../validation/beer.validation'
 
 type BeerFormProps = {
@@ -20,31 +14,18 @@ type BeerFormProps = {
 
 export function BeerForm({ beer }: BeerFormProps) {
   const navigate = useNavigate()
-  const queryClient = useQueryClient()
   const isEditing = Boolean(beer)
 
   const form = useAppForm({
     ...beerFormOptions(beer),
     onSubmit: async ({ value }) => {
-      try {
-        if (beer) {
-          await update(value)
-        } else {
-          await create(value)
-        }
-
-        toast.success(
-          `Cerveja ${isEditing ? 'atualizada' : 'criada'} com sucesso`,
-        )
-
-        await queryClient.invalidateQueries(listBeersOptions())
-        await navigate({ to: '/beers' })
-      } catch (err) {
-        toast.error(
-          `Erro ao ${isEditing ? 'atualizar' : 'criar'} nova cerveja`,
-          { description: await getErrorDescription(err) },
-        )
+      if (beer) {
+        await update(value)
+      } else {
+        await create(value)
       }
+
+      await navigate({ to: '/beers' })
     },
   })
 

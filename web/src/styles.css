@@ -201,6 +201,6 @@ body,
 
 @layer utilities {
   .page-wrapper {
-    @apply max-w-full min-w-0 space-y-2;
+    @apply max-w-full min-w-0 space-y-4;
   }
 }

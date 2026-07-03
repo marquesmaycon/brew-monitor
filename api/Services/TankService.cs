@@ -7,12 +7,16 @@ namespace BrewMonitor.Api.Services;
 
 public class TankService(AppDbContext context) : ITankService
 {
-  public async Task<PaginatedResult<Tank>> GetAllAsync(int page, int limit)
+  public async Task<PaginatedResult<Tank>> GetAllAsync(int page, int limit, string? search)
   {
     page = Math.Max(page, 1);
     limit = Math.Max(limit, 1);
+    search = search?.Trim();
 
     var query = context.Tanks
+      .Where(tank =>
+        string.IsNullOrWhiteSpace(search)
+        || EF.Functions.ILike(tank.Name, $"%{search}%"))
       .OrderBy(tank => tank.Name);
 
     var total = await query.CountAsync();

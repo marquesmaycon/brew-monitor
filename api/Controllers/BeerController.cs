@@ -13,10 +13,11 @@ public class BeersController(IBeerService beerService) : ControllerBase
   [HttpGet]
   public async Task<ActionResult<PaginatedResult<BeerResponse>>> GetAll(
     [FromQuery] int page = 1,
-    [FromQuery] int limit = 20
+    [FromQuery] int limit = 20,
+    [FromQuery] string? search = null
   )
   {
-    var beers = await beerService.GetAllAsync(page, limit);
+    var beers = await beerService.GetAllAsync(page, limit, search);
 
     return Ok(beers);
   }

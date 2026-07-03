@@ -8,12 +8,17 @@ namespace BrewMonitor.Api.Services;
 
 public class BeerService(AppDbContext context) : IBeerService
 {
-  public async Task<PaginatedResult<BeerResponse>> GetAllAsync(int page, int limit)
+  public async Task<PaginatedResult<BeerResponse>> GetAllAsync(int page, int limit, string? search)
   {
     page = Math.Max(page, 1);
     limit = Math.Max(limit, 1);
+    search = search?.Trim();
 
     var query = context.Beers
+      .Where(beer =>
+        string.IsNullOrWhiteSpace(search)
+        || EF.Functions.ILike(beer.Name, $"%{search}%")
+        || EF.Functions.ILike(beer.Style, $"%{search}%"))
       .OrderBy(beer => beer.Name);
 
     var total = await query.CountAsync();

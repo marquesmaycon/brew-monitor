@@ -5,7 +5,7 @@ namespace BrewMonitor.Api.Services;
 
 public interface ITankService
 {
-  Task<PaginatedResult<Tank>> GetAllAsync(int page, int limit);
+  Task<PaginatedResult<Tank>> GetAllAsync(int page, int limit, string? search);
   Task<Tank?> GetByIdAsync(Guid id);
   Task<Tank> CreateAsync(Tank tank);
   Task<Tank?> UpdateAsync(Guid id, Tank tank);

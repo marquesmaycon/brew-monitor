@@ -1,7 +1,6 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { useEffect, useMemo, useState } from 'react'
-import { toast } from 'sonner'
 
 import { Field, FieldGroup } from '@/components/ui/field'
 import { listBeersOptions } from '@/features/beers/api/options'
@@ -11,7 +10,6 @@ import type { FermentationRecord, FermentationRecordPayload } from '@/types/api'
 
 import {
   createFermentationRecordOptions,
-  fermentationRecordKeys,
   updateFermentationRecordOptions,
 } from '../api/options'
 import type { FermentationRecordSchema } from '../validation/fermentation-record.validation'
@@ -29,7 +27,6 @@ export function FermentationRecordForm({
   onSuccess,
 }: FermentationRecordFormProps) {
   const navigate = useNavigate()
-  const queryClient = useQueryClient()
 
   const [beerSearch, setBeerSearch] = useState('')
   const [debouncedBeerSearch, setDebouncedBeerSearch] = useState('')
@@ -135,30 +132,16 @@ export function FermentationRecordForm({
         notes: value.notes.trim() || null,
       }
 
-      try {
-        if (record) {
-          await update(payload)
-        } else {
-          await create(payload)
-        }
+      if (record) {
+        await update(payload)
+      } else {
+        await create(payload)
+      }
 
-        toast.success(
-          `Registro ${isEditing ? 'atualizado' : 'criado'} com sucesso`,
-        )
-
-        await queryClient.invalidateQueries({
-          queryKey: fermentationRecordKeys.root,
-        })
-
-        if (onSuccess) {
-          await onSuccess()
-        } else {
-          await navigate({ to: '/fermentation-records' })
-        }
-      } catch (err) {
-        toast.error(`Erro ao ${isEditing ? 'atualizar' : 'criar'} registro`, {
-          description: err instanceof Error && err.message,
-        })
+      if (onSuccess) {
+        await onSuccess()
+      } else {
+        await navigate({ to: '/fermentation-records' })
       }
     },
   })

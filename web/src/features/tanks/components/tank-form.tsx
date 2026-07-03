@@ -1,16 +1,11 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
-import { toast } from 'sonner'
 
 import { Field, FieldGroup } from '@/components/ui/field'
 import { useAppForm } from '@/hooks/form'
 import type { Tank } from '@/types/api'
 
-import {
-  createTankOptions,
-  listTanksOptions,
-  updateTankOptions,
-} from '../api/options'
+import { createTankOptions, updateTankOptions } from '../api/options'
 import { tankFormOptions } from '../validation/tank.validation'
 
 type TankFormProps = {
@@ -19,7 +14,6 @@ type TankFormProps = {
 
 export function TankForm({ tank }: TankFormProps) {
   const navigate = useNavigate()
-  const queryClient = useQueryClient()
   const isEditing = Boolean(tank)
 
   const { mutateAsync: create } = useMutation(createTankOptions())
@@ -28,24 +22,13 @@ export function TankForm({ tank }: TankFormProps) {
   const form = useAppForm({
     ...tankFormOptions(tank),
     onSubmit: async ({ value }) => {
-      try {
-        if (tank) {
-          await update(value)
-        } else {
-          await create(value)
-        }
-
-        toast.success(
-          `Tanque ${isEditing ? 'atualizado' : 'criado'} com sucesso`,
-        )
-
-        await queryClient.invalidateQueries(listTanksOptions())
-        await navigate({ to: '/tanks' })
-      } catch (err) {
-        toast.error(`Erro ao ${isEditing ? 'atualizar' : 'criar'} tanque`, {
-          description: err instanceof Error && err.message,
-        })
+      if (tank) {
+        await update(value)
+      } else {
+        await create(value)
       }
+
+      await navigate({ to: '/tanks' })
     },
   })
 

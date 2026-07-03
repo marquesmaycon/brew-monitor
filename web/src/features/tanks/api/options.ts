@@ -1,6 +1,8 @@
 import { mutationOptions, queryOptions } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 import type { Pagination, TankPayload } from '@/types/api'
+import { getErrorDescription } from '#/lib/utils'
 
 import {
   createTank,
@@ -45,6 +47,15 @@ export function createTankOptions() {
     mutationFn: function (tank: TankPayload) {
       return createTank(tank)
     },
+    onSuccess: async (_, __, ___, { client }) => {
+      toast.success('Tanque criado com sucesso')
+      await client.invalidateQueries({ queryKey: tankKeys.root })
+    },
+    onError: async (err) => {
+      toast.error('Erro ao criar tanque', {
+        description: await getErrorDescription(err),
+      })
+    },
   })
 }
 
@@ -53,6 +64,16 @@ export function updateTankOptions(id: string) {
     mutationFn: function (tank: TankPayload) {
       return updateTank(id, tank)
     },
+    onSuccess: async (_, __, ___, { client }) => {
+      toast.success('Tanque atualizado com sucesso')
+      await client.invalidateQueries({ queryKey: tankKeys.root })
+      await client.invalidateQueries({ queryKey: tankKeys.detail(id) })
+    },
+    onError: async (err) => {
+      toast.error('Erro ao atualizar tanque', {
+        description: await getErrorDescription(err),
+      })
+    },
   })
 }
 
@@ -60,6 +81,16 @@ export function deleteTankOptions() {
   return mutationOptions({
     mutationFn: function (id: string) {
       return deleteTank(id)
+    },
+    onSuccess: async (_, id, ___, { client }) => {
+      toast.success('Tanque excluido com sucesso')
+      await client.invalidateQueries({ queryKey: tankKeys.root })
+      client.removeQueries({ queryKey: tankKeys.detail(id) })
+    },
+    onError: async (err) => {
+      toast.error('Erro ao excluir tanque', {
+        description: await getErrorDescription(err),
+      })
     },
   })
 }

@@ -3,8 +3,10 @@ import {
   mutationOptions,
   queryOptions,
 } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 import type { FermentationRecordPayload, Pagination } from '@/types/api'
+import { getErrorDescription } from '#/lib/utils'
 
 import {
   createFermentationRecord,
@@ -50,6 +52,15 @@ export function createFermentationRecordOptions() {
     mutationFn: function (record: FermentationRecordPayload) {
       return createFermentationRecord(record)
     },
+    onSuccess: async (_, __, ___, { client }) => {
+      toast.success('Registro criado com sucesso')
+      await client.invalidateQueries({ queryKey: fermentationRecordKeys.root })
+    },
+    onError: async (err) => {
+      toast.error('Erro ao criar registro', {
+        description: await getErrorDescription(err),
+      })
+    },
   })
 }
 
@@ -58,6 +69,18 @@ export function updateFermentationRecordOptions(id: string) {
     mutationFn: function (record: FermentationRecordPayload) {
       return updateFermentationRecord(id, record)
     },
+    onSuccess: async (_, __, ___, { client }) => {
+      toast.success('Registro atualizado com sucesso')
+      await client.invalidateQueries({ queryKey: fermentationRecordKeys.root })
+      await client.invalidateQueries({
+        queryKey: fermentationRecordKeys.detail(id),
+      })
+    },
+    onError: async (err) => {
+      toast.error('Erro ao atualizar registro', {
+        description: await getErrorDescription(err),
+      })
+    },
   })
 }
 
@@ -65,6 +88,18 @@ export function deleteFermentationRecordOptions() {
   return mutationOptions({
     mutationFn: function (id: string) {
       return deleteFermentationRecord(id)
+    },
+    onSuccess: async (_, id, ___, { client }) => {
+      toast.success('Registro excluido com sucesso')
+      await client.invalidateQueries({ queryKey: fermentationRecordKeys.root })
+      client.removeQueries({
+        queryKey: fermentationRecordKeys.detail(id),
+      })
+    },
+    onError: async (err) => {
+      toast.error('Erro ao excluir registro', {
+        description: await getErrorDescription(err),
+      })
     },
   })
 }

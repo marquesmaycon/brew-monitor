@@ -96,9 +96,10 @@ export function deleteBeerOptions() {
     mutationFn: function (id: string) {
       return deleteBeer(id)
     },
-    onSuccess: async (_, __, ___, { client }) => {
+    onSuccess: async (_, id, ___, { client }) => {
       toast.success('Cerveja excluida com sucesso')
       await client.invalidateQueries({ queryKey: beerKeys.root })
+      client.removeQueries({ queryKey: beerKeys.detail(id) })
     },
     onError: async (err) => {
       toast.error('Erro ao excluir cerveja', {
@@ -167,7 +168,7 @@ export function deleteBeerFermentationParameterOptions() {
     onSuccess: async (_, beerId, ___, { client }) => {
       toast.success('Parametros de fermentacao excluidos com sucesso')
       await client.invalidateQueries({ queryKey: beerKeys.root })
-      await client.invalidateQueries({
+      client.removeQueries({
         queryKey: beerKeys.fermentationParameter(beerId),
       })
       await client.invalidateQueries({ queryKey: beerKeys.detail(beerId) })

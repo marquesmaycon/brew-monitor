@@ -32,3 +32,15 @@ export const classificationLabels: Record<
   ATTENTION: 'Atenção',
   OUT_OF_STANDARD: 'Fora do padrão',
 }
+
+export const classificationDescriptions: Record<
+  FermentationRecordClassification,
+  string
+> = {
+  WITHIN_STANDARD:
+    'Os parâmetros registrados estão dentro da faixa esperada para esta cerveja.',
+  ATTENTION:
+    'Há parâmetros próximos do limite; acompanhe a evolução da fermentação.',
+  OUT_OF_STANDARD:
+    'Um ou mais parâmetros estão fora do padrão esperado; avalie ajustes no processo.',
+}

@@ -7,6 +7,7 @@ import { cn } from '#/lib/utils'
 
 import {
   classificationClasses,
+  classificationDescriptions,
   classificationLabels,
   getClassificationIcon,
 } from '../utils/constants'
@@ -15,10 +16,13 @@ type FermentationRecordSummaryProps = {
   record: FermentationRecord
 }
 
+
+
 export function FermentationRecordSummary({
   record: { classification, beer, tank },
 }: FermentationRecordSummaryProps) {
   const ClassificationIcon = getClassificationIcon(classification)
+
   return (
     <div className="grid w-full justify-items-end gap-4 md:grid-cols-2 lg:grid-cols-1">
       <Alert
@@ -29,7 +33,9 @@ export function FermentationRecordSummary({
       >
         <ClassificationIcon />
         <AlertTitle>{classificationLabels[classification]}</AlertTitle>
-        <AlertDescription>descrever</AlertDescription>
+        <AlertDescription>
+          {classificationDescriptions[classification]}
+        </AlertDescription>
       </Alert>
 
       <FermentationParametersCard beer={beer} />

@@ -59,6 +59,16 @@ public class BeersController(IBeerService beerService) : ControllerBase
   [HttpDelete("{id:guid}")]
   public async Task<IActionResult> Delete(Guid id)
   {
+    if (!await beerService.ExistsAsync(id))
+    {
+      return NotFound();
+    }
+
+    if (await beerService.HasFermentationRecordsAsync(id))
+    {
+      return Conflict("Beer cannot be deleted because it has fermentation records.");
+    }
+
     var deleted = await beerService.DeleteAsync(id);
 
     if (!deleted)

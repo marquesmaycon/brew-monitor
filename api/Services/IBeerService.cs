@@ -9,6 +9,7 @@ public interface IBeerService
   Task<PaginatedResult<BeerResponse>> GetAllAsync(int page, int limit, string? search);
   Task<BeerResponse?> GetByIdAsync(Guid id);
   Task<bool> ExistsAsync(Guid id);
+  Task<bool> HasFermentationRecordsAsync(Guid id);
   Task<Beer> CreateAsync(Beer beer);
   Task<Beer?> UpdateAsync(Guid id, Beer beer);
   Task<bool> DeleteAsync(Guid id);

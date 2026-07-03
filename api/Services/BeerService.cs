@@ -87,6 +87,11 @@ public class BeerService(AppDbContext context) : IBeerService
     return context.Beers.AnyAsync(beer => beer.Id == id);
   }
 
+  public Task<bool> HasFermentationRecordsAsync(Guid id)
+  {
+    return context.FermentationRecords.AnyAsync(record => record.BeerId == id);
+  }
+
   public async Task<Beer> CreateAsync(Beer beer)
   {
     beer.Id = beer.Id == Guid.Empty ? Guid.NewGuid() : beer.Id;

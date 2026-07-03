@@ -6,7 +6,13 @@ namespace BrewMonitor.Api.Services;
 
 public interface IBeerService
 {
-  Task<PaginatedResult<BeerResponse>> GetAllAsync(int page, int limit, string? search);
+  Task<PaginatedResult<BeerResponse>> GetAllAsync(
+    int page,
+    int limit,
+    string? search,
+    string? sortBy,
+    string? sortDirection
+  );
   Task<BeerResponse?> GetByIdAsync(Guid id);
   Task<bool> ExistsAsync(Guid id);
   Task<bool> HasFermentationRecordsAsync(Guid id);

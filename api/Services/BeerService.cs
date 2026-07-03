@@ -8,18 +8,29 @@ namespace BrewMonitor.Api.Services;
 
 public class BeerService(AppDbContext context) : IBeerService
 {
-  public async Task<PaginatedResult<BeerResponse>> GetAllAsync(int page, int limit, string? search)
+  private const string SortDirectionDescending = "desc";
+
+  public async Task<PaginatedResult<BeerResponse>> GetAllAsync(
+    int page,
+    int limit,
+    string? search,
+    string? sortBy,
+    string? sortDirection
+  )
   {
     page = Math.Max(page, 1);
     limit = Math.Max(limit, 1);
     search = search?.Trim();
+    sortBy = sortBy?.Trim();
+    sortDirection = sortDirection?.Trim();
 
     var query = context.Beers
       .Where(beer =>
         string.IsNullOrWhiteSpace(search)
         || EF.Functions.ILike(beer.Name, $"%{search}%")
-        || EF.Functions.ILike(beer.Style, $"%{search}%"))
-      .OrderBy(beer => beer.Name);
+        || EF.Functions.ILike(beer.Style, $"%{search}%"));
+
+    query = ApplySorting(query, sortBy, sortDirection);
 
     var total = await query.CountAsync();
     var beers = await query
@@ -53,6 +64,32 @@ public class BeerService(AppDbContext context) : IBeerService
       {
         Total = total
       }
+    };
+  }
+
+  private static IQueryable<Beer> ApplySorting(
+    IQueryable<Beer> query,
+    string? sortBy,
+    string? sortDirection
+  )
+  {
+    var isDescending = string.Equals(
+      sortDirection,
+      SortDirectionDescending,
+      StringComparison.OrdinalIgnoreCase
+    );
+
+    return sortBy?.ToLowerInvariant() switch
+    {
+      "style" => isDescending
+        ? query.OrderByDescending(beer => beer.Style).ThenBy(beer => beer.Name)
+        : query.OrderBy(beer => beer.Style).ThenBy(beer => beer.Name),
+      "createdat" => isDescending
+        ? query.OrderByDescending(beer => beer.CreatedAt).ThenBy(beer => beer.Name)
+        : query.OrderBy(beer => beer.CreatedAt).ThenBy(beer => beer.Name),
+      _ => isDescending
+        ? query.OrderByDescending(beer => beer.Name)
+        : query.OrderBy(beer => beer.Name)
     };
   }
 

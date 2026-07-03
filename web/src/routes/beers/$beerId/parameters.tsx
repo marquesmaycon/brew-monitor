@@ -1,8 +1,11 @@
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowLeftIcon } from 'lucide-react'
+import { createFileRoute } from '@tanstack/react-router'
 
-import { Button } from '@/components/ui/button'
+import {
+  PageHeader,
+  PageHeaderBackButton,
+  PageHeaderTitle,
+} from '@/components/page-header'
 import {
   getBeerFermentationParameterOptions,
   getBeerOptions,
@@ -39,20 +42,15 @@ function RouteComponent() {
 
   return (
     <div className="page-wrapper">
-      <Button asChild variant="link">
-        <Link to="/beers" className="text-sm font-medium">
-          <ArrowLeftIcon /> Voltar para cervejas
-        </Link>
-      </Button>
-      <div className="mt-6">
-        <h1 className="font-heading text-3xl font-semibold tracking-normal">
-          Parametros de fermentação
-        </h1>
-        <p className="text-muted-foreground mt-2 text-sm">
-          Configure os limites de temperatura, pH e extrato para {beer.name}.
-        </p>
-      </div>
-      <div className="mt-8 flex flex-col items-start justify-between gap-8 lg:flex-row-reverse">
+      <PageHeader>
+        <PageHeaderBackButton />
+        <PageHeaderTitle
+          title="Parametros de fermentacao"
+          description={`Configure os limites de temperatura, pH e extrato para ${beer.name}.`}
+        />
+      </PageHeader>
+
+      <div className="flex flex-col items-start justify-between gap-8 lg:flex-row-reverse">
         <BeerCard beer={beer} />
 
         <FermentationParametersForm beerId={beerId} parameters={parameters} />

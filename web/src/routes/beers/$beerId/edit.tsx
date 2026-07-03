@@ -1,13 +1,16 @@
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowLeftIcon } from 'lucide-react'
+import { createFileRoute } from '@tanstack/react-router'
 
-import { Button } from '@/components/ui/button'
 import { deleteBeerOptions, getBeerOptions } from '@/features/beers/api/options'
 import { BeerForm } from '@/features/beers/components/beer-form'
 import FermentationParametersCard from '@/features/beers/components/fermentation-parameters-card'
 import { createMetadata } from '@/lib/metadata'
 import { DestroyButton } from '#/components/form/destroy-button'
+import {
+  PageHeader,
+  PageHeaderBackButton,
+  PageHeaderTitle,
+} from '#/components/page-header'
 
 export const Route = createFileRoute('/beers/$beerId/edit')({
   loader: ({ context, params }) =>
@@ -29,8 +32,7 @@ function EditBeerPage() {
 
   const { data: beer } = useSuspenseQuery(getBeerOptions(beerId))
 
-  const { mutateAsync: destroy, isPending: isDestroying } =
-    useMutation(deleteBeerOptions())
+  const { mutateAsync: destroy } = useMutation(deleteBeerOptions())
 
   async function handleDestroy() {
     await destroy(beer.id)
@@ -39,27 +41,15 @@ function EditBeerPage() {
 
   return (
     <div className="page-wrapper">
-      <Button
-        asChild
-        variant="link"
-        className="px-0 text-xs font-medium md:text-sm"
-      >
-        <Link to="/beers">
-          <ArrowLeftIcon /> Voltar para cervejas
-        </Link>
-      </Button>
-
-      <div className="flex flex-wrap items-center gap-2 md:justify-between">
-        <div className="mr-auto">
-          <h1 className="font-heading text-2xl font-semibold tracking-normal md:text-3xl">
-            {beer.name} - {beer.style}
-          </h1>
-          <p className="text-muted-foreground mt-2 text-sm">
-            Atualize o nome e o estilo usados nos registros de fermentação.
-          </p>
-        </div>
-        <DestroyButton disabled={isDestroying} destroy={handleDestroy} />
-      </div>
+      <PageHeader>
+        <PageHeaderBackButton />
+        <PageHeaderTitle
+          title={`Editar ${beer.name} - ${beer.style}`}
+          description="Atualize o nome e o estilo usados nos registros de fermentacao."
+        >
+          <DestroyButton destroy={handleDestroy} />
+        </PageHeaderTitle>
+      </PageHeader>
 
       <div className="flex h-full flex-col items-start justify-between gap-8 lg:flex-row-reverse">
         <FermentationParametersCard beer={beer} />

@@ -1,3 +1,4 @@
+import { useIsMutating } from '@tanstack/react-query'
 import { AlertCircle, Trash2 } from 'lucide-react'
 import type { ComponentProps } from 'react'
 
@@ -30,10 +31,12 @@ export function DestroyButton({
   destroy,
   ...props
 }: DestroyButtonProps) {
+  const isMutating = useIsMutating()
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button {...props} variant="secondary">
+        <Button disabled={!!isMutating} {...props} variant="secondary">
           {label || 'Excluir'} <AlertCircle />
         </Button>
       </AlertDialogTrigger>

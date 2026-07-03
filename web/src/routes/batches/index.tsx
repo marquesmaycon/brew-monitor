@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 
+import { PageHeader, PageHeaderTitle } from '@/components/page-header'
 import { listBatchesOptions } from '@/features/batches/api/options'
 import { BatchList } from '@/features/batches/components/batch-list'
 import { createMetadata } from '@/lib/metadata'
@@ -19,16 +20,12 @@ export const Route = createFileRoute('/batches/')({
 function BatchesPage() {
   return (
     <div className="page-wrapper">
-      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="font-heading text-3xl font-semibold tracking-normal">
-            Lotes
-          </h1>
-          <p className="text-muted-foreground mt-2 text-sm">
-            Lotes encontrados nos registros de fermentação.
-          </p>
-        </div>
-      </div>
+      <PageHeader className="mb-8">
+        <PageHeaderTitle
+          title="Lotes"
+          description="Lotes encontrados nos registros de fermentacao."
+        />
+      </PageHeader>
 
       <BatchList />
     </div>

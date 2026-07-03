@@ -1,8 +1,11 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowLeftIcon } from 'lucide-react'
+import { createFileRoute } from '@tanstack/react-router'
 
-import { Button } from '@/components/ui/button'
+import {
+  PageHeader,
+  PageHeaderBackButton,
+  PageHeaderTitle,
+} from '@/components/page-header'
 import { getTankOptions } from '@/features/tanks/api/options'
 import { TankForm } from '@/features/tanks/components/tank-form'
 import { createMetadata } from '@/lib/metadata'
@@ -27,19 +30,13 @@ function EditTankPage() {
 
   return (
     <div className="page-wrapper">
-      <Button asChild variant="link">
-        <Link to="/tanks" className="text-sm font-medium">
-          <ArrowLeftIcon /> Voltar para tanques
-        </Link>
-      </Button>
-      <div className="mt-6">
-        <h1 className="font-heading text-3xl font-semibold tracking-normal">
-          {tank.name}
-        </h1>
-        <p className="text-muted-foreground mt-2 text-sm">
-          Atualize o nome e a capacidade usados nos registros de fermentação.
-        </p>
-      </div>
+      <PageHeader>
+        <PageHeaderBackButton />
+        <PageHeaderTitle
+          title={tank.name}
+          description="Atualize o nome e a capacidade usados nos registros de fermentacao."
+        />
+      </PageHeader>
 
       <TankForm tank={tank} />
     </div>

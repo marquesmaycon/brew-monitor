@@ -1,8 +1,11 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowLeftIcon } from 'lucide-react'
+import { createFileRoute } from '@tanstack/react-router'
 
-import { Button } from '@/components/ui/button'
+import {
+  PageHeader,
+  PageHeaderBackButton,
+  PageHeaderTitle,
+} from '@/components/page-header'
 import { getFermentationRecordOptions } from '@/features/fermentation-records/api/options'
 import { FermentationRecordForm } from '@/features/fermentation-records/components/fermentation-record-form'
 import { FermentationRecordSummary } from '@/features/fermentation-records/components/fermentation-record-summary'
@@ -36,19 +39,13 @@ function EditFermentationRecordPage() {
 
   return (
     <div className="page-wrapper">
-      <Button asChild variant="link">
-        <Link to="/fermentation-records" className="text-sm font-medium">
-          <ArrowLeftIcon /> Voltar para registros
-        </Link>
-      </Button>
-      <div className="mt-6">
-        <h1 className="font-heading text-3xl font-semibold tracking-normal">
-          {record.batchNumber}
-        </h1>
-        <p className="text-muted-foreground mt-2 text-sm">
-          Atualize a medicao e permita que a classificação seja recalculada.
-        </p>
-      </div>
+      <PageHeader>
+        <PageHeaderBackButton />
+        <PageHeaderTitle
+          title={record.batchNumber}
+          description="Atualize a medicao e permita que a classificacao seja recalculada."
+        />
+      </PageHeader>
 
       <div className="flex flex-col items-start justify-between gap-8 lg:flex-row-reverse">
         <FermentationRecordSummary record={record} />

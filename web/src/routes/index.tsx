@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 
+import { PageHeader, PageHeaderTitle } from '#/components/page-header'
 import {
   getDashboardMetricsOptions,
   getFermentationHistoryOptions,
@@ -27,14 +28,12 @@ export const Route = createFileRoute('/')({
 function App() {
   return (
     <div className="page-wrapper">
-      <div className="flex flex-col gap-1">
-        <h1 className="font-heading text-3xl font-semibold tracking-tight">
-          Dashboard
-        </h1>
-        <p className="text-muted-foreground max-w-2xl text-sm">
-          Indicadores iniciais dos apontamentos fermentativos cadastrados.
-        </p>
-      </div>
+      <PageHeader>
+        <PageHeaderTitle
+          title="Dashboard"
+          description="Indicadores iniciais dos apontamentos fermentativos cadastrados."
+        />
+      </PageHeader>
 
       <section className="flex flex-col gap-8">
         <DashboardCards />

@@ -12,19 +12,23 @@ function toDatetimeLocalValue(value?: string) {
 }
 
 export const fermentationRecordSchema = z.object({
-  registeredAt: z.string().min(1),
-  beerId: z.guid(),
-  tankId: z.guid(),
-  batchNumber: z.string().min(1),
-  temperature: z.coerce.number<number>(),
-  ph: z.coerce.number<number>().positive(),
-  extract: z.coerce.number<number>().nonnegative(),
-  notes: z.string().trim(),
+  registeredAt: z
+    .string('A data e hora devem ser um texto')
+    .min(1, 'Informe a data e hora'),
+  beerId: z.guid('Selecione uma cerveja válida'),
+  tankId: z.guid('Selecione um tanque válido'),
+  batchNumber: z.string('O lote deve ser um texto').min(1, 'Informe o lote'),
+  temperature: z.coerce.number<number>('A temperatura deve ser um número'),
+  ph: z.coerce
+    .number<number>('O pH deve ser um número')
+    .positive('O pH deve ser maior que zero'),
+  extract: z.coerce
+    .number<number>('O extrato deve ser um número')
+    .nonnegative('O extrato deve ser maior ou igual a zero'),
+  notes: z.string('As observações devem ser um texto').trim(),
 })
 
-export type FermentationRecordSchema = z.infer<
-  typeof fermentationRecordSchema
->
+export type FermentationRecordSchema = z.infer<typeof fermentationRecordSchema>
 
 const fermentationRecordDefaultValues: FermentationRecordSchema = {
   registeredAt: toDatetimeLocalValue(),
@@ -37,9 +41,7 @@ const fermentationRecordDefaultValues: FermentationRecordSchema = {
   notes: '',
 }
 
-export const fermentationRecordFormOptions = (
-  record?: FermentationRecord,
-) =>
+export const fermentationRecordFormOptions = (record?: FermentationRecord) =>
   formOptions({
     defaultValues: record
       ? {

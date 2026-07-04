@@ -2,8 +2,12 @@ import { formOptions } from '@tanstack/react-form'
 import z from 'zod'
 
 export const beerSchema = z.object({
-  name: z.string().min(2),
-  style: z.string().min(3),
+  name: z
+    .string('O nome deve ser um texto')
+    .min(2, 'O nome deve ter pelo menos 2 caracteres'),
+  style: z
+    .string('O estilo deve ser um texto')
+    .min(3, 'O estilo deve ter pelo menos 3 caracteres'),
 })
 
 export type BeerSchema = z.infer<typeof beerSchema>

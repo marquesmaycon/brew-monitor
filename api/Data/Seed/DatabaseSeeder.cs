@@ -9,13 +9,15 @@ public static class DatabaseSeeder
   private const decimal TemperatureTolerancePercentage = 0.05m;
   private const decimal PhTolerance = 0.2m;
   private const decimal ExtractTolerancePercentage = 0.05m;
-  private const int RecordsPerBatch = 30;
+  private const int MinRecordsPerBatch = 30;
+  private const int MaxRecordsPerBatch = 35;
   private const decimal IndustryMinTemperature = -1m;
   private const decimal IndustryMaxTemperature = 22m;
   private const decimal IndustryMinPh = 3.9m;
   private const decimal IndustryMaxPh = 5.4m;
   private const decimal IndustryMinExtract = 1.8m;
   private const decimal IndustryMaxExtract = 22m;
+  private const int EntityCreatedAtRangeDays = 5;
 
   private static readonly DateTime BaseDate = new(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc);
   private static readonly DateTime DeliveryDate = new(2026, 7, 6, 0, 0, 0, DateTimeKind.Utc);
@@ -105,7 +107,7 @@ public static class DatabaseSeeder
           Id = CreateId(1, index + 1),
           Name = beer.Name,
           Style = beer.Style,
-          CreatedAt = BaseDate,
+          CreatedAt = BuildEntityCreatedAt(BuildRegisteredAt(0, index, BuildRecordsPerBatch(index)), index),
           UpdatedAt = null
         }
       )
@@ -120,7 +122,7 @@ public static class DatabaseSeeder
           Id = CreateId(2, index),
           Name = $"Tank {index:000}",
           CapacityLiters = 500m + (index % 20) * 500m,
-          CreatedAt = BaseDate,
+          CreatedAt = BuildEntityCreatedAt(FirstRecordDate, index),
           UpdatedAt = null
         }
       )
@@ -158,51 +160,71 @@ public static class DatabaseSeeder
     IReadOnlyList<FermentationParameter> parameters
   )
   {
-    return [.. Enumerable.Range(1, beers.Count * RecordsPerBatch)
-      .Select(index =>
+    var records = new List<FermentationRecord>();
+    var index = 1;
+
+    for (var beerIndex = 0; beerIndex < beers.Count; beerIndex++)
+    {
+      var recordsPerBatch = BuildRecordsPerBatch(beerIndex);
+
+      for (var recordIndex = 0; recordIndex < recordsPerBatch; recordIndex++)
+      {
+        var beer = beers[beerIndex];
+        var tank = tanks[(index - 1) % tanks.Count];
+        var parameter = parameters[beerIndex];
+        var (Temperature, Ph, Extract, Notes) = BuildMeasurement(parameter, (index - 1) % 4, index);
+        var registeredAt = BuildRegisteredAt(recordIndex, beerIndex, recordsPerBatch);
+        var createdAt = registeredAt.AddMinutes(5 + index % 25);
+
+        if (registeredAt > MaxRecordDate || createdAt > MaxRecordDate)
         {
-          var beerIndex = (index - 1) / RecordsPerBatch;
-          var recordIndex = (index - 1) % RecordsPerBatch;
-          var beer = beers[beerIndex];
-          var tank = tanks[(index - 1) % tanks.Count];
-          var parameter = parameters[beerIndex];
-          var (Temperature, Ph, Extract, Notes) = BuildMeasurement(parameter, (index - 1) % 4, index);
-          var registeredAt = BuildRegisteredAt(recordIndex, beerIndex);
-          var createdAt = registeredAt.AddMinutes(5 + index % 25);
-
-          if (registeredAt > MaxRecordDate || createdAt > MaxRecordDate)
-          {
-            throw new InvalidOperationException("Seeded fermentation records cannot be dated after 2026-07-06.");
-          }
-
-          return new FermentationRecord
-          {
-            Id = CreateId(4, index),
-            RegisteredAt = registeredAt,
-            BeerId = beer.Id,
-            TankId = tank.Id,
-            BatchNumber = BuildBatchNumber(beer.Style, beerIndex + 1),
-            Temperature = Temperature,
-            Ph = Ph,
-            Extract = Extract,
-            Notes = Notes,
-            Classification = Classify(Temperature, Ph, Extract, parameter),
-            CreatedAt = createdAt,
-            UpdatedAt = null
-          };
+          throw new InvalidOperationException("Seeded fermentation records cannot be dated after 2026-07-06.");
         }
-      )
-    ];
+
+        records.Add(new FermentationRecord
+        {
+          Id = CreateId(4, index),
+          RegisteredAt = registeredAt,
+          BeerId = beer.Id,
+          TankId = tank.Id,
+          BatchNumber = BuildBatchNumber(beer.Style, beerIndex + 1),
+          Temperature = Temperature,
+          Ph = Ph,
+          Extract = Extract,
+          Notes = Notes,
+          Classification = Classify(Temperature, Ph, Extract, parameter),
+          CreatedAt = createdAt,
+          UpdatedAt = null
+        });
+
+        index++;
+      }
+    }
+
+    return records;
   }
 
-  private static DateTime BuildRegisteredAt(int recordIndex, int beerIndex)
+  private static int BuildRecordsPerBatch(int beerIndex)
+  {
+    return MinRecordsPerBatch + beerIndex % (MaxRecordsPerBatch - MinRecordsPerBatch + 1);
+  }
+
+  private static DateTime BuildRegisteredAt(int recordIndex, int beerIndex, int recordsPerBatch)
   {
     var windowTicks = LastRecordDate.Ticks - FirstRecordDate.Ticks;
-    var recordOffsetTicks = windowTicks * recordIndex / (RecordsPerBatch - 1);
+    var recordOffsetTicks = windowTicks * recordIndex / (recordsPerBatch - 1);
 
     return FirstRecordDate
       .AddTicks(recordOffsetTicks)
       .AddMinutes((beerIndex % 8) * 7);
+  }
+
+  private static DateTime BuildEntityCreatedAt(DateTime firstRecordDate, int index)
+  {
+    var rangeMinutes = EntityCreatedAtRangeDays * 24 * 60;
+    var minutesBeforeRecord = 1 + index * 137 % rangeMinutes;
+
+    return firstRecordDate.AddMinutes(-minutesBeforeRecord);
   }
 
   private static (decimal Temperature, decimal Ph, decimal Extract, string Notes) BuildMeasurement(

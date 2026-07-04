@@ -40,6 +40,16 @@ public class TankService(AppDbContext context) : ITankService
     return context.Tanks.FindAsync(id).AsTask();
   }
 
+  public Task<bool> ExistsAsync(Guid id)
+  {
+    return context.Tanks.AnyAsync(tank => tank.Id == id);
+  }
+
+  public Task<bool> HasFermentationRecordsAsync(Guid id)
+  {
+    return context.FermentationRecords.AnyAsync(record => record.TankId == id);
+  }
+
   public async Task<Tank> CreateAsync(Tank tank)
   {
     tank.Id = tank.Id == Guid.Empty ? Guid.NewGuid() : tank.Id;

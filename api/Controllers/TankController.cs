@@ -58,6 +58,16 @@ public class TanksController(ITankService tankService) : ControllerBase
   [HttpDelete("{id:guid}")]
   public async Task<IActionResult> Delete(Guid id)
   {
+    if (!await tankService.ExistsAsync(id))
+    {
+      return NotFound();
+    }
+
+    if (await tankService.HasFermentationRecordsAsync(id))
+    {
+      return Conflict("Tank cannot be deleted because it has fermentation records.");
+    }
+
     var deleted = await tankService.DeleteAsync(id);
 
     if (!deleted)

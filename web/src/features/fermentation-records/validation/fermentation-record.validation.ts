@@ -19,7 +19,7 @@ export const fermentationRecordSchema = z.object({
   temperature: z.coerce.number<number>(),
   ph: z.coerce.number<number>().positive(),
   extract: z.coerce.number<number>().nonnegative(),
-  notes: z.string(),
+  notes: z.string().trim(),
 })
 
 export type FermentationRecordSchema = z.infer<

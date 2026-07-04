@@ -34,9 +34,7 @@ export const beerKeys = {
   },
 }
 
-export function listBeersOptions(
-  pagination: Pagination = { limit: 20, page: 1 },
-) {
+export function listBeersOptions(pagination: Pagination = { page: 1, limit: 20 }) {
   return queryOptions({
     queryKey: beerKeys.list(pagination),
     queryFn: function () {

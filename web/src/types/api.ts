@@ -1,6 +1,6 @@
 export type Pagination = {
-  limit: number
-  page: number
+  limit?: number
+  page?: number
   search?: string
   sortBy?: string
   sortDirection?: 'asc' | 'desc'

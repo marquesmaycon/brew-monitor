@@ -1,12 +1,13 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
 import { Field, FieldGroup } from '@/components/ui/field'
 import { listBeersOptions } from '@/features/beers/api/options'
 import { listTanksOptions } from '@/features/tanks/api/options'
 import { useAppForm } from '@/hooks/form'
-import type { FermentationRecord, FermentationRecordPayload } from '@/types/api'
+import type { FermentationRecord } from '@/types/api'
+import { useDebouncedSearch } from '#/hooks/use-debounced-search'
 
 import {
   createFermentationRecordOptions,
@@ -28,42 +29,16 @@ export function FermentationRecordForm({
 }: FermentationRecordFormProps) {
   const navigate = useNavigate()
 
-  const [beerSearch, setBeerSearch] = useState('')
-  const [debouncedBeerSearch, setDebouncedBeerSearch] = useState('')
-  const [tankSearch, setTankSearch] = useState('')
-  const [debouncedTankSearch, setDebouncedTankSearch] = useState('')
-
   const isEditing = Boolean(record)
 
-  useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      setDebouncedBeerSearch(beerSearch.trim())
-    }, 300)
-
-    return () => window.clearTimeout(timeoutId)
-  }, [beerSearch])
-
-  useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      setDebouncedTankSearch(tankSearch.trim())
-    }, 300)
-
-    return () => window.clearTimeout(timeoutId)
-  }, [tankSearch])
+  const [debouncedBeerSearch, , setBeerSearch] = useDebouncedSearch('')
+  const [debouncedTankSearch, , setTankSearch] = useDebouncedSearch('')
 
   const { data: beers, isFetching: isFetchingBeers } = useQuery(
-    listBeersOptions({
-      limit: 100,
-      page: 1,
-      search: debouncedBeerSearch || undefined,
-    }),
+    listBeersOptions({ search: debouncedBeerSearch }),
   )
   const { data: tanks, isFetching: isFetchingTanks } = useQuery(
-    listTanksOptions({
-      limit: 100,
-      page: 1,
-      search: debouncedTankSearch || undefined,
-    }),
+    listTanksOptions({ search: debouncedTankSearch }),
   )
   const { mutateAsync: create } = useMutation(createFermentationRecordOptions())
   const { mutateAsync: update } = useMutation(
@@ -126,16 +101,10 @@ export function FermentationRecordForm({
       ...defaultValues,
     },
     onSubmit: async ({ value }) => {
-      const payload: FermentationRecordPayload = {
-        ...value,
-        registeredAt: new Date(value.registeredAt).toISOString(),
-        notes: value.notes.trim() || null,
-      }
-
       if (record) {
-        await update(payload)
+        await update(value)
       } else {
-        await create(payload)
+        await create(value)
       }
 
       if (onSuccess) {

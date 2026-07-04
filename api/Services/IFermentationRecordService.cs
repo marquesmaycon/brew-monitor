@@ -6,7 +6,14 @@ namespace BrewMonitor.Api.Services;
 
 public interface IFermentationRecordService
 {
-  Task<PaginatedResult<FermentationRecordResponse>> GetAllAsync(int page, int limit);
+  Task<PaginatedResult<FermentationRecordResponse>> GetAllAsync(
+    int page,
+    int limit,
+    string? search,
+    string? sortBy,
+    string? sortDirection,
+    string? classification
+  );
   Task<FermentationRecordResponse?> GetByIdAsync(Guid id);
   Task<FermentationRecord> CreateAsync(FermentationRecord record);
   Task<FermentationRecord?> UpdateAsync(Guid id, FermentationRecord record);

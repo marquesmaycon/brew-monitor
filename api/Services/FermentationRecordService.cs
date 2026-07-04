@@ -10,17 +10,39 @@ namespace BrewMonitor.Api.Services;
 
 public class FermentationRecordService(AppDbContext context) : IFermentationRecordService
 {
+  private const string SortDirectionDescending = "desc";
   private const decimal TemperatureTolerancePercentage = 0.05m;
   private const decimal PhTolerance = 0.2m;
   private const decimal ExtractTolerancePercentage = 0.05m;
 
-  public async Task<PaginatedResult<FermentationRecordResponse>> GetAllAsync(int page, int limit)
+  public async Task<PaginatedResult<FermentationRecordResponse>> GetAllAsync(
+    int page,
+    int limit,
+    string? search,
+    string? sortBy,
+    string? sortDirection,
+    string? classification
+  )
   {
     page = Math.Max(page, 1);
     limit = Math.Max(limit, 1);
+    search = search?.Trim();
+    sortBy = sortBy?.Trim();
+    sortDirection = sortDirection?.Trim();
+    var hasClassificationFilter = TryParseClassification(
+      classification,
+      out var classificationFilter
+    );
 
     var query = context.FermentationRecords
-      .OrderByDescending(record => record.RegisteredAt);
+      .Where(record =>
+        (
+          string.IsNullOrWhiteSpace(search)
+          || EF.Functions.ILike(record.BatchNumber, $"%{search}%")
+        )
+        && (!hasClassificationFilter || record.Classification == classificationFilter));
+
+    query = ApplySorting(query, sortBy, sortDirection);
 
     var total = await query.CountAsync();
     var records = await query
@@ -63,6 +85,64 @@ public class FermentationRecordService(AppDbContext context) : IFermentationReco
         Total = total
       }
     };
+  }
+
+  private static IQueryable<FermentationRecord> ApplySorting(
+    IQueryable<FermentationRecord> query,
+    string? sortBy,
+    string? sortDirection
+  )
+  {
+    var isDescending = string.Equals(
+      sortDirection,
+      SortDirectionDescending,
+      StringComparison.OrdinalIgnoreCase
+    );
+
+    return sortBy?.ToLowerInvariant() switch
+    {
+      "batchnumber" => isDescending
+        ? query.OrderByDescending(record => record.BatchNumber).ThenByDescending(record => record.RegisteredAt)
+        : query.OrderBy(record => record.BatchNumber).ThenByDescending(record => record.RegisteredAt),
+      _ => isDescending
+        ? query.OrderByDescending(record => record.RegisteredAt)
+        : query.OrderBy(record => record.RegisteredAt)
+    };
+  }
+
+  private static bool TryParseClassification(
+    string? value,
+    out FermentationRecordClassification classification
+  )
+  {
+    classification = default;
+
+    return value?.Trim().ToUpperInvariant() switch
+    {
+      "WITHIN_STANDARD" => SetClassification(
+        FermentationRecordClassification.WithinStandard,
+        out classification
+      ),
+      "ATTENTION" => SetClassification(
+        FermentationRecordClassification.Attention,
+        out classification
+      ),
+      "OUT_OF_STANDARD" => SetClassification(
+        FermentationRecordClassification.OutOfStandard,
+        out classification
+      ),
+      _ => false
+    };
+  }
+
+  private static bool SetClassification(
+    FermentationRecordClassification value,
+    out FermentationRecordClassification classification
+  )
+  {
+    classification = value;
+
+    return true;
   }
 
   public Task<FermentationRecordResponse?> GetByIdAsync(Guid id)

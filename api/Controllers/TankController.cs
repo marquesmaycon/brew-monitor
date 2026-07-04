@@ -13,10 +13,12 @@ public class TanksController(ITankService tankService) : ControllerBase
   public async Task<ActionResult<PaginatedResult<Tank>>> GetAll(
     [FromQuery] int page = 1,
     [FromQuery] int limit = 20,
-    [FromQuery] string? search = null
+    [FromQuery] string? search = null,
+    [FromQuery] string? sortBy = null,
+    [FromQuery] string? sortDirection = null
   )
   {
-    var tanks = await tankService.GetAllAsync(page, limit, search);
+    var tanks = await tankService.GetAllAsync(page, limit, search, sortBy, sortDirection);
 
     return Ok(tanks);
   }

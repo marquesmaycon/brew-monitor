@@ -5,7 +5,13 @@ namespace BrewMonitor.Api.Services;
 
 public interface ITankService
 {
-  Task<PaginatedResult<Tank>> GetAllAsync(int page, int limit, string? search);
+  Task<PaginatedResult<Tank>> GetAllAsync(
+    int page,
+    int limit,
+    string? search,
+    string? sortBy,
+    string? sortDirection
+  );
   Task<Tank?> GetByIdAsync(Guid id);
   Task<bool> ExistsAsync(Guid id);
   Task<bool> HasFermentationRecordsAsync(Guid id);

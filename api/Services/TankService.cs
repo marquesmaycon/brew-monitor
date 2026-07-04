@@ -2,22 +2,41 @@ using BrewMonitor.Api.Data;
 using BrewMonitor.Api.DTOs.Common;
 using BrewMonitor.Api.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace BrewMonitor.Api.Services;
 
 public class TankService(AppDbContext context) : ITankService
 {
-  public async Task<PaginatedResult<Tank>> GetAllAsync(int page, int limit, string? search)
+  private const string SortDirectionDescending = "desc";
+
+  public async Task<PaginatedResult<Tank>> GetAllAsync(
+    int page,
+    int limit,
+    string? search,
+    string? sortBy,
+    string? sortDirection
+  )
   {
     page = Math.Max(page, 1);
     limit = Math.Max(limit, 1);
     search = search?.Trim();
+    sortBy = sortBy?.Trim();
+    sortDirection = sortDirection?.Trim();
+    var hasCapacitySearch = decimal.TryParse(
+      search?.Replace(',', '.'),
+      NumberStyles.Number,
+      CultureInfo.InvariantCulture,
+      out var capacitySearch
+    );
 
     var query = context.Tanks
       .Where(tank =>
         string.IsNullOrWhiteSpace(search)
-        || EF.Functions.ILike(tank.Name, $"%{search}%"))
-      .OrderBy(tank => tank.Name);
+        || EF.Functions.ILike(tank.Name, $"%{search}%")
+        || (hasCapacitySearch && tank.CapacityLiters == capacitySearch));
+
+    query = ApplySorting(query, sortBy, sortDirection);
 
     var total = await query.CountAsync();
     var tanks = await query
@@ -32,6 +51,32 @@ public class TankService(AppDbContext context) : ITankService
       {
         Total = total
       }
+    };
+  }
+
+  private static IQueryable<Tank> ApplySorting(
+    IQueryable<Tank> query,
+    string? sortBy,
+    string? sortDirection
+  )
+  {
+    var isDescending = string.Equals(
+      sortDirection,
+      SortDirectionDescending,
+      StringComparison.OrdinalIgnoreCase
+    );
+
+    return sortBy?.ToLowerInvariant() switch
+    {
+      "capacityliters" => isDescending
+        ? query.OrderByDescending(tank => tank.CapacityLiters).ThenBy(tank => tank.Name)
+        : query.OrderBy(tank => tank.CapacityLiters).ThenBy(tank => tank.Name),
+      "createdat" => isDescending
+        ? query.OrderByDescending(tank => tank.CreatedAt).ThenBy(tank => tank.Name)
+        : query.OrderBy(tank => tank.CreatedAt).ThenBy(tank => tank.Name),
+      _ => isDescending
+        ? query.OrderByDescending(tank => tank.Name)
+        : query.OrderBy(tank => tank.Name)
     };
   }
 

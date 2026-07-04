@@ -13,10 +13,21 @@ public class FermentationRecordsController(IFermentationRecordService fermentati
   [HttpGet]
   public async Task<ActionResult<PaginatedResult<FermentationRecordResponse>>> GetAll(
     [FromQuery] int page = 1,
-    [FromQuery] int limit = 20
+    [FromQuery] int limit = 20,
+    [FromQuery] string? search = null,
+    [FromQuery] string? sortBy = null,
+    [FromQuery] string? sortDirection = null,
+    [FromQuery] string? classification = null
   )
   {
-    var records = await fermentationRecordService.GetAllAsync(page, limit);
+    var records = await fermentationRecordService.GetAllAsync(
+      page,
+      limit,
+      search,
+      sortBy,
+      sortDirection,
+      classification
+    );
 
     return Ok(records);
   }

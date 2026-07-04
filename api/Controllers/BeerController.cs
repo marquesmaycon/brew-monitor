@@ -1,5 +1,6 @@
 using BrewMonitor.Api.DTOs.Beers;
 using BrewMonitor.Api.DTOs.Common;
+using BrewMonitor.Api.DTOs.FermentationRecords;
 using BrewMonitor.Api.Models;
 using BrewMonitor.Api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,10 @@ namespace BrewMonitor.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class BeersController(IBeerService beerService) : ControllerBase
+public class BeersController(
+  IBeerService beerService,
+  IFermentationRecordService fermentationRecordService
+) : ControllerBase
 {
   [HttpGet]
   public async Task<ActionResult<PaginatedResult<BeerResponse>>> GetAll(
@@ -79,6 +83,23 @@ public class BeersController(IBeerService beerService) : ControllerBase
     }
 
     return NoContent();
+  }
+
+  [HttpGet("{beerId:guid}/fermentation-records")]
+  public async Task<ActionResult<PaginatedResult<FermentationRecordResponse>>> GetFermentationRecords(
+    Guid beerId,
+    [FromQuery] int page = 1,
+    [FromQuery] int limit = 20
+  )
+  {
+    if (!await beerService.ExistsAsync(beerId))
+    {
+      return NotFound();
+    }
+
+    var records = await fermentationRecordService.GetByBeerAsync(beerId, page, limit);
+
+    return Ok(records);
   }
 
   [HttpGet("{beerId:guid}/fermentation-parameters")]

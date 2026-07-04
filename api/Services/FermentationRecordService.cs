@@ -87,6 +87,89 @@ public class FermentationRecordService(AppDbContext context) : IFermentationReco
     };
   }
 
+  public Task<PaginatedResult<FermentationRecordResponse>> GetByBeerAsync(
+    Guid beerId,
+    int page,
+    int limit
+  )
+  {
+    return GetAssociatedAsync(
+      context.FermentationRecords.Where(record => record.BeerId == beerId),
+      page,
+      limit
+    );
+  }
+
+  public Task<PaginatedResult<FermentationRecordResponse>> GetByTankAsync(
+    Guid tankId,
+    int page,
+    int limit
+  )
+  {
+    return GetAssociatedAsync(
+      context.FermentationRecords.Where(record => record.TankId == tankId),
+      page,
+      limit
+    );
+  }
+
+  private static async Task<PaginatedResult<FermentationRecordResponse>> GetAssociatedAsync(
+    IQueryable<FermentationRecord> query,
+    int page,
+    int limit
+  )
+  {
+    page = Math.Max(page, 1);
+    limit = Math.Max(limit, 1);
+
+    var orderedQuery = query
+      .AsNoTracking()
+      .OrderByDescending(record => record.RegisteredAt)
+      .ThenByDescending(record => record.CreatedAt);
+
+    var total = await orderedQuery.CountAsync();
+    var records = await orderedQuery
+      .Skip((page - 1) * limit)
+      .Take(limit)
+      .Select(record => new FermentationRecordResponse
+      {
+        Id = record.Id,
+        RegisteredAt = record.RegisteredAt,
+        BeerId = record.BeerId,
+        Beer = new FermentationRecordBeerResponse
+        {
+          Id = record.Beer.Id,
+          Name = record.Beer.Name,
+          Style = record.Beer.Style,
+        },
+        TankId = record.TankId,
+        Tank = new FermentationRecordTankResponse
+        {
+          Id = record.Tank.Id,
+          Name = record.Tank.Name,
+          CapacityLiters = record.Tank.CapacityLiters,
+        },
+        BatchNumber = record.BatchNumber,
+        Temperature = record.Temperature,
+        Ph = record.Ph,
+        Extract = record.Extract,
+        Notes = record.Notes,
+        Classification = record.Classification,
+        CreatedAt = record.CreatedAt,
+        UpdatedAt = record.UpdatedAt
+      })
+      .ToListAsync();
+
+    return new PaginatedResult<FermentationRecordResponse>
+    {
+      Data = records,
+      Meta = new PaginationMeta
+      {
+        Total = total
+      }
+    };
+  }
+
   private static IQueryable<FermentationRecord> ApplySorting(
     IQueryable<FermentationRecord> query,
     string? sortBy,

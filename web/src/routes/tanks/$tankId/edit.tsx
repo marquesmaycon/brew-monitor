@@ -1,12 +1,13 @@
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
+import { DestroyButton } from '@/components/form/destroy-button'
 import {
   PageHeader,
   PageHeaderBackButton,
   PageHeaderTitle,
 } from '@/components/page-header'
-import { getTankOptions } from '@/features/tanks/api/options'
+import { deleteTankOptions, getTankOptions } from '@/features/tanks/api/options'
 import { TankForm } from '@/features/tanks/components/tank-form'
 import { createMetadata } from '@/lib/metadata'
 
@@ -26,7 +27,15 @@ export const Route = createFileRoute('/tanks/$tankId/edit')({
 
 function EditTankPage() {
   const { tankId } = Route.useParams()
+  const navigate = Route.useNavigate()
   const { data: tank } = useSuspenseQuery(getTankOptions(tankId))
+
+  const { mutateAsync: destroy } = useMutation(deleteTankOptions())
+
+  async function handleDestroy() {
+    await destroy(tank.id)
+    await navigate({ to: '/tanks' })
+  }
 
   return (
     <div className="page-wrapper">
@@ -35,7 +44,9 @@ function EditTankPage() {
         <PageHeaderTitle
           title={tank.name}
           description="Atualize o nome e a capacidade usados nos registros de fermentacao."
-        />
+        >
+          <DestroyButton destroy={handleDestroy} />
+        </PageHeaderTitle>
       </PageHeader>
 
       <TankForm tank={tank} />

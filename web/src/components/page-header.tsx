@@ -29,7 +29,7 @@ function PageHeaderTitle({
   children?: ReactNode
 }) {
   return (
-    <div className="flex flex-wrap items-center gap-2 md:justify-between">
+    <div className="flex flex-wrap items-center justify-end gap-4 md:justify-between">
       <div className="mr-auto">
         <h1 className="font-heading text-2xl font-semibold tracking-normal md:text-3xl">
           {title}

@@ -1,12 +1,16 @@
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
+import { DestroyButton } from '@/components/form/destroy-button'
 import {
   PageHeader,
   PageHeaderBackButton,
   PageHeaderTitle,
 } from '@/components/page-header'
-import { getFermentationRecordOptions } from '@/features/fermentation-records/api/options'
+import {
+  deleteFermentationRecordOptions,
+  getFermentationRecordOptions,
+} from '@/features/fermentation-records/api/options'
 import { FermentationRecordForm } from '@/features/fermentation-records/components/fermentation-record-form'
 import { FermentationRecordSummary } from '@/features/fermentation-records/components/fermentation-record-summary'
 import { createMetadata } from '@/lib/metadata'
@@ -33,9 +37,17 @@ export const Route = createFileRoute('/fermentation-records/$recordId/edit')({
 
 function EditFermentationRecordPage() {
   const { recordId } = Route.useParams()
+  const navigate = Route.useNavigate()
   const { data: record } = useSuspenseQuery(
     getFermentationRecordOptions(recordId),
   )
+
+  const { mutateAsync: destroy } = useMutation(deleteFermentationRecordOptions())
+
+  async function handleDestroy() {
+    await destroy(record.id)
+    await navigate({ to: '/fermentation-records' })
+  }
 
   return (
     <div className="page-wrapper">
@@ -44,7 +56,9 @@ function EditFermentationRecordPage() {
         <PageHeaderTitle
           title={record.batchNumber}
           description="Atualize a medicao e permita que a classificacao seja recalculada."
-        />
+        >
+          <DestroyButton destroy={handleDestroy} />
+        </PageHeaderTitle>
       </PageHeader>
 
       <div className="flex flex-col items-start justify-between gap-8 lg:flex-row-reverse">

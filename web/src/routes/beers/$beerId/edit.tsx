@@ -4,6 +4,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { deleteBeerOptions, getBeerOptions } from '@/features/beers/api/options'
 import { BeerForm } from '@/features/beers/components/beer-form'
 import FermentationParametersCard from '@/features/beers/components/fermentation-parameters-card'
+import { AssociatedFermentationRecordTable } from '@/features/fermentation-records/components/associated-fermentation-record-table'
 import { createMetadata } from '@/lib/metadata'
 import { DestroyButton } from '#/components/form/destroy-button'
 import {
@@ -51,10 +52,17 @@ function EditBeerPage() {
         </PageHeaderTitle>
       </PageHeader>
 
-      <div className="flex h-full flex-col items-start justify-between gap-8 lg:flex-row-reverse">
-        <FermentationParametersCard beer={beer} />
+      <div className="flex flex-col gap-8">
+        <div className="flex h-full flex-col items-start justify-between gap-8 lg:flex-row-reverse">
+          <FermentationParametersCard beer={beer} />
 
-        <BeerForm beer={beer} />
+          <BeerForm beer={beer} />
+        </div>
+
+        <AssociatedFermentationRecordTable
+          entityId={beer.id}
+          entityType="beer"
+        />
       </div>
     </div>
   )

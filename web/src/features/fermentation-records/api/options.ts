@@ -5,6 +5,8 @@ import {
 } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
+import { beerKeys } from '@/features/beers/api/options'
+import { tankKeys } from '@/features/tanks/api/options'
 import type { FermentationRecordPayload, Pagination } from '@/types/api'
 import { getErrorDescription } from '#/lib/utils'
 
@@ -55,6 +57,8 @@ export function createFermentationRecordOptions() {
     onSuccess: async (_, __, ___, { client }) => {
       toast.success('Registro criado com sucesso')
       await client.invalidateQueries({ queryKey: fermentationRecordKeys.root })
+      await client.invalidateQueries({ queryKey: beerKeys.root })
+      await client.invalidateQueries({ queryKey: tankKeys.root })
     },
     onError: async (err) => {
       toast.error('Erro ao criar registro', {
@@ -75,6 +79,8 @@ export function updateFermentationRecordOptions(id: string) {
       await client.invalidateQueries({
         queryKey: fermentationRecordKeys.detail(id),
       })
+      await client.invalidateQueries({ queryKey: beerKeys.root })
+      await client.invalidateQueries({ queryKey: tankKeys.root })
     },
     onError: async (err) => {
       toast.error('Erro ao atualizar registro', {
@@ -92,6 +98,8 @@ export function deleteFermentationRecordOptions() {
     onSuccess: async (_, id, ___, { client }) => {
       toast.success('Registro excluido com sucesso')
       await client.invalidateQueries({ queryKey: fermentationRecordKeys.root })
+      await client.invalidateQueries({ queryKey: beerKeys.root })
+      await client.invalidateQueries({ queryKey: tankKeys.root })
       client.removeQueries({
         queryKey: fermentationRecordKeys.detail(id),
       })

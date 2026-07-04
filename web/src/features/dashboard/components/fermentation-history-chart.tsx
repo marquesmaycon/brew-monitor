@@ -18,6 +18,7 @@ import {
   CardHeader,
   CardTitle,
 } from '#/components/ui/card'
+import { Field, FieldLabel } from '#/components/ui/field'
 import { FermentationMetricsChart } from '#/features/fermentation-records/components/fermentation-metrics-chart'
 
 import { getFermentationHistoryOptions } from '../api/options'
@@ -47,27 +48,34 @@ export function FermentationHistoryChart() {
           </CardDescription>
         </div>
 
-        <Select
-          value={selectedBatchNumber}
-          onValueChange={setBatchNumber}
-          disabled={!data?.batches.length || isError}
-        >
-          <SelectTrigger
-            className="w-full sm:w-56"
-            aria-label="Selecionar lote"
+        <Field className="w-fit">
+          <FieldLabel htmlFor="batchNumber">Lote</FieldLabel>
+          <Select
+            value={selectedBatchNumber}
+            onValueChange={setBatchNumber}
+            disabled={!data?.batches.length || isError}
           >
-            <SelectValue placeholder="Selecionar lote" />
-          </SelectTrigger>
-          <SelectContent align="end">
-            {data?.batches.map((batch) => (
-              <SelectItem key={batch.batchNumber} value={batch.batchNumber}>
-                {batch.batchNumber}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+            <SelectTrigger
+              className="w-full sm:w-56"
+              aria-label="Selecionar lote"
+            >
+              <SelectValue placeholder="Selecionar lote" />
+            </SelectTrigger>
+            <SelectContent align="end">
+              {data?.batches.map((batch) => (
+                <SelectItem key={batch.batchNumber} value={batch.batchNumber}>
+                  {batch.batchNumber}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </Field>
         {selectedBatchNumber && (
-          <Button variant="link" className="flex items-center gap-2" asChild>
+          <Button
+            variant="link"
+            className="flex items-center gap-2 px-0"
+            asChild
+          >
             <Link
               to="/batches/$batchNumber"
               params={{ batchNumber: selectedBatchNumber }}

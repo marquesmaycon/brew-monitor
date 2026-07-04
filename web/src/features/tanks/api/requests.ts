@@ -1,5 +1,11 @@
 import { api } from '@/lib/api'
-import type { Paginated, Pagination, Tank, TankPayload } from '@/types/api'
+import type {
+  FermentationRecord,
+  Paginated,
+  Pagination,
+  Tank,
+  TankPayload,
+} from '@/types/api'
 
 const resource = 'tanks'
 
@@ -29,4 +35,15 @@ export function updateTank(id: string, tank: TankPayload) {
 
 export function deleteTank(id: string) {
   return api.delete(`${resource}/${id}`)
+}
+
+export function listTankFermentationRecords(
+  tankId: string,
+  pagination: Pagination,
+) {
+  return api
+    .get(`${resource}/${tankId}/fermentation-records`, {
+      searchParams: pagination,
+    })
+    .json<Paginated<FermentationRecord>>()
 }

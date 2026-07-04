@@ -7,6 +7,7 @@ import {
   PageHeaderBackButton,
   PageHeaderTitle,
 } from '@/components/page-header'
+import { AssociatedFermentationRecordTable } from '@/features/fermentation-records/components/associated-fermentation-record-table'
 import { deleteTankOptions, getTankOptions } from '@/features/tanks/api/options'
 import { TankForm } from '@/features/tanks/components/tank-form'
 import { createMetadata } from '@/lib/metadata'
@@ -49,7 +50,14 @@ function EditTankPage() {
         </PageHeaderTitle>
       </PageHeader>
 
-      <TankForm tank={tank} />
+      <div className="flex flex-col gap-8">
+        <TankForm tank={tank} />
+
+        <AssociatedFermentationRecordTable
+          entityId={tank.id}
+          entityType="tank"
+        />
+      </div>
     </div>
   )
 }

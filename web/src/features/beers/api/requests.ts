@@ -3,6 +3,7 @@ import type {
   Beer,
   FermentationParameter,
   FermentationParameterPayload,
+  FermentationRecord,
   Paginated,
   Pagination,
 } from '@/types/api'
@@ -37,6 +38,17 @@ export function updateBeer(id: string, beer: BeerSchema) {
 
 export function deleteBeer(id: string) {
   return api.delete(`${resource}/${id}`)
+}
+
+export function listBeerFermentationRecords(
+  beerId: string,
+  pagination: Pagination,
+) {
+  return api
+    .get(`${resource}/${beerId}/fermentation-records`, {
+      searchParams: pagination,
+    })
+    .json<Paginated<FermentationRecord>>()
 }
 
 export function getBeerFermentationParameter(beerId: string) {

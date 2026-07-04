@@ -16,6 +16,7 @@ import {
   deleteBeerFermentationParameter,
   getBeer,
   getBeerFermentationParameter,
+  listBeerFermentationRecords,
   listBeers,
   updateBeer,
   updateBeerFermentationParameter,
@@ -32,9 +33,18 @@ export const beerKeys = {
   fermentationParameter: function (beerId: string) {
     return [...beerKeys.detail(beerId), 'fermentation-parameter'] as const
   },
+  fermentationRecords: function (beerId: string, pagination: Pagination) {
+    return [
+      ...beerKeys.detail(beerId),
+      'fermentation-records',
+      pagination,
+    ] as const
+  },
 }
 
-export function listBeersOptions(pagination: Pagination = { page: 1, limit: 20 }) {
+export function listBeersOptions(
+  pagination: Pagination = { page: 1, limit: 20 },
+) {
   return queryOptions({
     queryKey: beerKeys.list(pagination),
     queryFn: function () {
@@ -104,6 +114,19 @@ export function deleteBeerOptions() {
         description: await getErrorDescription(err),
       })
     },
+  })
+}
+
+export function listBeerFermentationRecordsOptions(
+  beerId: string,
+  pagination: Pagination = { limit: 20, page: 1 },
+) {
+  return queryOptions({
+    queryKey: beerKeys.fermentationRecords(beerId, pagination),
+    queryFn: function () {
+      return listBeerFermentationRecords(beerId, pagination)
+    },
+    placeholderData: keepPreviousData,
   })
 }
 

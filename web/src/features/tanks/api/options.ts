@@ -12,6 +12,7 @@ import {
   createTank,
   deleteTank,
   getTank,
+  listTankFermentationRecords,
   listTanks,
   updateTank,
 } from './requests'
@@ -23,6 +24,13 @@ export const tankKeys = {
   },
   detail: function (id: string) {
     return [...tankKeys.root, id] as const
+  },
+  fermentationRecords: function (tankId: string, pagination: Pagination) {
+    return [
+      ...tankKeys.detail(tankId),
+      'fermentation-records',
+      pagination,
+    ] as const
   },
 }
 
@@ -44,6 +52,19 @@ export function getTankOptions(id: string) {
     queryFn: function () {
       return getTank(id)
     },
+  })
+}
+
+export function listTankFermentationRecordsOptions(
+  tankId: string,
+  pagination: Pagination = { limit: 20, page: 1 },
+) {
+  return queryOptions({
+    queryKey: tankKeys.fermentationRecords(tankId, pagination),
+    queryFn: function () {
+      return listTankFermentationRecords(tankId, pagination)
+    },
+    placeholderData: keepPreviousData,
   })
 }
 

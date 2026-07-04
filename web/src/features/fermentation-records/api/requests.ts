@@ -9,8 +9,18 @@ import type {
 const resource = 'fermentation-records'
 
 export function listFermentationRecords(pagination: Pagination) {
+  const { search, sortBy, sortDirection, classification, ...pageParams } =
+    pagination
+  const searchParams = {
+    ...pageParams,
+    ...(search?.trim() ? { search: search.trim() } : {}),
+    ...(sortBy ? { sortBy } : {}),
+    ...(sortDirection ? { sortDirection } : {}),
+    ...(classification ? { classification } : {}),
+  }
+
   return api
-    .get(resource, { searchParams: pagination })
+    .get(resource, { searchParams })
     .json<Paginated<FermentationRecord>>()
 }
 

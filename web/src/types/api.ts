@@ -4,6 +4,7 @@ export type Pagination = {
   search?: string
   sortBy?: string
   sortDirection?: 'asc' | 'desc'
+  classification?: string
 }
 
 export type Paginated<T> = {

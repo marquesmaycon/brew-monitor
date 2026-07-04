@@ -4,10 +4,13 @@ import type { Paginated, Pagination, Tank, TankPayload } from '@/types/api'
 const resource = 'tanks'
 
 export function listTanks(pagination: Pagination) {
-  const { search, ...pageParams } = pagination
-  const searchParams = search?.trim()
-    ? { ...pageParams, search: search.trim() }
-    : pageParams
+  const { search, sortBy, sortDirection, ...pageParams } = pagination
+  const searchParams = {
+    ...pageParams,
+    ...(search?.trim() ? { search: search.trim() } : {}),
+    ...(sortBy ? { sortBy } : {}),
+    ...(sortDirection ? { sortDirection } : {}),
+  }
 
   return api.get(resource, { searchParams }).json<Paginated<Tank>>()
 }

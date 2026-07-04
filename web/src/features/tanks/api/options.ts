@@ -1,4 +1,8 @@
-import { mutationOptions, queryOptions } from '@tanstack/react-query'
+import {
+  keepPreviousData,
+  mutationOptions,
+  queryOptions,
+} from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import type { Pagination, TankPayload } from '@/types/api'
@@ -30,6 +34,7 @@ export function listTanksOptions(
     queryFn: function () {
       return listTanks(pagination)
     },
+    placeholderData: keepPreviousData,
   })
 }
 

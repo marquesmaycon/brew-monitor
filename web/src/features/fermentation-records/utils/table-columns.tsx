@@ -36,7 +36,7 @@ export const columns = [
     cell: ({ row }) => formatDateTime(row.original.registeredAt),
   }),
   columnHelper.accessor('beer.name', {
-    header: sortableHeader('Cerveja'),
+    header: 'Cerveja',
     cell: ({ row }) => (
       <Button asChild variant="link" className="px-0">
         <Link
@@ -48,9 +48,10 @@ export const columns = [
         </Link>
       </Button>
     ),
+    enableSorting: false,
   }),
   columnHelper.accessor('tank.name', {
-    header: sortableHeader('Tanque'),
+    header: 'Tanque',
     cell: ({ row }) => (
       <Button asChild variant="link" className="px-0">
         <Link
@@ -62,18 +63,22 @@ export const columns = [
         </Link>
       </Button>
     ),
+    enableSorting: false,
   }),
   columnHelper.accessor('temperature', {
-    header: sortableHeader('Temp.'),
+    header: 'Temp.',
     cell: (info) => `${info.row.original.temperature} ºC`,
+    enableSorting: false,
   }),
   columnHelper.accessor('ph', {
-    header: sortableHeader('pH'),
+    header: 'pH',
     cell: (info) => info.row.original.ph,
+    enableSorting: false,
   }),
   columnHelper.accessor('extract', {
-    header: sortableHeader('Extrato'),
+    header: 'Extrato',
     cell: (info) => `${info.row.original.extract} ºP`,
+    enableSorting: false,
   }),
   columnHelper.accessor('classification', {
     header: 'Classificação',
@@ -91,6 +96,7 @@ export const columns = [
         </Badge>
       )
     },
+    enableSorting: false,
   }),
   columnHelper.display({
     id: 'actions',

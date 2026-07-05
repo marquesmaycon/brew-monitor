@@ -86,8 +86,9 @@ npm run web:dev
 Acesse:
 
 - Frontend: `http://localhost:3000`
-- API: `http://localhost:5027`
+- API / healthcheck: `http://localhost:5027`
 - OpenAPI em desenvolvimento: `http://localhost:5027/openapi/v1.json`
+- Documentação visual da API com Scalar: `http://localhost:5027/scalar/v1`
 
 ### Comando opcional de migration
 
@@ -210,7 +211,8 @@ O material gerado por IA precisou ser revisado e ajustado em alguns pontos:
 - Ordenação, paginação e filtragem das listagens processadas server-side, reduzindo carga no navegador, diminuindo o tráfego de dados e melhorando a previsibilidade com bases maiores.
 - Regras de consulta centralizadas na API, evitando duplicação de lógica de filtros e ordenação entre telas do frontend.
 - Validações de relacionamento, como impedir a remoção de cervejas e tanques com registros associados.
-- OpenAPI disponível em ambiente de desenvolvimento e CORS configurado para integração local com o frontend.
+- OpenAPI disponível em ambiente de desenvolvimento, com documentação visual via Scalar, e CORS configurado para integração local com o frontend.
+- Rota raiz `/` retornando um payload simples de healthcheck para validação rápida de disponibilidade da API.
 
 ## Pontos fortes do app web
 

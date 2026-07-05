@@ -1,3 +1,4 @@
+using BrewMonitor.Api.Documentation.OpenApi;
 using BrewMonitor.Api.DTOs.Beers;
 using BrewMonitor.Api.DTOs.Common;
 using BrewMonitor.Api.DTOs.FermentationRecords;
@@ -15,6 +16,7 @@ public class BeersController(
 ) : ControllerBase
 {
   [HttpGet]
+  [BeersEndpointDocumentation.List]
   public async Task<ActionResult<PaginatedResult<BeerResponse>>> GetAll(
     [FromQuery] int page = 1,
     [FromQuery] int limit = 20,
@@ -29,6 +31,7 @@ public class BeersController(
   }
 
   [HttpGet("{id:guid}")]
+  [BeersEndpointDocumentation.GetById]
   public async Task<ActionResult<BeerResponse>> GetById(Guid id)
   {
     var beer = await beerService.GetByIdAsync(id);
@@ -42,6 +45,7 @@ public class BeersController(
   }
 
   [HttpPost]
+  [BeersEndpointDocumentation.Create]
   public async Task<ActionResult<Beer>> Create(Beer beer)
   {
     var createdBeer = await beerService.CreateAsync(beer);
@@ -50,6 +54,7 @@ public class BeersController(
   }
 
   [HttpPut("{id:guid}")]
+  [BeersEndpointDocumentation.Update]
   public async Task<ActionResult<Beer>> Update(Guid id, Beer beer)
   {
     var updatedBeer = await beerService.UpdateAsync(id, beer);
@@ -63,6 +68,7 @@ public class BeersController(
   }
 
   [HttpDelete("{id:guid}")]
+  [BeersEndpointDocumentation.Delete]
   public async Task<IActionResult> Delete(Guid id)
   {
     if (!await beerService.ExistsAsync(id))
@@ -86,6 +92,7 @@ public class BeersController(
   }
 
   [HttpGet("{beerId:guid}/fermentation-records")]
+  [BeersEndpointDocumentation.ListFermentationRecords]
   public async Task<ActionResult<PaginatedResult<FermentationRecordResponse>>> GetFermentationRecords(
     Guid beerId,
     [FromQuery] int page = 1,
@@ -103,6 +110,7 @@ public class BeersController(
   }
 
   [HttpGet("{beerId:guid}/fermentation-parameters")]
+  [BeersEndpointDocumentation.GetFermentationParameter]
   public async Task<ActionResult<FermentationParameter>> GetFermentationParameter(Guid beerId)
   {
     if (!await beerService.ExistsAsync(beerId))
@@ -121,6 +129,7 @@ public class BeersController(
   }
 
   [HttpPost("{beerId:guid}/fermentation-parameters")]
+  [BeersEndpointDocumentation.CreateFermentationParameter]
   public async Task<ActionResult<FermentationParameter>> CreateFermentationParameter(
     Guid beerId,
     FermentationParameter parameter
@@ -153,6 +162,7 @@ public class BeersController(
   }
 
   [HttpPut("{beerId:guid}/fermentation-parameters")]
+  [BeersEndpointDocumentation.UpdateFermentationParameter]
   public async Task<ActionResult<FermentationParameter>> UpdateFermentationParameter(
     Guid beerId,
     FermentationParameter parameter
@@ -179,6 +189,7 @@ public class BeersController(
   }
 
   [HttpDelete("{beerId:guid}/fermentation-parameters")]
+  [BeersEndpointDocumentation.DeleteFermentationParameter]
   public async Task<IActionResult> DeleteFermentationParameter(Guid beerId)
   {
     if (!await beerService.ExistsAsync(beerId))

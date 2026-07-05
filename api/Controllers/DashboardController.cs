@@ -1,4 +1,5 @@
 using BrewMonitor.Api.Data;
+using BrewMonitor.Api.Documentation.OpenApi;
 using BrewMonitor.Api.DTOs.Dashboard;
 using BrewMonitor.Api.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ namespace BrewMonitor.Api.Controllers;
 public class DashboardController(AppDbContext context) : ControllerBase
 {
   [HttpGet]
+  [DashboardEndpointDocumentation.GetSummary]
   public async Task<ActionResult<object>> Get()
   {
     var recordsByClassification = await context.FermentationRecords
@@ -38,6 +40,7 @@ public class DashboardController(AppDbContext context) : ControllerBase
   }
 
   [HttpGet("fermentation-history")]
+  [DashboardEndpointDocumentation.GetFermentationHistory]
   public async Task<ActionResult<FermentationHistoryResponse>> GetFermentationHistory(
     [FromQuery] string? batchNumber = null
   )

@@ -1,3 +1,4 @@
+using BrewMonitor.Api.Documentation.OpenApi;
 using BrewMonitor.Api.DTOs.Common;
 using BrewMonitor.Api.DTOs.FermentationRecords;
 using BrewMonitor.Api.Models;
@@ -11,6 +12,7 @@ namespace BrewMonitor.Api.Controllers;
 public class FermentationRecordsController(IFermentationRecordService fermentationRecordService) : ControllerBase
 {
   [HttpGet]
+  [FermentationRecordsEndpointDocumentation.List]
   public async Task<ActionResult<PaginatedResult<FermentationRecordResponse>>> GetAll(
     [FromQuery] int page = 1,
     [FromQuery] int limit = 20,
@@ -33,6 +35,7 @@ public class FermentationRecordsController(IFermentationRecordService fermentati
   }
 
   [HttpGet("{id:guid}")]
+  [FermentationRecordsEndpointDocumentation.GetById]
   public async Task<ActionResult<FermentationRecordResponse>> GetById(Guid id)
   {
     var record = await fermentationRecordService.GetByIdAsync(id);
@@ -46,6 +49,7 @@ public class FermentationRecordsController(IFermentationRecordService fermentati
   }
 
   [HttpPost]
+  [FermentationRecordsEndpointDocumentation.Create]
   public async Task<ActionResult<FermentationRecord>> Create(FermentationRecord record)
   {
     var validationError = await ValidateAsync(record);
@@ -61,6 +65,7 @@ public class FermentationRecordsController(IFermentationRecordService fermentati
   }
 
   [HttpPut("{id:guid}")]
+  [FermentationRecordsEndpointDocumentation.Update]
   public async Task<ActionResult<FermentationRecord>> Update(Guid id, FermentationRecord record)
   {
     var validationError = await ValidateAsync(record);
@@ -81,6 +86,7 @@ public class FermentationRecordsController(IFermentationRecordService fermentati
   }
 
   [HttpDelete("{id:guid}")]
+  [FermentationRecordsEndpointDocumentation.Delete]
   public async Task<IActionResult> Delete(Guid id)
   {
     var deleted = await fermentationRecordService.DeleteAsync(id);

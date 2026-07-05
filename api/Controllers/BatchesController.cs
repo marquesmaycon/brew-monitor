@@ -1,3 +1,4 @@
+using BrewMonitor.Api.Documentation.OpenApi;
 using BrewMonitor.Api.DTOs.Batches;
 using BrewMonitor.Api.DTOs.Common;
 using BrewMonitor.Api.Services;
@@ -10,6 +11,7 @@ namespace BrewMonitor.Api.Controllers;
 public class BatchesController(IBatchService batchService) : ControllerBase
 {
   [HttpGet]
+  [BatchesEndpointDocumentation.List]
   public async Task<ActionResult<PaginatedResult<BatchResponse>>> GetAll(
     [FromQuery] int page = 1,
     [FromQuery] int limit = 20
@@ -21,6 +23,7 @@ public class BatchesController(IBatchService batchService) : ControllerBase
   }
 
   [HttpGet("{batchNumber}/overview")]
+  [BatchesEndpointDocumentation.GetOverview]
   public async Task<ActionResult<BatchOverviewResponse>> GetOverview(string batchNumber)
   {
     var normalizedBatchNumber = NormalizeBatchNumber(batchNumber);
@@ -41,6 +44,7 @@ public class BatchesController(IBatchService batchService) : ControllerBase
   }
 
   [HttpGet("{batchNumber}/fermentation-records")]
+  [BatchesEndpointDocumentation.ListFermentationRecords]
   public async Task<ActionResult<PaginatedResult<BatchFermentationRecordResponse>>> GetFermentationRecords(
     string batchNumber,
     [FromQuery] int page = 1,

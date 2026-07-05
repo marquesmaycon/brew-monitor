@@ -9,7 +9,7 @@ docker compose -f api/docker-compose.yml up -d postgres
 Write-Host "Starting API at http://localhost:5027..."
 $api = Start-Process `
   -FilePath "dotnet" `
-  -ArgumentList @("run", "--project", "api/BrewMonitor.Api.csproj", "--launch-profile", "http") `
+  -ArgumentList @("watch", "--project", "api/BrewMonitor.Api.csproj", "run", "--launch-profile", "http") `
   -WorkingDirectory $root `
   -NoNewWindow `
   -PassThru

@@ -1,3 +1,4 @@
+using BrewMonitor.Api.Documentation.OpenApi;
 using BrewMonitor.Api.DTOs.Common;
 using BrewMonitor.Api.DTOs.FermentationRecords;
 using BrewMonitor.Api.Models;
@@ -14,6 +15,7 @@ public class TanksController(
 ) : ControllerBase
 {
   [HttpGet]
+  [TanksEndpointDocumentation.List]
   public async Task<ActionResult<PaginatedResult<Tank>>> GetAll(
     [FromQuery] int page = 1,
     [FromQuery] int limit = 20,
@@ -28,6 +30,7 @@ public class TanksController(
   }
 
   [HttpGet("{id:guid}")]
+  [TanksEndpointDocumentation.GetById]
   public async Task<ActionResult<Tank>> GetById(Guid id)
   {
     var tank = await tankService.GetByIdAsync(id);
@@ -41,6 +44,7 @@ public class TanksController(
   }
 
   [HttpPost]
+  [TanksEndpointDocumentation.Create]
   public async Task<ActionResult<Tank>> Create(Tank tank)
   {
     var createdTank = await tankService.CreateAsync(tank);
@@ -49,6 +53,7 @@ public class TanksController(
   }
 
   [HttpPut("{id:guid}")]
+  [TanksEndpointDocumentation.Update]
   public async Task<ActionResult<Tank>> Update(Guid id, Tank tank)
   {
     var updatedTank = await tankService.UpdateAsync(id, tank);
@@ -62,6 +67,7 @@ public class TanksController(
   }
 
   [HttpDelete("{id:guid}")]
+  [TanksEndpointDocumentation.Delete]
   public async Task<IActionResult> Delete(Guid id)
   {
     if (!await tankService.ExistsAsync(id))
@@ -85,6 +91,7 @@ public class TanksController(
   }
 
   [HttpGet("{tankId:guid}/fermentation-records")]
+  [TanksEndpointDocumentation.ListFermentationRecords]
   public async Task<ActionResult<PaginatedResult<FermentationRecordResponse>>> GetFermentationRecords(
     Guid tankId,
     [FromQuery] int page = 1,

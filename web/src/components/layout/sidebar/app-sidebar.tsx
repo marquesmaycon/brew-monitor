@@ -1,15 +1,13 @@
 'use client'
 
 import { Link } from '@tanstack/react-router'
-import {
-  BeerIcon,
-  ClipboardListIcon,
-  ContainerIcon,
-  HouseIcon,
-  PackageIcon,
-} from 'lucide-react'
 import * as React from 'react'
 
+import BatchIcon from '@/assets/icons/batch.svg?react'
+import BeerIcon from '@/assets/icons/beer.svg?react'
+import DashboardIcon from '@/assets/icons/dashboard.svg?react'
+import RecordIcon from '@/assets/icons/record.svg?react'
+import TankIcon from '@/assets/icons/tank.svg?react'
 import { NavMain } from '#/components/layout/sidebar/nav-main'
 import { NavUser } from '#/components/layout/sidebar/nav-user'
 import {
@@ -31,7 +29,7 @@ const data = {
     {
       title: 'Dashboard',
       url: '/',
-      icon: <HouseIcon />,
+      icon: <DashboardIcon />,
     },
     {
       title: 'Cervejas',
@@ -41,17 +39,17 @@ const data = {
     {
       title: 'Tanques',
       url: '/tanks',
-      icon: <ContainerIcon />,
+      icon: <TankIcon />,
     },
     {
       title: 'Registros',
       url: '/fermentation-records',
-      icon: <ClipboardListIcon />,
+      icon: <RecordIcon />,
     },
     {
       title: 'Lotes',
       url: '/batches',
-      icon: <PackageIcon />,
+      icon: <BatchIcon />,
     },
   ],
 }

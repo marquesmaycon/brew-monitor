@@ -2,6 +2,12 @@
 
 Aplicação web para registrar e acompanhar dados de fermentação cervejeira. O sistema permite cadastrar cervejas, tanques, parâmetros aceitáveis de fermentação, registros fermentativos, indicadores de dashboard e histórico por lote.
 
+## Demo online
+
+- Acesse a demo: `https://brew-monitor.mklly.com.br/`
+
+Observação: a API está hospedada na Render. Como o serviço gratuito pode desligar após períodos de inatividade, a primeira requisição pode levar de 1 a 2 minutos para responder enquanto a aplicação volta a ficar disponível.
+
 ## Tecnologias
 
 - Backend: C# / .NET 10, ASP.NET Core, Entity Framework Core

@@ -121,7 +121,7 @@ npm run db:down      # derruba o PostgreSQL e os recursos do compose
 npm run api:restore  # restaura dependências do backend
 npm run api:migrate  # aplica migrations manualmente com EF Core CLI
 npm run api:dev      # executa a API em http://localhost:5027
-npm run web:install  # instala dependências do frontend com npm ci
+npm run web:install  # instala dependências do frontend com npm install
 npm run web:dev      # executa o frontend em http://localhost:3000
 npm run dev          # inicia banco, API e frontend; não instala dependências nem cria .env
 ```

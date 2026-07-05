@@ -15,17 +15,24 @@ export const fermentationRecordSchema = z.object({
   registeredAt: z
     .string('A data e hora devem ser um texto')
     .min(1, 'Informe a data e hora'),
-  beerId: z.guid('Selecione uma cerveja válida'),
-  tankId: z.guid('Selecione um tanque válido'),
-  batchNumber: z.string('O lote deve ser um texto').min(1, 'Informe o lote'),
-  temperature: z.coerce.number<number>('A temperatura deve ser um número'),
+  beerId: z.guid('Selecione uma cerveja valida'),
+  tankId: z.guid('Selecione um tanque valido'),
+  batchNumber: z
+    .string('O lote deve ser um texto')
+    .trim()
+    .min(1, 'Informe o lote')
+    .max(80, 'O lote deve ter no maximo 80 caracteres'),
+  temperature: z.coerce.number<number>('A temperatura deve ser um numero'),
   ph: z.coerce
-    .number<number>('O pH deve ser um número')
+    .number<number>('O pH deve ser um numero')
     .positive('O pH deve ser maior que zero'),
   extract: z.coerce
-    .number<number>('O extrato deve ser um número')
+    .number<number>('O extrato deve ser um numero')
     .nonnegative('O extrato deve ser maior ou igual a zero'),
-  notes: z.string('As observações devem ser um texto').trim(),
+  notes: z
+    .string('As observacoes devem ser um texto')
+    .trim()
+    .max(1000, 'As observacoes devem ter no maximo 1000 caracteres'),
 })
 
 export type FermentationRecordSchema = z.infer<typeof fermentationRecordSchema>

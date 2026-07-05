@@ -1,6 +1,7 @@
 using BrewMonitor.Api.Documentation.OpenApi;
 using BrewMonitor.Api.DTOs.Beers;
 using BrewMonitor.Api.DTOs.Common;
+using BrewMonitor.Api.DTOs.FermentationParameters;
 using BrewMonitor.Api.DTOs.FermentationRecords;
 using BrewMonitor.Api.Models;
 using BrewMonitor.Api.Services;
@@ -18,14 +19,16 @@ public class BeersController(
   [HttpGet]
   [BeersEndpointDocumentation.List]
   public async Task<ActionResult<PaginatedResult<BeerResponse>>> GetAll(
-    [FromQuery] int page = 1,
-    [FromQuery] int limit = 20,
-    [FromQuery] string? search = null,
-    [FromQuery] string? sortBy = null,
-    [FromQuery] string? sortDirection = null
+    [FromQuery] BeerListRequest request
   )
   {
-    var beers = await beerService.GetAllAsync(page, limit, search, sortBy, sortDirection);
+    var beers = await beerService.GetAllAsync(
+      request.Page,
+      request.Limit,
+      request.Search,
+      request.SortBy,
+      request.SortDirection
+    );
 
     return Ok(beers);
   }
@@ -46,17 +49,19 @@ public class BeersController(
 
   [HttpPost]
   [BeersEndpointDocumentation.Create]
-  public async Task<ActionResult<Beer>> Create(Beer beer)
+  public async Task<ActionResult<BeerResponse>> Create([FromBody] BeerRequest request)
   {
+    var beer = ToBeer(request);
     var createdBeer = await beerService.CreateAsync(beer);
 
-    return CreatedAtAction(nameof(GetById), new { id = createdBeer.Id }, createdBeer);
+    return CreatedAtAction(nameof(GetById), new { id = createdBeer.Id }, ToResponse(createdBeer));
   }
 
   [HttpPut("{id:guid}")]
   [BeersEndpointDocumentation.Update]
-  public async Task<ActionResult<Beer>> Update(Guid id, Beer beer)
+  public async Task<ActionResult<BeerResponse>> Update(Guid id, [FromBody] BeerRequest request)
   {
+    var beer = ToBeer(request);
     var updatedBeer = await beerService.UpdateAsync(id, beer);
 
     if (updatedBeer is null)
@@ -64,7 +69,7 @@ public class BeersController(
       return NotFound();
     }
 
-    return Ok(updatedBeer);
+    return Ok(ToResponse(updatedBeer));
   }
 
   [HttpDelete("{id:guid}")]
@@ -95,8 +100,7 @@ public class BeersController(
   [BeersEndpointDocumentation.ListFermentationRecords]
   public async Task<ActionResult<PaginatedResult<FermentationRecordResponse>>> GetFermentationRecords(
     Guid beerId,
-    [FromQuery] int page = 1,
-    [FromQuery] int limit = 20
+    [FromQuery] PaginationRequest request
   )
   {
     if (!await beerService.ExistsAsync(beerId))
@@ -104,7 +108,11 @@ public class BeersController(
       return NotFound();
     }
 
-    var records = await fermentationRecordService.GetByBeerAsync(beerId, page, limit);
+    var records = await fermentationRecordService.GetByBeerAsync(
+      beerId,
+      request.Page,
+      request.Limit
+    );
 
     return Ok(records);
   }
@@ -132,9 +140,11 @@ public class BeersController(
   [BeersEndpointDocumentation.CreateFermentationParameter]
   public async Task<ActionResult<FermentationParameter>> CreateFermentationParameter(
     Guid beerId,
-    FermentationParameter parameter
+    [FromBody] FermentationParameterRequest request
   )
   {
+    var parameter = ToFermentationParameter(request);
+
     if (!await beerService.ExistsAsync(beerId))
     {
       return NotFound();
@@ -146,12 +156,6 @@ public class BeersController(
     {
       return Conflict("Fermentation parameters already exist for this beer.");
     }
-
-    if (!HasValidRanges(parameter))
-    {
-      return BadRequest("Minimum values must be less than or equal to maximum values.");
-    }
-
     var createdParameter = await beerService.CreateFermentationParameterAsync(beerId, parameter);
 
     return CreatedAtAction(
@@ -165,17 +169,14 @@ public class BeersController(
   [BeersEndpointDocumentation.UpdateFermentationParameter]
   public async Task<ActionResult<FermentationParameter>> UpdateFermentationParameter(
     Guid beerId,
-    FermentationParameter parameter
+    [FromBody] FermentationParameterRequest request
   )
   {
+    var parameter = ToFermentationParameter(request);
+
     if (!await beerService.ExistsAsync(beerId))
     {
       return NotFound();
-    }
-
-    if (!HasValidRanges(parameter))
-    {
-      return BadRequest("Minimum values must be less than or equal to maximum values.");
     }
 
     var updatedParameter = await beerService.UpdateFermentationParameterAsync(beerId, parameter);
@@ -207,10 +208,40 @@ public class BeersController(
     return NoContent();
   }
 
-  private static bool HasValidRanges(FermentationParameter parameter)
+  private static Beer ToBeer(BeerRequest request)
   {
-    return parameter.MinTemperature <= parameter.MaxTemperature
-      && parameter.MinPh <= parameter.MaxPh
-      && parameter.MinExtract <= parameter.MaxExtract;
+    return new Beer
+    {
+      Name = request.Name.Trim(),
+      Style = request.Style.Trim()
+    };
+  }
+
+  private static BeerResponse ToResponse(Beer beer)
+  {
+    return new BeerResponse
+    {
+      Id = beer.Id,
+      Name = beer.Name,
+      Style = beer.Style,
+      CreatedAt = beer.CreatedAt,
+      UpdatedAt = beer.UpdatedAt,
+      FermentationParameter = null
+    };
+  }
+
+  private static FermentationParameter ToFermentationParameter(
+    FermentationParameterRequest request
+  )
+  {
+    return new FermentationParameter
+    {
+      MinTemperature = request.MinTemperature!.Value,
+      MaxTemperature = request.MaxTemperature!.Value,
+      MinPh = request.MinPh!.Value,
+      MaxPh = request.MaxPh!.Value,
+      MinExtract = request.MinExtract!.Value,
+      MaxExtract = request.MaxExtract!.Value
+    };
   }
 }

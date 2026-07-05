@@ -13,25 +13,21 @@ public class BatchesController(IBatchService batchService) : ControllerBase
   [HttpGet]
   [BatchesEndpointDocumentation.List]
   public async Task<ActionResult<PaginatedResult<BatchResponse>>> GetAll(
-    [FromQuery] int page = 1,
-    [FromQuery] int limit = 20
+    [FromQuery] PaginationRequest request
   )
   {
-    var batches = await batchService.GetAllAsync(page, limit);
+    var batches = await batchService.GetAllAsync(request.Page, request.Limit);
 
     return Ok(batches);
   }
 
   [HttpGet("{batchNumber}/overview")]
   [BatchesEndpointDocumentation.GetOverview]
-  public async Task<ActionResult<BatchOverviewResponse>> GetOverview(string batchNumber)
+  public async Task<ActionResult<BatchOverviewResponse>> GetOverview(
+    [FromRoute] BatchRouteRequest request
+  )
   {
-    var normalizedBatchNumber = NormalizeBatchNumber(batchNumber);
-
-    if (string.IsNullOrWhiteSpace(normalizedBatchNumber))
-    {
-      return BadRequest("Batch number is required.");
-    }
+    var normalizedBatchNumber = NormalizeBatchNumber(request.BatchNumber!);
 
     var overview = await batchService.GetOverviewAsync(normalizedBatchNumber);
 
@@ -46,22 +42,16 @@ public class BatchesController(IBatchService batchService) : ControllerBase
   [HttpGet("{batchNumber}/fermentation-records")]
   [BatchesEndpointDocumentation.ListFermentationRecords]
   public async Task<ActionResult<PaginatedResult<BatchFermentationRecordResponse>>> GetFermentationRecords(
-    string batchNumber,
-    [FromQuery] int page = 1,
-    [FromQuery] int limit = 20
+    [FromRoute] BatchRouteRequest routeRequest,
+    [FromQuery] PaginationRequest queryRequest
   )
   {
-    var normalizedBatchNumber = NormalizeBatchNumber(batchNumber);
-
-    if (string.IsNullOrWhiteSpace(normalizedBatchNumber))
-    {
-      return BadRequest("Batch number is required.");
-    }
+    var normalizedBatchNumber = NormalizeBatchNumber(routeRequest.BatchNumber!);
 
     var records = await batchService.GetFermentationRecordsAsync(
       normalizedBatchNumber,
-      page,
-      limit
+      queryRequest.Page,
+      queryRequest.Limit
     );
 
     if (records is null)

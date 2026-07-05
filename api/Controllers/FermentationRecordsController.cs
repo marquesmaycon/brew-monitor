@@ -14,21 +14,16 @@ public class FermentationRecordsController(IFermentationRecordService fermentati
   [HttpGet]
   [FermentationRecordsEndpointDocumentation.List]
   public async Task<ActionResult<PaginatedResult<FermentationRecordResponse>>> GetAll(
-    [FromQuery] int page = 1,
-    [FromQuery] int limit = 20,
-    [FromQuery] string? search = null,
-    [FromQuery] string? sortBy = null,
-    [FromQuery] string? sortDirection = null,
-    [FromQuery] string? classification = null
+    [FromQuery] FermentationRecordListRequest request
   )
   {
     var records = await fermentationRecordService.GetAllAsync(
-      page,
-      limit,
-      search,
-      sortBy,
-      sortDirection,
-      classification
+      request.Page,
+      request.Limit,
+      request.Search,
+      request.SortBy,
+      request.SortDirection,
+      request.Classification
     );
 
     return Ok(records);
@@ -50,8 +45,11 @@ public class FermentationRecordsController(IFermentationRecordService fermentati
 
   [HttpPost]
   [FermentationRecordsEndpointDocumentation.Create]
-  public async Task<ActionResult<FermentationRecord>> Create(FermentationRecord record)
+  public async Task<ActionResult<FermentationRecord>> Create(
+    [FromBody] FermentationRecordRequest request
+  )
   {
+    var record = ToFermentationRecord(request);
     var validationError = await ValidateAsync(record);
 
     if (validationError is not null)
@@ -66,8 +64,12 @@ public class FermentationRecordsController(IFermentationRecordService fermentati
 
   [HttpPut("{id:guid}")]
   [FermentationRecordsEndpointDocumentation.Update]
-  public async Task<ActionResult<FermentationRecord>> Update(Guid id, FermentationRecord record)
+  public async Task<ActionResult<FermentationRecord>> Update(
+    Guid id,
+    [FromBody] FermentationRecordRequest request
+  )
   {
+    var record = ToFermentationRecord(request);
     var validationError = await ValidateAsync(record);
 
     if (validationError is not null)
@@ -101,19 +103,9 @@ public class FermentationRecordsController(IFermentationRecordService fermentati
 
   private async Task<ActionResult?> ValidateAsync(FermentationRecord record)
   {
-    if (record.BeerId == Guid.Empty)
-    {
-      return BadRequest("Beer is required.");
-    }
-
     if (!await fermentationRecordService.BeerExistsAsync(record.BeerId))
     {
       return BadRequest("Beer does not exist.");
-    }
-
-    if (record.TankId == Guid.Empty)
-    {
-      return BadRequest("Tank is required.");
     }
 
     if (!await fermentationRecordService.TankExistsAsync(record.TankId))
@@ -121,16 +113,21 @@ public class FermentationRecordsController(IFermentationRecordService fermentati
       return BadRequest("Tank does not exist.");
     }
 
-    if (record.RegisteredAt == default)
-    {
-      return BadRequest("Registered date and time are required.");
-    }
-
-    if (string.IsNullOrWhiteSpace(record.BatchNumber))
-    {
-      return BadRequest("Batch number is required.");
-    }
-
     return null;
+  }
+
+  private static FermentationRecord ToFermentationRecord(FermentationRecordRequest request)
+  {
+    return new FermentationRecord
+    {
+      RegisteredAt = request.RegisteredAt!.Value,
+      BeerId = request.BeerId!.Value,
+      TankId = request.TankId!.Value,
+      BatchNumber = request.BatchNumber!.Trim(),
+      Temperature = request.Temperature!.Value,
+      Ph = request.Ph!.Value,
+      Extract = request.Extract!.Value,
+      Notes = string.IsNullOrWhiteSpace(request.Notes) ? null : request.Notes.Trim()
+    };
   }
 }

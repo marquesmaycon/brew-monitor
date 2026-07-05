@@ -42,7 +42,7 @@ public class DashboardController(AppDbContext context) : ControllerBase
   [HttpGet("fermentation-history")]
   [DashboardEndpointDocumentation.GetFermentationHistory]
   public async Task<ActionResult<FermentationHistoryResponse>> GetFermentationHistory(
-    [FromQuery] string? batchNumber = null
+    [FromQuery] FermentationHistoryRequest request
   )
   {
     var batches = await context.FermentationRecords
@@ -62,9 +62,9 @@ public class DashboardController(AppDbContext context) : ControllerBase
       .OrderByDescending(batch => batch.LastRegisteredAt)
       .ToListAsync();
 
-    var selectedBatchNumber = string.IsNullOrWhiteSpace(batchNumber)
+    var selectedBatchNumber = string.IsNullOrWhiteSpace(request.BatchNumber)
       ? batches.FirstOrDefault()?.BatchNumber
-      : batchNumber.Trim();
+      : request.BatchNumber.Trim();
 
     if (
       selectedBatchNumber is not null

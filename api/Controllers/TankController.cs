@@ -1,6 +1,7 @@
 using BrewMonitor.Api.Documentation.OpenApi;
 using BrewMonitor.Api.DTOs.Common;
 using BrewMonitor.Api.DTOs.FermentationRecords;
+using BrewMonitor.Api.DTOs.Tanks;
 using BrewMonitor.Api.Models;
 using BrewMonitor.Api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -17,14 +18,16 @@ public class TanksController(
   [HttpGet]
   [TanksEndpointDocumentation.List]
   public async Task<ActionResult<PaginatedResult<Tank>>> GetAll(
-    [FromQuery] int page = 1,
-    [FromQuery] int limit = 20,
-    [FromQuery] string? search = null,
-    [FromQuery] string? sortBy = null,
-    [FromQuery] string? sortDirection = null
+    [FromQuery] TankListRequest request
   )
   {
-    var tanks = await tankService.GetAllAsync(page, limit, search, sortBy, sortDirection);
+    var tanks = await tankService.GetAllAsync(
+      request.Page,
+      request.Limit,
+      request.Search,
+      request.SortBy,
+      request.SortDirection
+    );
 
     return Ok(tanks);
   }
@@ -45,8 +48,9 @@ public class TanksController(
 
   [HttpPost]
   [TanksEndpointDocumentation.Create]
-  public async Task<ActionResult<Tank>> Create(Tank tank)
+  public async Task<ActionResult<Tank>> Create([FromBody] TankRequest request)
   {
+    var tank = ToTank(request);
     var createdTank = await tankService.CreateAsync(tank);
 
     return CreatedAtAction(nameof(GetById), new { id = createdTank.Id }, createdTank);
@@ -54,8 +58,9 @@ public class TanksController(
 
   [HttpPut("{id:guid}")]
   [TanksEndpointDocumentation.Update]
-  public async Task<ActionResult<Tank>> Update(Guid id, Tank tank)
+  public async Task<ActionResult<Tank>> Update(Guid id, [FromBody] TankRequest request)
   {
+    var tank = ToTank(request);
     var updatedTank = await tankService.UpdateAsync(id, tank);
 
     if (updatedTank is null)
@@ -94,8 +99,7 @@ public class TanksController(
   [TanksEndpointDocumentation.ListFermentationRecords]
   public async Task<ActionResult<PaginatedResult<FermentationRecordResponse>>> GetFermentationRecords(
     Guid tankId,
-    [FromQuery] int page = 1,
-    [FromQuery] int limit = 20
+    [FromQuery] PaginationRequest request
   )
   {
     if (!await tankService.ExistsAsync(tankId))
@@ -103,8 +107,21 @@ public class TanksController(
       return NotFound();
     }
 
-    var records = await fermentationRecordService.GetByTankAsync(tankId, page, limit);
+    var records = await fermentationRecordService.GetByTankAsync(
+      tankId,
+      request.Page,
+      request.Limit
+    );
 
     return Ok(records);
+  }
+
+  private static Tank ToTank(TankRequest request)
+  {
+    return new Tank
+    {
+      Name = request.Name!.Trim(),
+      CapacityLiters = request.CapacityLiters!.Value
+    };
   }
 }

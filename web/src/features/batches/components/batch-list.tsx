@@ -1,27 +1,22 @@
 import { useQuery } from '@tanstack/react-query'
-import { Link } from '@tanstack/react-router'
 import type {
   ColumnFiltersState,
   PaginationState,
   SortingState,
 } from '@tanstack/react-table'
 import {
-  createColumnHelper,
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { Eye } from 'lucide-react'
 import { useState } from 'react'
 
-import { sortableHeader } from '@/components/table/sortable-header'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import type { Batch } from '@/types/api'
 import { DataTable } from '#/components/table/data-table'
 
 import { listBatchesOptions } from '../api/options'
+import { columns } from '../tables/batch-list-columns'
 
 export function BatchList() {
   const [sorting, setSorting] = useState<SortingState>([])
@@ -68,50 +63,3 @@ export function BatchList() {
     </div>
   )
 }
-
-const columnHelper = createColumnHelper<Batch>()
-
-const columns = [
-  columnHelper.accessor('batchNumber', {
-    header: sortableHeader('Lote'),
-    cell: (info) => info.row.original.batchNumber,
-  }),
-  columnHelper.accessor('beerName', {
-    header: sortableHeader('Cerveja'),
-    cell: ({ row }) => (
-      <Button asChild variant="link" className="px-0">
-        <Link
-          to="/beers/$beerId/edit"
-          params={{ beerId: row.original.beerId }}
-          aria-label="Abrir cerveja"
-        >
-          {`${row.original.beerName} - ${row.original.beerStyle}`}
-        </Link>
-      </Button>
-    ),
-  }),
-  columnHelper.accessor('fermentationRecordCount', {
-    header: sortableHeader('Registros'),
-    cell: ({ row }) => row.original.fermentationRecordCount,
-  }),
-  columnHelper.display({
-    id: 'actions',
-    header: () => <div className="text-right">Acoes</div>,
-    cell: ({ row }) => (
-      <div className="flex justify-end">
-        <Button asChild variant="link" aria-label="Ver lote">
-          <Link
-            to="/batches/$batchNumber"
-            params={{ batchNumber: row.original.batchNumber }}
-            title="Ver lote"
-          >
-            <Eye />
-            <span>Ver lote</span>
-          </Link>
-        </Button>
-      </div>
-    ),
-    enableSorting: false,
-    enableColumnFilter: false,
-  }),
-]

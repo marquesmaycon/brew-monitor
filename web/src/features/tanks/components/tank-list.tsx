@@ -1,19 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import { Link } from '@tanstack/react-router'
 import type { PaginationState, SortingState } from '@tanstack/react-table'
-import {
-  createColumnHelper,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
-import { SquarePen } from 'lucide-react'
+import { getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { useState } from 'react'
 
-import { sortableHeader } from '@/components/table/sortable-header'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { formatDate } from '@/lib/date-format'
-import type { Tank } from '@/types/api'
 import { DataTable } from '#/components/table/data-table'
 import { ButtonGroup } from '#/components/ui/button-group'
 import { Field, FieldLabel } from '#/components/ui/field'
@@ -29,6 +19,7 @@ import { ToggleGroup, ToggleGroupItem } from '#/components/ui/toggle-group'
 import { useDebouncedSearch } from '#/hooks/use-debounced-search'
 
 import { listTanksOptions } from '../api/options'
+import { columns } from '../tables/tank-list-columns'
 
 const items = [
   {
@@ -134,40 +125,3 @@ export function TankList() {
     </div>
   )
 }
-
-const columnHelper = createColumnHelper<Tank>()
-
-const columns = [
-  columnHelper.accessor('name', {
-    header: sortableHeader('Nome'),
-    cell: (info) => info.row.original.name,
-  }),
-  columnHelper.accessor('capacityLiters', {
-    header: sortableHeader('Capacidade'),
-    cell: (info) => `${info.row.original.capacityLiters} L`,
-  }),
-  columnHelper.accessor('createdAt', {
-    header: sortableHeader('Criado em'),
-    cell: ({ row }) => formatDate(row.original.createdAt),
-  }),
-  columnHelper.display({
-    id: 'actions',
-    header: () => <div className="text-right">Ações</div>,
-    cell: ({ row }) => (
-      <div className="flex justify-end">
-        <Button asChild variant="link" aria-label="Editar tanque">
-          <Link
-            to="/tanks/$tankId/edit"
-            params={{ tankId: row.original.id }}
-            title="Editar tanque"
-          >
-            <SquarePen />
-            <span>Editar</span>
-          </Link>
-        </Button>
-      </div>
-    ),
-    enableSorting: false,
-    enableColumnFilter: false,
-  }),
-]

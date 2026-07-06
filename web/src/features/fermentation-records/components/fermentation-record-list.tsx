@@ -1,9 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import type { PaginationState, SortingState } from '@tanstack/react-table'
-import {
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
+import { getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { useState } from 'react'
 
 import { Input } from '@/components/ui/input'
@@ -23,8 +20,8 @@ import { useDebouncedSearch } from '#/hooks/use-debounced-search'
 import type { FermentationRecordClassification } from '#/types/api'
 
 import { listFermentationRecordsOptions } from '../api/options'
-import { classificationLabels } from '../utils/constants'
-import { columns } from '../utils/table-columns'
+import { classificationLabels } from '../constants'
+import { columns } from '../tables/fermentation-record-list-columns'
 
 const items = [
   {

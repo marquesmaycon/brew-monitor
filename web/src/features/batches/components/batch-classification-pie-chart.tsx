@@ -12,7 +12,7 @@ import type {
   BatchClassificationCount,
   FermentationRecordClassification,
 } from '@/types/api'
-import { classificationLabels } from '#/features/fermentation-records/utils/constants'
+import { classificationLabels } from '#/features/fermentation-records/constants'
 
 type BatchClassificationPieChartProps = {
   classificationCounts: Array<BatchClassificationCount>

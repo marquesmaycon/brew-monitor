@@ -12,7 +12,7 @@ import {
   classificationClasses,
   classificationLabels,
   getClassificationIcon,
-} from './constants'
+} from '../constants'
 
 const columnHelper = createColumnHelper<FermentationRecord>()
 

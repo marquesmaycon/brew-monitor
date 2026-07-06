@@ -10,13 +10,11 @@ import {
   classificationDescriptions,
   classificationLabels,
   getClassificationIcon,
-} from '../utils/constants'
+} from '../constants'
 
 type FermentationRecordSummaryProps = {
   record: FermentationRecord
 }
-
-
 
 export function FermentationRecordSummary({
   record: { classification, beer, tank },

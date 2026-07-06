@@ -1,22 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
-import { Link } from '@tanstack/react-router'
 import type { PaginationState, SortingState } from '@tanstack/react-table'
-import {
-  createColumnHelper,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
-import { SquarePen } from 'lucide-react'
+import { getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { useState } from 'react'
 
-import { sortableHeader } from '@/components/table/sortable-header'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { formatDate } from '@/lib/date-format'
-import type { Beer } from '@/types/api'
 import { DataTable } from '#/components/table/data-table'
 import { ButtonGroup } from '#/components/ui/button-group'
 import { Field, FieldLabel } from '#/components/ui/field'
+import { Input } from '#/components/ui/input'
 import {
   Select,
   SelectContent,
@@ -29,6 +19,7 @@ import { ToggleGroup, ToggleGroupItem } from '#/components/ui/toggle-group'
 import { useDebouncedSearch } from '#/hooks/use-debounced-search'
 
 import { listBeersOptions } from '../api/options'
+import { columns } from '../tables/beer-list-columns'
 
 const items = [
   {
@@ -136,62 +127,3 @@ export function BeerList() {
   )
 }
 
-const columnHelper = createColumnHelper<Beer>()
-
-const columns = [
-  columnHelper.accessor('name', {
-    header: sortableHeader('Nome'),
-    cell: (info) => info.row.original.name,
-  }),
-  columnHelper.accessor('style', {
-    header: sortableHeader('Estilo'),
-    cell: (info) => info.row.original.style,
-  }),
-  columnHelper.accessor('createdAt', {
-    header: sortableHeader('Criado em'),
-    cell: ({ row }) => formatDate(row.original.createdAt),
-  }),
-  columnHelper.accessor('fermentationParameter', {
-    header: () => 'Parâmetros (Temperatura | PH | Extrato)',
-    cell: ({ row }) => {
-      const params = row.original.fermentationParameter
-      const temp = `${params?.minTemperature} - ${params?.maxTemperature}`
-      const pH = `${params?.minPh} - ${params?.maxPh}`
-      const extract = `${params?.minExtract} - ${params?.maxExtract}`
-
-      return (
-        <Button asChild variant="link" aria-label="Editar parâmetros">
-          <Link
-            to="/beers/$beerId/parameters"
-            params={{ beerId: row.original.id }}
-            title="Editar parâmetros"
-          >
-            {temp} | {pH} | {extract}
-            <span className="sr-only">Editar parâmetros</span>
-          </Link>
-        </Button>
-      )
-    },
-    enableSorting: false,
-  }),
-  columnHelper.display({
-    id: 'actions',
-    header: () => <div className="text-right">Ações</div>,
-    cell: ({ row }) => (
-      <div className="flex justify-end">
-        <Button asChild variant="link" aria-label="Editar cerveja">
-          <Link
-            to="/beers/$beerId/edit"
-            params={{ beerId: row.original.id }}
-            title="Editar cerveja"
-          >
-            <SquarePen />
-            <span>Editar</span>
-          </Link>
-        </Button>
-      </div>
-    ),
-    enableSorting: false,
-    enableColumnFilter: false,
-  }),
-]

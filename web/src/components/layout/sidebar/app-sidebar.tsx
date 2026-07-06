@@ -1,6 +1,7 @@
 'use client'
 
 import { Link } from '@tanstack/react-router'
+import { BookOpenTextIcon, ExternalLinkIcon } from 'lucide-react'
 import * as React from 'react'
 
 import BatchIcon from '@/assets/icons/batch.svg?react'
@@ -19,6 +20,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '#/components/ui/sidebar.tsx'
+
+const apiDocumentationUrl = new URL(
+  '/scalar/v1',
+  import.meta.env.VITE_API_URL ?? 'http://localhost:5027',
+).toString()
 
 const data = {
   user: {
@@ -82,6 +88,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <a href={apiDocumentationUrl} target="_blank" rel="noreferrer">
+                <BookOpenTextIcon />
+                <span>Documentação da API</span>
+                <ExternalLinkIcon className="ml-auto size-3.5" />
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
         <NavUser user={data.user} />
       </SidebarFooter>
     </Sidebar>

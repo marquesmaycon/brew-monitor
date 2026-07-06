@@ -143,14 +143,14 @@ export function AssociatedFermentationRecordTable({
           </Field>
           <Field>
             <FieldLabel htmlFor={`${entityType}-record-classification`}>
-              Classificacao
+              Classificação
             </FieldLabel>
             <Select value={classification} onValueChange={setClassification}>
               <SelectTrigger
                 id={`${entityType}-record-classification`}
                 className="max-w-sm min-w-44"
               >
-                <SelectValue placeholder="Selecione a classificacao" />
+                <SelectValue placeholder="Selecione a classificação" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
@@ -192,7 +192,7 @@ export function AssociatedFermentationRecordTable({
             </Select>
           </Field>
           <Field>
-            <FieldLabel>Direcao</FieldLabel>
+            <FieldLabel>Direção</FieldLabel>
             <ToggleGroup
               type="single"
               onValueChange={(value) =>

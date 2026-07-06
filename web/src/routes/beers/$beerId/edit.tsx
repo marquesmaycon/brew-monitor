@@ -46,7 +46,7 @@ function EditBeerPage() {
         <PageHeaderBackButton />
         <PageHeaderTitle
           title={`Editar ${beer.name} - ${beer.style}`}
-          description="Atualize o nome e o estilo usados nos registros de fermentacao."
+          description="Atualize o nome e o estilo usados nos registros de fermentação."
         >
           <DestroyButton destroy={handleDestroy} />
         </PageHeaderTitle>

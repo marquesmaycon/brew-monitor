@@ -116,7 +116,7 @@ export function BatchList() {
           </Select>
         </Field>
         <Field>
-          <FieldLabel>Direcao</FieldLabel>
+          <FieldLabel>Direção</FieldLabel>
           <ToggleGroup
             type="single"
             onValueChange={(value) =>

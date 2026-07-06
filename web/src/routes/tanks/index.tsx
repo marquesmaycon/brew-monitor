@@ -15,7 +15,7 @@ export const Route = createFileRoute('/tanks/')({
     meta: createMetadata({
       title: 'Tanques',
       description:
-        'Gerencie os tanques usados no monitoramento de fermentacao.',
+        'Gerencie os tanques usados no monitoramento de fermentação.',
     }),
   }),
 })
@@ -26,7 +26,7 @@ function TanksPage() {
       <PageHeader className="mb-8">
         <PageHeaderTitle
           title="Tanques"
-          description="Cadastro dos tanques usados no monitoramento de fermentacao."
+          description="Cadastro dos tanques usados no monitoramento de fermentação."
         >
           <Button asChild>
             <Link to="/tanks/new">

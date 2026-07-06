@@ -133,7 +133,7 @@ export function FermentationParametersForm({
         <Field>
           <form.AppForm>
             <form.SubmitButton
-              label={isEditing ? 'Atualizar parametros' : 'Criar parametros'}
+              label={isEditing ? 'Atualizar parâmetros' : 'Criar parâmetros'}
             />
           </form.AppForm>
         </Field>

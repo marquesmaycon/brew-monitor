@@ -60,7 +60,7 @@ function BatchPage() {
       <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(320px,420px)]">
         <Card className="shadow-none">
           <CardHeader>
-            <CardTitle>Historico de fermentacao</CardTitle>
+            <CardTitle>Historico de fermentação</CardTitle>
             <CardDescription>
               Temperatura, pH e extrato ao longo dos apontamentos.
             </CardDescription>
@@ -78,9 +78,9 @@ function BatchPage() {
 
         <Card className="shadow-none">
           <CardHeader>
-            <CardTitle>Classificacao</CardTitle>
+            <CardTitle>Classificação</CardTitle>
             <CardDescription>
-              Distribuicao dos registros deste lote.
+              Distribuição dos registros deste lote.
             </CardDescription>
           </CardHeader>
           <CardContent>

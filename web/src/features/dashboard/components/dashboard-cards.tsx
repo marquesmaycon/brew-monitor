@@ -34,24 +34,24 @@ export function DashboardCards() {
         'border-sky-200 bg-sky-50 text-sky-700 dark:border-sky-900/60 dark:bg-sky-950/40 dark:text-sky-300',
     },
     {
-      title: 'Registros dentro do padrao',
-      description: 'Parametros dentro dos limites',
+      title: 'Registros dentro do padrão',
+      description: 'Parâmetros dentro dos limites',
       value: data?.withinStandardRecords ?? 0,
       icon: CircleCheck,
       className:
         'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900/60 dark:bg-emerald-950/40 dark:text-emerald-300',
     },
     {
-      title: 'Registros que requerem atencao',
-      description: 'Parametros em margem de tolerancia',
+      title: 'Registros que requerem atenção',
+      description: 'Parâmetros em margem de tolerância',
       value: data?.attentionRecords ?? 0,
       icon: CircleAlert,
       className:
         'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber-300',
     },
     {
-      title: 'Registros fora do padrao',
-      description: 'Parametros acima da tolerancia',
+      title: 'Registros fora do padrão',
+      description: 'Parâmetros acima da tolerância',
       value: data?.outOfStandardRecords ?? 0,
       icon: CircleX,
       className:

@@ -15,7 +15,7 @@ export const Route = createFileRoute('/beers/')({
     meta: createMetadata({
       title: 'Cervejas',
       description:
-        'Consulte e gerencie o catalogo de cervejas monitoradas na fermentacao.',
+        'Consulte e gerencie o catalogo de cervejas monitoradas na fermentação.',
     }),
   }),
 })
@@ -26,7 +26,7 @@ function BeersPage() {
       <PageHeader className="mb-8">
         <PageHeaderTitle
           title="Cervejas"
-          description="Catalogo de receitas monitoradas na fermentacao."
+          description="Catalogo de receitas monitoradas na fermentação."
         >
           <Button asChild>
             <Link to="/beers/new">

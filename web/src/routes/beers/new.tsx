@@ -14,7 +14,7 @@ export const Route = createFileRoute('/beers/new')({
     meta: createMetadata({
       title: 'Nova cerveja',
       description:
-        'Cadastre uma receita para acompanhar seus parametros de fermentacao.',
+        'Cadastre uma receita para acompanhar seus parâmetros de fermentação.',
     }),
   }),
 })
@@ -26,7 +26,7 @@ function CreateBeerPage() {
         <PageHeaderBackButton />
         <PageHeaderTitle
           title="Nova cerveja"
-          description="Cadastre uma receita para acompanhar os parametros de fermentacao."
+          description="Cadastre uma receita para acompanhar os parâmetros de fermentação."
         />
       </PageHeader>
 

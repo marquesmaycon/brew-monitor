@@ -145,7 +145,7 @@ export function createBeerFermentationParameterOptions(beerId: string) {
       return createBeerFermentationParameter(beerId, parameter)
     },
     onSuccess: async (_, __, ___, { client }) => {
-      toast.success('Parametros de fermentacao criados com sucesso')
+      toast.success('Parâmetros de fermentação criados com sucesso')
       await client.invalidateQueries({ queryKey: beerKeys.root })
       await client.invalidateQueries({
         queryKey: beerKeys.fermentationParameter(beerId),
@@ -153,7 +153,7 @@ export function createBeerFermentationParameterOptions(beerId: string) {
       await client.invalidateQueries({ queryKey: beerKeys.detail(beerId) })
     },
     onError: async (err) => {
-      toast.error('Erro ao criar parametros de fermentacao', {
+      toast.error('Erro ao criar parâmetros de fermentação', {
         description: await getErrorDescription(err),
       })
     },
@@ -166,7 +166,7 @@ export function updateBeerFermentationParameterOptions(beerId: string) {
       return updateBeerFermentationParameter(beerId, parameter)
     },
     onSuccess: async (_, __, ___, { client }) => {
-      toast.success('Parametros de fermentacao atualizados com sucesso')
+      toast.success('Parâmetros de fermentação atualizados com sucesso')
       await client.invalidateQueries({ queryKey: beerKeys.root })
       await client.invalidateQueries({
         queryKey: beerKeys.fermentationParameter(beerId),
@@ -174,7 +174,7 @@ export function updateBeerFermentationParameterOptions(beerId: string) {
       await client.invalidateQueries({ queryKey: beerKeys.detail(beerId) })
     },
     onError: async (err) => {
-      toast.error('Erro ao atualizar parametros de fermentacao', {
+      toast.error('Erro ao atualizar parâmetros de fermentação', {
         description: await getErrorDescription(err),
       })
     },
@@ -187,7 +187,7 @@ export function deleteBeerFermentationParameterOptions() {
       return deleteBeerFermentationParameter(beerId)
     },
     onSuccess: async (_, beerId, ___, { client }) => {
-      toast.success('Parametros de fermentacao excluidos com sucesso')
+      toast.success('Parâmetros de fermentação excluidos com sucesso')
       await client.invalidateQueries({ queryKey: beerKeys.root })
       client.removeQueries({
         queryKey: beerKeys.fermentationParameter(beerId),
@@ -195,7 +195,7 @@ export function deleteBeerFermentationParameterOptions() {
       await client.invalidateQueries({ queryKey: beerKeys.detail(beerId) })
     },
     onError: async (err) => {
-      toast.error('Erro ao excluir parametros de fermentacao', {
+      toast.error('Erro ao excluir parâmetros de fermentação', {
         description: await getErrorDescription(err),
       })
     },

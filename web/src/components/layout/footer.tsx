@@ -55,7 +55,7 @@ export function Footer() {
           </div>
           <p className="text-muted-foreground m-0 max-w-md text-sm">
             Controle de lotes, tanques e apontamentos fermentativos para manter
-            cada brassagem dentro do padrao.
+            cada brassagem dentro do padrão.
           </p>
           <p className="text-muted-foreground m-0 text-xs">
             &copy; {year} Maycon Marques. Todos os direitos reservados.

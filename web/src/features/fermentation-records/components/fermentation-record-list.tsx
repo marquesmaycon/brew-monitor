@@ -93,10 +93,10 @@ export function FermentationRecordList() {
           />
         </Field>
         <Field>
-          <FieldLabel htmlFor="classification">Classificacao</FieldLabel>
+          <FieldLabel htmlFor="classification">Classificação</FieldLabel>
           <Select value={classification} onValueChange={setClassification}>
             <SelectTrigger id="classification" className="max-w-sm min-w-44">
-              <SelectValue placeholder="Selecione a classificacao" />
+              <SelectValue placeholder="Selecione a classificação" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -133,7 +133,7 @@ export function FermentationRecordList() {
           </Select>
         </Field>
         <Field>
-          <FieldLabel>Direcao</FieldLabel>
+          <FieldLabel>Direção</FieldLabel>
           <ToggleGroup
             type="single"
             onValueChange={(val) =>

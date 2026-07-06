@@ -28,8 +28,8 @@ export const Route = createFileRoute('/fermentation-records/$recordId/edit')({
           ? `Editar registro do lote ${loaderData.batchNumber}`
           : 'Editar registro',
         description: loaderData
-          ? `Atualize a medicao do lote ${loaderData.batchNumber} para ${loaderData.beer.name} no tanque ${loaderData.tank.name}.`
-          : `Atualize a medicao do registro ${params.recordId}.`,
+          ? `Atualize a medição do lote ${loaderData.batchNumber} para ${loaderData.beer.name} no tanque ${loaderData.tank.name}.`
+          : `Atualize a medição do registro ${params.recordId}.`,
       }),
     }
   },
@@ -55,7 +55,7 @@ function EditFermentationRecordPage() {
         <PageHeaderBackButton />
         <PageHeaderTitle
           title={record.batchNumber}
-          description="Atualize a medicao e permita que a classificacao seja recalculada."
+          description="Atualize a medição e permita que a classificação seja recalculada."
         >
           <DestroyButton destroy={handleDestroy} />
         </PageHeaderTitle>

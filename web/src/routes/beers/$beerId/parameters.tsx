@@ -21,11 +21,11 @@ export const Route = createFileRoute('/beers/$beerId/parameters')({
   head: ({ loaderData }) => ({
     meta: createMetadata({
       title: loaderData
-        ? `Parametros de ${loaderData.name}`
-        : 'Parametros de fermentacao',
+        ? `Parâmetros de ${loaderData.name}`
+        : 'Parâmetros de fermentação',
       description: loaderData
         ? `Configure limites de temperatura, pH e extrato para ${loaderData.name}.`
-        : 'Configure os parametros de fermentacao de uma cerveja.',
+        : 'Configure os parâmetros de fermentação de uma cerveja.',
     }),
   }),
 })
@@ -45,7 +45,7 @@ function RouteComponent() {
       <PageHeader>
         <PageHeaderBackButton />
         <PageHeaderTitle
-          title="Parametros de fermentacao"
+          title="Parâmetros de fermentação"
           description={`Configure os limites de temperatura, pH e extrato para ${beer.name}.`}
         />
       </PageHeader>

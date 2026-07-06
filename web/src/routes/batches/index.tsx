@@ -12,7 +12,7 @@ export const Route = createFileRoute('/batches/')({
   head: () => ({
     meta: createMetadata({
       title: 'Lotes',
-      description: 'Consulte lotes identificados nos registros de fermentacao.',
+      description: 'Consulte lotes identificados nos registros de fermentação.',
     }),
   }),
 })
@@ -23,7 +23,7 @@ function BatchesPage() {
       <PageHeader className="mb-8">
         <PageHeaderTitle
           title="Lotes"
-          description="Lotes encontrados nos registros de fermentacao."
+          description="Lotes encontrados nos registros de fermentação."
         />
       </PageHeader>
 

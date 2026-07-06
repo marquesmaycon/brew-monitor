@@ -13,9 +13,9 @@ export const Route = createFileRoute('/fermentation-records/')({
   component: FermentationRecordsPage,
   head: () => ({
     meta: createMetadata({
-      title: 'Registros de fermentacao',
+      title: 'Registros de fermentação',
       description:
-        'Acompanhe medicoes de lote por cerveja, tanque e classificacao.',
+        'Acompanhe medicoes de lote por cerveja, tanque e classificação.',
     }),
   }),
 })
@@ -25,8 +25,8 @@ function FermentationRecordsPage() {
     <div className="page-wrapper">
       <PageHeader className="mb-8">
         <PageHeaderTitle
-          title="Registros de fermentacao"
-          description="Acompanhe medicoes de lote por cerveja, tanque e classificacao."
+          title="Registros de fermentação"
+          description="Acompanhe medicoes de lote por cerveja, tanque e classificação."
         >
           <Button asChild>
             <Link to="/fermentation-records/new">

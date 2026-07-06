@@ -25,7 +25,7 @@ export const Route = createFileRoute('/fermentation-records/new')({
     meta: createMetadata({
       title: 'Novo registro',
       description:
-        'Cadastre uma medicao de fermentacao para um lote em tanque.',
+        'Cadastre uma medição de fermentação para um lote em tanque.',
     }),
   }),
 })
@@ -37,7 +37,7 @@ function CreateFermentationRecordPage() {
         <PageHeaderBackButton />
         <PageHeaderTitle
           title="Novo registro"
-          description="Cadastre uma medicao de fermentacao para um lote em tanque."
+          description="Cadastre uma medição de fermentação para um lote em tanque."
         />
       </PageHeader>
 

@@ -27,9 +27,9 @@ export default function FermentationParametersCard({
   return (
     <Card className="w-full lg:max-w-md">
       <CardHeader>
-        <CardTitle> Parametros de fermentação</CardTitle>
+        <CardTitle> Parâmetros de fermentação</CardTitle>
         <CardDescription>
-          Limites aceitaveis configurados para esta cerveja.
+          Limites aceitáveis configurados para esta cerveja.
         </CardDescription>
         <CardAction>
           <Button asChild variant="link" className="h-auto justify-start p-0">

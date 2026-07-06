@@ -119,14 +119,14 @@ export function BatchFermentationRecordTable({
         </Field>
         <Field>
           <FieldLabel htmlFor="batch-record-classification">
-            Classificacao
+            Classificação
           </FieldLabel>
           <Select value={classification} onValueChange={setClassification}>
             <SelectTrigger
               id="batch-record-classification"
               className="max-w-sm min-w-44"
             >
-              <SelectValue placeholder="Selecione a classificacao" />
+              <SelectValue placeholder="Selecione a classificação" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -163,7 +163,7 @@ export function BatchFermentationRecordTable({
           </Select>
         </Field>
         <Field>
-          <FieldLabel>Direcao</FieldLabel>
+          <FieldLabel>Direção</FieldLabel>
           <ToggleGroup
             type="single"
             onValueChange={(value) =>

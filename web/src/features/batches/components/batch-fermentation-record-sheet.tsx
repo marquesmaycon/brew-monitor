@@ -39,7 +39,7 @@ export function BatchFermentationRecordSheet({
         <SheetHeader>
           <SheetTitle>Novo registro do lote</SheetTitle>
           <SheetDescription>
-            Cadastre uma nova medicao para o lote {batch.batchNumber}.
+            Cadastre uma nova medição para o lote {batch.batchNumber}.
           </SheetDescription>
         </SheetHeader>
         <div className="px-6 pb-6">

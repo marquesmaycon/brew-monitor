@@ -44,7 +44,7 @@ function EditTankPage() {
         <PageHeaderBackButton />
         <PageHeaderTitle
           title={tank.name}
-          description="Atualize o nome e a capacidade usados nos registros de fermentacao."
+          description="Atualize o nome e a capacidade usados nos registros de fermentação."
         >
           <DestroyButton destroy={handleDestroy} />
         </PageHeaderTitle>

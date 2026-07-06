@@ -34,6 +34,7 @@ export function listBatchesOptions(
     queryFn: function () {
       return listBatches(pagination)
     },
+    placeholderData: keepPreviousData,
   })
 }
 

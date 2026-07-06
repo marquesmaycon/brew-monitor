@@ -10,8 +10,16 @@ import type {
 const resource = 'batches'
 
 export function listBatches(pagination: Pagination) {
+  const { search, sortBy, sortDirection, ...pageParams } = pagination
+  const searchParams = {
+    ...pageParams,
+    ...(search?.trim() ? { search: search.trim() } : {}),
+    ...(sortBy ? { sortBy } : {}),
+    ...(sortDirection ? { sortDirection } : {}),
+  }
+
   return api
-    .get(resource, { searchParams: pagination })
+    .get(resource, { searchParams })
     .json<Paginated<Batch>>()
 }
 
@@ -25,9 +33,19 @@ export function listBatchFermentationRecords(
   batchNumber: string,
   pagination: Pagination,
 ) {
+  const { search, sortBy, sortDirection, classification, ...pageParams } =
+    pagination
+  const searchParams = {
+    ...pageParams,
+    ...(search?.trim() ? { search: search.trim() } : {}),
+    ...(sortBy ? { sortBy } : {}),
+    ...(sortDirection ? { sortDirection } : {}),
+    ...(classification ? { classification } : {}),
+  }
+
   return api
     .get(`${resource}/${encodeURIComponent(batchNumber)}/fermentation-records`, {
-      searchParams: pagination,
+      searchParams,
     })
     .json<Paginated<BatchFermentationRecord>>()
 }

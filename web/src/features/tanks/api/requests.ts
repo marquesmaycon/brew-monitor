@@ -41,9 +41,19 @@ export function listTankFermentationRecords(
   tankId: string,
   pagination: Pagination,
 ) {
+  const { search, sortBy, sortDirection, classification, ...pageParams } =
+    pagination
+  const searchParams = {
+    ...pageParams,
+    ...(search?.trim() ? { search: search.trim() } : {}),
+    ...(sortBy ? { sortBy } : {}),
+    ...(sortDirection ? { sortDirection } : {}),
+    ...(classification ? { classification } : {}),
+  }
+
   return api
     .get(`${resource}/${tankId}/fermentation-records`, {
-      searchParams: pagination,
+      searchParams,
     })
     .json<Paginated<FermentationRecord>>()
 }

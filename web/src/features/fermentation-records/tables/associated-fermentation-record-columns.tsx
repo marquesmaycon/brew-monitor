@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { createColumnHelper } from '@tanstack/react-table'
 import { SquarePen } from 'lucide-react'
 
+import { sortableHeader } from '@/components/table/sortable-header'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { formatDateTime } from '@/lib/date-format'
@@ -22,7 +23,7 @@ export function buildAssociatedFermentationRecordColumns(
 ) {
   return [
     columnHelper.accessor('batchNumber', {
-      header: 'Lote',
+      header: sortableHeader('Lote'),
       cell: ({ row }) => (
         <Button asChild variant="link" className="px-0">
           <Link
@@ -36,12 +37,13 @@ export function buildAssociatedFermentationRecordColumns(
       ),
     }),
     columnHelper.accessor('registeredAt', {
-      header: 'Registro',
+      header: sortableHeader('Registro'),
       cell: ({ row }) => formatDateTime(row.original.registeredAt),
     }),
     entityType === 'beer'
       ? columnHelper.accessor('tank.name', {
           header: 'Tanque',
+          enableSorting: false,
           cell: ({ row }) => (
             <Button asChild variant="link" className="px-0">
               <Link
@@ -56,6 +58,7 @@ export function buildAssociatedFermentationRecordColumns(
         })
       : columnHelper.accessor('beer.name', {
           header: 'Cerveja',
+          enableSorting: false,
           cell: ({ row }) => (
             <Button asChild variant="link" className="px-0">
               <Link
@@ -71,17 +74,21 @@ export function buildAssociatedFermentationRecordColumns(
     columnHelper.accessor('temperature', {
       header: 'Temp.',
       cell: ({ row }) => `${row.original.temperature} C`,
+      enableSorting: false,
     }),
     columnHelper.accessor('ph', {
       header: 'pH',
       cell: ({ row }) => row.original.ph,
+      enableSorting: false,
     }),
     columnHelper.accessor('extract', {
       header: 'Extrato',
       cell: ({ row }) => `${row.original.extract} P`,
+      enableSorting: false,
     }),
     columnHelper.accessor('classification', {
       header: 'Classificação',
+      enableSorting: false,
       cell: ({ row }) => {
         const classification = row.original.classification
         const Icon = getClassificationIcon(classification)
@@ -100,6 +107,7 @@ export function buildAssociatedFermentationRecordColumns(
     columnHelper.display({
       id: 'actions',
       header: () => <div className="text-right">Ações</div>,
+      enableSorting: false,
       cell: ({ row }) => (
         <div className="flex justify-end">
           <Button asChild variant="link" aria-label="Editar registro">

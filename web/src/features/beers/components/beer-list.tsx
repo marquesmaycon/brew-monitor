@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import type { PaginationState, SortingState } from '@tanstack/react-table'
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import {
   DataTable,
@@ -50,6 +50,10 @@ export function BeerList() {
   })
   const [debouncedSearch, search, setSearch] = useDebouncedSearch()
   const [sort] = sorting
+
+  useEffect(() => {
+    setPagination((current) => ({ ...current, pageIndex: 0 }))
+  }, [debouncedSearch, sorting])
 
   const { data: beers, isFetching } = useQuery(
     listBeersOptions({

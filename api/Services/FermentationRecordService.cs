@@ -142,6 +142,10 @@ public class FermentationRecordService(AppDbContext context) : IFermentationReco
     );
   }
 
+  /// <summary>
+  /// Busca registros associados. Define a ordenação padrão sortDirection para "desc" 
+  /// (mais recentes primeiro) especificamente para os endpoints de beer e tank.
+  /// </summary>
   private static async Task<PaginatedResult<FermentationRecordResponse>> GetAssociatedAsync(
     IQueryable<FermentationRecord> query,
     int page,
@@ -211,6 +215,10 @@ public class FermentationRecordService(AppDbContext context) : IFermentationReco
     };
   }
 
+  /// <summary>
+  /// Aplica ordenação à query. A ordenação por batchNumber sempre usa ThenByDescending(RegisteredAt) 
+  /// como ordenação secundária estável, independente se a direção principal é ascendente ou descendente.
+  /// </summary>
   private static IQueryable<FermentationRecord> ApplySorting(
     IQueryable<FermentationRecord> query,
     string? sortBy,
@@ -234,6 +242,10 @@ public class FermentationRecordService(AppDbContext context) : IFermentationReco
     };
   }
 
+  /// <summary>
+  /// Tenta converter uma string para classificação. Caso o valor do filtro seja inválido,
+  /// retorna false e o filtro é ignorado silenciosamente na consulta (sem retornar erro HTTP 400).
+  /// </summary>
   private static bool TryParseClassification(
     string? value,
     out FermentationRecordClassification classification
@@ -314,6 +326,10 @@ public class FermentationRecordService(AppDbContext context) : IFermentationReco
       .FirstOrDefaultAsync();
   }
 
+  /// <summary>
+  /// Cria um registro de fermentação. A classificação de conformidade é calculada no servidor 
+  /// com base nos parâmetros ideais; o cliente nunca envia ou define o campo Classification.
+  /// </summary>
   public async Task<FermentationRecord> CreateAsync(FermentationRecord record)
   {
     record.Id = record.Id == Guid.Empty ? Guid.NewGuid() : record.Id;
@@ -378,6 +394,17 @@ public class FermentationRecordService(AppDbContext context) : IFermentationReco
     return context.Tanks.AnyAsync(tank => tank.Id == tankId);
   }
 
+  /// <summary>
+  /// Classifica um registro de fermentação com base nos parâmetros ideais cadastrados para a cerveja.
+  /// 
+  /// Regras de Negócio de Tolerância:
+  /// - DENTRO DO PADRÃO: Todos os parâmetros (Temperatura, pH e Extrato) estão estritamente dentro das faixas ideais.
+  /// - ALERTA (ATTENTION): Pelo menos um parâmetro violou a faixa ideal, mas está dentro dos limites de tolerância:
+  ///   * Temperatura: tolerância de 5% (relativa)
+  ///   * Extrato: tolerância de 5% (relativa)
+  ///   * pH: tolerância de 0.2 (absoluta)
+  /// - FORA DO PADRÃO: Algum parâmetro excedeu até mesmo a margem de tolerância tolerada ou se não houver parâmetros cadastrados.
+  /// </summary>
   private async Task<FermentationRecordClassification> ClassifyAsync(FermentationRecord record)
   {
     var parameter = await context.FermentationParameters
@@ -424,11 +451,21 @@ public class FermentationRecordService(AppDbContext context) : IFermentationReco
     return value >= min && value <= max;
   }
 
+  /// <summary>
+  /// Expande a faixa ideal por uma tolerância absoluta.
+  /// O pH usa tolerância absoluta (±0,2) e não percentual porque a escala de pH é logarítmica,
+  /// o que faria uma tolerância percentual variar fisicamente em diferentes níveis de acidez.
+  /// </summary>
   private static bool IsWithinAbsoluteTolerance(decimal value, decimal min, decimal max, decimal tolerance)
   {
     return value >= min - tolerance && value <= max + tolerance;
   }
 
+/// <summary>
+/// Expande a faixa ideal por uma tolerância percentual relativa a cada limite.
+/// Exemplo: faixa 18–22°C com 5% → 17,1–23,1°C.
+/// Math.Abs(min) garante comportamento correto quando min é negativo (ex.: lager a -1°C).
+/// </summary>
   private static bool IsWithinPercentageTolerance(decimal value, decimal min, decimal max, decimal tolerancePercentage)
   {
     var lowerBound = min - Math.Abs(min * tolerancePercentage);

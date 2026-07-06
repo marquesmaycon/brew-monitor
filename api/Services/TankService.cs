@@ -10,6 +10,10 @@ public class TankService(AppDbContext context) : ITankService
 {
   private const string SortDirectionDescending = "desc";
 
+  /// <summary>
+  /// Busca tanques paginados. Normaliza o termo de busca substituindo vírgula por ponto antes de tentar
+  /// converter para decimal, garantindo que buscas por capacidade funcionem em diferentes culturas.
+  /// </summary>
   public async Task<PaginatedResult<Tank>> GetAllAsync(
     int page,
     int limit,

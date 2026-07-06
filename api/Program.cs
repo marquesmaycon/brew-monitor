@@ -74,6 +74,7 @@ builder.Services.AddScoped<IFermentationRecordService, FermentationRecordService
 
 var app = builder.Build();
 
+// Executa as migrações e o seed de dados de forma idempotente em cada inicialização do servidor.
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();

@@ -72,6 +72,10 @@ public class BeersController(
     return Ok(ToResponse(updatedBeer));
   }
 
+  /// <summary>
+  /// Exclui a entidade se ela não possuir registros de fermentação. Retorna HTTP 409 (Conflict) 
+  /// como uma proteção na camada de aplicação para complementar a restrição Restrict configurada no banco.
+  /// </summary>
   [HttpDelete("{id:guid}")]
   [BeersEndpointDocumentation.Delete]
   public async Task<IActionResult> Delete(Guid id)
@@ -140,6 +144,10 @@ public class BeersController(
     return Ok(parameter);
   }
 
+  /// <summary>
+  /// Cria os parâmetros ideais de fermentação, garantindo a relação estrita de 1:1 por cerveja
+  /// e retornando Conflict caso as configurações de parâmetro já existam.
+  /// </summary>
   [HttpPost("{beerId:guid}/fermentation-parameters")]
   [BeersEndpointDocumentation.CreateFermentationParameter]
   public async Task<ActionResult<FermentationParameter>> CreateFermentationParameter(

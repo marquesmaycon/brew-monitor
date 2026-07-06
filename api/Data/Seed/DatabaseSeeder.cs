@@ -79,6 +79,10 @@ public static class DatabaseSeeder
     ("Estrela Lager", "Premium Lager")
   ];
 
+  /// <summary>
+  /// Executa o seed do banco de dados de forma idempotente, inserindo dados na ordem de chaves estrangeiras:
+  /// Beers -> Tanks -> FermentationParameters -> FermentationRecords.
+  /// </summary>
   public static async Task SeedAsync(AppDbContext context)
   {
     await context.Database.MigrateAsync();
@@ -209,6 +213,9 @@ public static class DatabaseSeeder
     return MinRecordsPerBatch + beerIndex % (MaxRecordsPerBatch - MinRecordsPerBatch + 1);
   }
 
+  /// <summary>
+  /// Gera a data de registro simulando uma interpolação linear uniforme dentro da janela histórica de 60 dias.
+  /// </summary>
   private static DateTime BuildRegisteredAt(int recordIndex, int beerIndex, int recordsPerBatch)
   {
     var windowTicks = LastRecordDate.Ticks - FirstRecordDate.Ticks;
@@ -227,6 +234,10 @@ public static class DatabaseSeeder
     return firstRecordDate.AddMinutes(-minutesBeforeRecord);
   }
 
+  /// <summary>
+  /// Simula medições sob 4 cenários baseados no resto da divisão (index % 4):
+  /// 0 (dentro do padrão), 1 (temperatura em atenção), 2 (pH em atenção) e 3 (fora do padrão).
+  /// </summary>
   private static (decimal Temperature, decimal Ph, decimal Extract, string Notes) BuildMeasurement(
     FermentationParameter parameter,
     int scenario,
@@ -264,6 +275,10 @@ public static class DatabaseSeeder
     return ClampMeasurementToIndustry(measurement);
   }
 
+  /// <summary>
+  /// Mapeia o estilo de cerveja para faixas ideais de fermentação. A ordem de avaliação do ContainsAny 
+  /// importa para garantir que estilos com nomes contendo termos de outros (ex: "Double IPA" vs "IPA") caiam no perfil correto.
+  /// </summary>
   private static FermentationProfile GetFermentationProfile(string style)
   {
     if (ContainsAny(style, "Sour", "Gose"))
@@ -309,6 +324,10 @@ public static class DatabaseSeeder
     return new FermentationProfile(16m, 22m, 4.1m, 4.8m, 2.4m, 10m);
   }
 
+  /// <summary>
+  /// Classifica o registro. Duplica a lógica de FermentationRecordService.ClassifyAsync
+  /// e ambas devem ser mantidas estritamente sincronizadas caso haja mudanças de regras de negócio.
+  /// </summary>
   private static FermentationRecordClassification Classify(
     decimal temperature,
     decimal ph,
@@ -347,6 +366,10 @@ public static class DatabaseSeeder
     return FermentationRecordClassification.OutOfStandard;
   }
 
+  /// <summary>
+  /// Insere no banco apenas as entidades cujos IDs ainda não existam. A propriedade Id
+  /// é acessada dinamicamente via reflexão de forma genérica.
+  /// </summary>
   private static async Task AddMissingAsync<TEntity>(DbSet<TEntity> dbSet, IReadOnlyCollection<TEntity> entities)
     where TEntity : class
   {
@@ -377,6 +400,9 @@ public static class DatabaseSeeder
       ?? throw new InvalidOperationException($"{typeof(TEntity).Name} Id cannot be null."));
   }
 
+  /// <summary>
+  /// Cria GUIDs determinísticos para cada entidade, permitindo re-executar o seed de forma limpa e idempotente sem duplicar registros.
+  /// </summary>
   private static Guid CreateId(int group, int index)
   {
     return Guid.Parse($"00000000-0000-{group:x4}-0000-{index:x12}");
@@ -421,6 +447,10 @@ public static class DatabaseSeeder
     return Math.Min(Math.Max(value, min), max);
   }
 
+  /// <summary>
+  /// Aplica limites de segurança globais às leituras simuladas por cenário, impedindo que a variação randômica
+  /// crie valores impossíveis fisicamente na indústria cervejeira.
+  /// </summary>
   private static (decimal Temperature, decimal Ph, decimal Extract, string Notes) ClampMeasurementToIndustry(
     (decimal Temperature, decimal Ph, decimal Extract, string Notes) measurement
   )

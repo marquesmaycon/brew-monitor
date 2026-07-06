@@ -71,6 +71,10 @@ public class TanksController(
     return Ok(updatedTank);
   }
 
+  /// <summary>
+  /// Exclui a entidade se ela não possuir registros de fermentação. Retorna HTTP 409 (Conflict) 
+  /// como uma proteção na camada de aplicação para complementar a restrição Restrict configurada no banco.
+  /// </summary>
   [HttpDelete("{id:guid}")]
   [TanksEndpointDocumentation.Delete]
   public async Task<IActionResult> Delete(Guid id)

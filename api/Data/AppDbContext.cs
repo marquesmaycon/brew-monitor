@@ -11,6 +11,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
   public DbSet<FermentationRecord> FermentationRecords => Set<FermentationRecord>();
   public DbSet<Tank> Tanks => Set<Tank>();
 
+  /// <summary>
+  /// Configura o mapeamento do modelo. Aplica exclusão Restrict em Beer/Tank (impedindo a deleção com registros associados), 
+  /// Cascade em FermentationParameter, além de criar o índice físico em BatchNumber para otimizar pesquisas.
+  /// </summary>
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     modelBuilder.Entity<Beer>()
@@ -46,6 +50,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
       );
   }
 
+  /// <summary>
+  /// Converte a classificação (enum) em string para salvar no banco, mantendo o padrão UPPER_SNAKE_CASE 
+  /// alinhado com a serialização JSON definida no JsonStringEnumConverter.
+  /// </summary>
   private static string ToDatabaseClassification(FermentationRecordClassification classification)
   {
     return classification switch
@@ -57,6 +65,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     };
   }
 
+  /// <summary>
+  /// Converte a representação string (UPPER_SNAKE_CASE) armazenada no banco de volta para o enum correspondente.
+  /// </summary>
   private static FermentationRecordClassification FromDatabaseClassification(string value)
   {
     return value switch

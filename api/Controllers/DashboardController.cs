@@ -11,6 +11,10 @@ namespace BrewMonitor.Api.Controllers;
 [Route("api/[controller]")]
 public class DashboardController(AppDbContext context) : ControllerBase
 {
+  /// <summary>
+  /// Obtém o resumo de contagens do painel. Utiliza GetValueOrDefault para tratar 
+  /// classificações sem registros como contagem zero de forma segura.
+  /// </summary>
   [HttpGet]
   [DashboardEndpointDocumentation.GetSummary]
   public async Task<ActionResult<object>> Get()
@@ -39,6 +43,10 @@ public class DashboardController(AppDbContext context) : ControllerBase
     });
   }
 
+  /// <summary>
+  /// Obtém o histórico de fermentação. Agrupa por BatchNumber, Beer.Name e Beer.Style (diferente do BatchService 
+  /// que agrupa apenas por BatchNumber) e seleciona automaticamente o lote mais recente caso nenhum seja informado.
+  /// </summary>
   [HttpGet("fermentation-history")]
   [DashboardEndpointDocumentation.GetFermentationHistory]
   public async Task<ActionResult<FermentationHistoryResponse>> GetFermentationHistory(

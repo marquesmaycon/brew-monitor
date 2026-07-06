@@ -11,6 +11,10 @@ public class BatchService(AppDbContext context) : IBatchService
 {
   private const string SortDirectionDescending = "desc";
 
+  /// <summary>
+  /// Agrupa os registros por número de lote para retornar uma listagem consolidada de lotes.
+  /// Projeta os dados coletando a primeira cerveja associada cronologicamente e o contador de registros.
+  /// </summary>
   public async Task<PaginatedResult<BatchResponse>> GetAllAsync(
     int page,
     int limit,
@@ -70,6 +74,10 @@ public class BatchService(AppDbContext context) : IBatchService
     };
   }
 
+  /// <summary>
+  /// Obtém a visão geral do lote realizando 3 consultas separadas: dados básicos do lote (cabeçalho),
+  /// séries temporais das medições e o histograma de contagem por classificação.
+  /// </summary>
   public async Task<BatchOverviewResponse?> GetOverviewAsync(string batchNumber)
   {
     var batch = await context.FermentationRecords
@@ -126,6 +134,10 @@ public class BatchService(AppDbContext context) : IBatchService
     return batch;
   }
 
+  /// <summary>
+  /// Verifica a existência do lote antes de aplicar filtros. Retorna null (HTTP 404) se o lote não existir,
+  /// ou uma página vazia se o lote existe mas nenhum registro atende aos filtros de busca e classificação.
+  /// </summary>
   public async Task<PaginatedResult<BatchFermentationRecordResponse>?> GetFermentationRecordsAsync(
     string batchNumber,
     int page,
@@ -200,6 +212,9 @@ public class BatchService(AppDbContext context) : IBatchService
     };
   }
 
+  /// <summary>
+  /// Aplica a ordenação na query projetada do DTO BatchResponse, e não diretamente nas entidades do Entity Framework.
+  /// </summary>
   private static IQueryable<BatchResponse> ApplyBatchSorting(
     IQueryable<BatchResponse> query,
     string? sortBy,

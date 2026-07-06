@@ -32,7 +32,37 @@ interface DataTableProps<TData> {
   isFetching: boolean
 }
 
-export function DataTable<TData>({ table, isFetching }: DataTableProps<TData>) {
+function DataTableRoot({
+  children,
+  className,
+  ...props
+}: React.ComponentProps<'div'>) {
+  return (
+    <div className={cn('flex flex-1 flex-col gap-6', className)} {...props}>
+      {children}
+    </div>
+  )
+}
+
+function DataTableFilters({
+  children,
+  className,
+  ...props
+}: React.ComponentProps<'div'>) {
+  return (
+    <div
+      className={cn(
+        'flex flex-wrap items-center gap-4 sm:flex-nowrap',
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  )
+}
+
+function DataTable<TData>({ table, isFetching }: DataTableProps<TData>) {
   return (
     <>
       <div className="bg-card/33 h-full max-w-full min-w-0 overflow-hidden rounded-md border">
@@ -156,3 +186,5 @@ export function DataTable<TData>({ table, isFetching }: DataTableProps<TData>) {
     </>
   )
 }
+
+export { DataTable, DataTableFilters, DataTableRoot }

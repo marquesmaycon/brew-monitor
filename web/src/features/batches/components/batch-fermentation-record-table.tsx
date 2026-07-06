@@ -3,7 +3,11 @@ import type { PaginationState, SortingState } from '@tanstack/react-table'
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { useEffect, useState } from 'react'
 
-import { DataTable } from '@/components/table/data-table'
+import {
+  DataTable,
+  DataTableFilters,
+  DataTableRoot,
+} from '@/components/table/data-table'
 import { Input } from '@/components/ui/input'
 import { classificationLabels } from '@/features/fermentation-records/constants'
 import { ButtonGroup } from '#/components/ui/button-group'
@@ -101,8 +105,8 @@ export function BatchFermentationRecordTable({
   })
 
   return (
-    <div className="flex flex-1 flex-col gap-4">
-      <div className="flex flex-wrap items-center gap-4 sm:flex-nowrap">
+    <DataTableRoot>
+      <DataTableFilters>
         <Field>
           <FieldLabel htmlFor="batch-record-search">Buscar</FieldLabel>
           <Input
@@ -176,8 +180,8 @@ export function BatchFermentationRecordTable({
             </ButtonGroup>
           </ToggleGroup>
         </Field>
-      </div>
+      </DataTableFilters>
       <DataTable table={table} isFetching={isFetching} />
-    </div>
+    </DataTableRoot>
   )
 }

@@ -3,7 +3,11 @@ import type { PaginationState, SortingState } from '@tanstack/react-table'
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { useState } from 'react'
 
-import { DataTable } from '#/components/table/data-table'
+import {
+  DataTable,
+  DataTableFilters,
+  DataTableRoot,
+} from '#/components/table/data-table'
 import { ButtonGroup } from '#/components/ui/button-group'
 import { Field, FieldLabel } from '#/components/ui/field'
 import { Input } from '#/components/ui/input'
@@ -71,8 +75,8 @@ export function BeerList() {
   })
 
   return (
-    <div className="flex flex-1 flex-col gap-4">
-      <div className="flex flex-wrap items-center gap-4 sm:flex-nowrap">
+    <DataTableRoot>
+      <DataTableFilters>
         <Field>
           <FieldLabel htmlFor="search">Ordenar por</FieldLabel>
           <Input
@@ -121,9 +125,9 @@ export function BeerList() {
             </ButtonGroup>
           </ToggleGroup>
         </Field>
-      </div>
+      </DataTableFilters>
       <DataTable table={table} isFetching={isFetching} />
-    </div>
+    </DataTableRoot>
   )
 }
 

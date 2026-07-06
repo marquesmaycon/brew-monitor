@@ -90,42 +90,83 @@ public class FermentationRecordService(AppDbContext context) : IFermentationReco
   public Task<PaginatedResult<FermentationRecordResponse>> GetByBeerAsync(
     Guid beerId,
     int page,
-    int limit
+    int limit,
+    string? search,
+    string? sortBy,
+    string? sortDirection,
+    string? classification
   )
   {
+    search = search?.Trim();
+
     return GetAssociatedAsync(
-      context.FermentationRecords.Where(record => record.BeerId == beerId),
+      context.FermentationRecords
+        .Where(record => record.BeerId == beerId)
+        .Where(record =>
+          string.IsNullOrWhiteSpace(search)
+          || EF.Functions.ILike(record.BatchNumber, $"%{search}%")
+          || EF.Functions.ILike(record.Tank.Name, $"%{search}%")),
       page,
-      limit
+      limit,
+      sortBy,
+      sortDirection,
+      classification
     );
   }
 
   public Task<PaginatedResult<FermentationRecordResponse>> GetByTankAsync(
     Guid tankId,
     int page,
-    int limit
+    int limit,
+    string? search,
+    string? sortBy,
+    string? sortDirection,
+    string? classification
   )
   {
+    search = search?.Trim();
+
     return GetAssociatedAsync(
-      context.FermentationRecords.Where(record => record.TankId == tankId),
+      context.FermentationRecords
+        .Where(record => record.TankId == tankId)
+        .Where(record =>
+          string.IsNullOrWhiteSpace(search)
+          || EF.Functions.ILike(record.BatchNumber, $"%{search}%")
+          || EF.Functions.ILike(record.Beer.Name, $"%{search}%")
+          || EF.Functions.ILike(record.Beer.Style, $"%{search}%")),
       page,
-      limit
+      limit,
+      sortBy,
+      sortDirection,
+      classification
     );
   }
 
   private static async Task<PaginatedResult<FermentationRecordResponse>> GetAssociatedAsync(
     IQueryable<FermentationRecord> query,
     int page,
-    int limit
+    int limit,
+    string? sortBy,
+    string? sortDirection,
+    string? classification
   )
   {
     page = Math.Max(page, 1);
     limit = Math.Max(limit, 1);
+    sortBy = sortBy?.Trim();
+    sortDirection = sortDirection?.Trim();
+    sortDirection ??= SortDirectionDescending;
+    var hasClassificationFilter = TryParseClassification(
+      classification,
+      out var classificationFilter
+    );
 
-    var orderedQuery = query
+    query = query
       .AsNoTracking()
-      .OrderByDescending(record => record.RegisteredAt)
-      .ThenByDescending(record => record.CreatedAt);
+      .Where(record =>
+        !hasClassificationFilter || record.Classification == classificationFilter);
+
+    var orderedQuery = ApplySorting(query, sortBy, sortDirection);
 
     var total = await orderedQuery.CountAsync();
     var records = await orderedQuery

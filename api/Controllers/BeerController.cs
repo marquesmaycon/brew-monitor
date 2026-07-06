@@ -100,7 +100,7 @@ public class BeersController(
   [BeersEndpointDocumentation.ListFermentationRecords]
   public async Task<ActionResult<PaginatedResult<FermentationRecordResponse>>> GetFermentationRecords(
     Guid beerId,
-    [FromQuery] PaginationRequest request
+    [FromQuery] FermentationRecordListRequest request
   )
   {
     if (!await beerService.ExistsAsync(beerId))
@@ -111,7 +111,11 @@ public class BeersController(
     var records = await fermentationRecordService.GetByBeerAsync(
       beerId,
       request.Page,
-      request.Limit
+      request.Limit,
+      request.Search,
+      request.SortBy,
+      request.SortDirection,
+      request.Classification
     );
 
     return Ok(records);

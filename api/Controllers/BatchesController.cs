@@ -13,10 +13,16 @@ public class BatchesController(IBatchService batchService) : ControllerBase
   [HttpGet]
   [BatchesEndpointDocumentation.List]
   public async Task<ActionResult<PaginatedResult<BatchResponse>>> GetAll(
-    [FromQuery] PaginationRequest request
+    [FromQuery] BatchListRequest request
   )
   {
-    var batches = await batchService.GetAllAsync(request.Page, request.Limit);
+    var batches = await batchService.GetAllAsync(
+      request.Page,
+      request.Limit,
+      request.Search,
+      request.SortBy,
+      request.SortDirection
+    );
 
     return Ok(batches);
   }
@@ -43,7 +49,7 @@ public class BatchesController(IBatchService batchService) : ControllerBase
   [BatchesEndpointDocumentation.ListFermentationRecords]
   public async Task<ActionResult<PaginatedResult<BatchFermentationRecordResponse>>> GetFermentationRecords(
     [FromRoute] BatchRouteRequest routeRequest,
-    [FromQuery] PaginationRequest queryRequest
+    [FromQuery] BatchFermentationRecordListRequest queryRequest
   )
   {
     var normalizedBatchNumber = NormalizeBatchNumber(routeRequest.BatchNumber!);
@@ -51,7 +57,11 @@ public class BatchesController(IBatchService batchService) : ControllerBase
     var records = await batchService.GetFermentationRecordsAsync(
       normalizedBatchNumber,
       queryRequest.Page,
-      queryRequest.Limit
+      queryRequest.Limit,
+      queryRequest.Search,
+      queryRequest.SortBy,
+      queryRequest.SortDirection,
+      queryRequest.Classification
     );
 
     if (records is null)

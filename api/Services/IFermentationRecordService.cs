@@ -17,12 +17,20 @@ public interface IFermentationRecordService
   Task<PaginatedResult<FermentationRecordResponse>> GetByBeerAsync(
     Guid beerId,
     int page,
-    int limit
+    int limit,
+    string? search,
+    string? sortBy,
+    string? sortDirection,
+    string? classification
   );
   Task<PaginatedResult<FermentationRecordResponse>> GetByTankAsync(
     Guid tankId,
     int page,
-    int limit
+    int limit,
+    string? search,
+    string? sortBy,
+    string? sortDirection,
+    string? classification
   );
   Task<FermentationRecordResponse?> GetByIdAsync(Guid id);
   Task<FermentationRecord> CreateAsync(FermentationRecord record);

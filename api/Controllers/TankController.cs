@@ -99,7 +99,7 @@ public class TanksController(
   [TanksEndpointDocumentation.ListFermentationRecords]
   public async Task<ActionResult<PaginatedResult<FermentationRecordResponse>>> GetFermentationRecords(
     Guid tankId,
-    [FromQuery] PaginationRequest request
+    [FromQuery] FermentationRecordListRequest request
   )
   {
     if (!await tankService.ExistsAsync(tankId))
@@ -110,7 +110,11 @@ public class TanksController(
     var records = await fermentationRecordService.GetByTankAsync(
       tankId,
       request.Page,
-      request.Limit
+      request.Limit,
+      request.Search,
+      request.SortBy,
+      request.SortDirection,
+      request.Classification
     );
 
     return Ok(records);

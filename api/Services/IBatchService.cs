@@ -5,11 +5,21 @@ namespace BrewMonitor.Api.Services;
 
 public interface IBatchService
 {
-  Task<PaginatedResult<BatchResponse>> GetAllAsync(int page, int limit);
+  Task<PaginatedResult<BatchResponse>> GetAllAsync(
+    int page,
+    int limit,
+    string? search,
+    string? sortBy,
+    string? sortDirection
+  );
   Task<BatchOverviewResponse?> GetOverviewAsync(string batchNumber);
   Task<PaginatedResult<BatchFermentationRecordResponse>?> GetFermentationRecordsAsync(
     string batchNumber,
     int page,
-    int limit
+    int limit,
+    string? search,
+    string? sortBy,
+    string? sortDirection,
+    string? classification
   );
 }

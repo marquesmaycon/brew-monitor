@@ -29,7 +29,7 @@ const apiDocumentationUrl = new URL(
 const data = {
   user: {
     name: 'Brew Monitor',
-    email: 'monitoramento de fermentação',
+    email: 'admin@brewmonitor.com',
   },
   navMain: [
     {

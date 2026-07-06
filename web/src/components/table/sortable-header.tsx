@@ -5,6 +5,10 @@ import { cn } from '@/lib/utils'
 
 import { Button } from '../ui/button'
 
+/**
+ * Constrói um cabeçalho de coluna interativo e ordenável.
+ * O clique executa uma alternância cíclica de estados de ordenação: sem ordenação -> descendente -> ascendente.
+ */
 export const sortableHeader = (label: string) =>
   function Header<TData, TValue>({ column }: HeaderContext<TData, TValue>) {
     const sort = column.getIsSorted()

@@ -3,6 +3,14 @@ import z from 'zod'
 
 import type { FermentationRecord } from '@/types/api'
 
+/**
+ * Prepara datas da API para serem renderizadas no formulário.
+ * Converte a string de data em UTC recebida da API para o formato local esperado 
+ * pelo input datetime-local, mitigando desvios de fuso horário na visualização.
+ *
+ * @param value - String da data vinda do servidor ou undefined
+ * @returns String formatada em "YYYY-MM-DDTHH:mm" do horário local do usuário
+ */
 function toDatetimeLocalValue(value?: string) {
   if (!value) {
     return new Date().toISOString().slice(0, 16)

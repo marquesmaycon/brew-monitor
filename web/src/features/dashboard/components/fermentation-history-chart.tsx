@@ -23,6 +23,14 @@ import { FermentationMetricsChart } from '#/features/fermentation-records/compon
 
 import { getFermentationHistoryOptions } from '../api/options'
 
+/**
+ * Componente do painel que exibe o histórico de fermentação por lote.
+ * Possui um estado duplo de lote: o `batchNumber` selecionado localmente na combo e o `data.selectedBatchNumber`
+ * vindo da resposta da API (que resolve o lote mais recente caso a busca inicial ocorra sem parâmetros).
+ * A query é habilitada condicionalmente (`enabled: !!batchNumber`) para evitar requisições desnecessárias com valores nulos.
+ *
+ * @returns Elemento JSX do card do histórico de fermentação
+ */
 export function FermentationHistoryChart() {
   const [batchNumber, setBatchNumber] = useState<string>()
 

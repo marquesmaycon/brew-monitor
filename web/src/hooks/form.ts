@@ -9,6 +9,11 @@ import { TextareaField } from '@/components/form/textarea-field'
 
 import { fieldContext, formContext } from './form-context'
 
+/**
+ * Hook centralizador e ponto de entrada para criação de formulários TanStack Form no projeto.
+ * Integra e injeta componentes de campo customizados (como ComboboxField, InputField, DateTimePickerField)
+ * diretamente no contexto do formulário para facilitar a consistência visual e o fluxo de dados.
+ */
 export const { useAppForm } = createFormHook({
   fieldComponents: {
     TextareaField,

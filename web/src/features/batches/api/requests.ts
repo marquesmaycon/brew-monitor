@@ -23,6 +23,14 @@ export function listBatches(pagination: Pagination) {
     .json<Paginated<Batch>>()
 }
 
+/**
+ * Busca a visão geral consolidada de um lote.
+ * Utiliza encodeURIComponent no parâmetro batchNumber para garantir transmissões seguras na URL, 
+ * prevenindo quebras em lotes que contenham caracteres especiais.
+ *
+ * @param batchNumber - Identificador numérico/textual do lote
+ * @returns Promise com a visão geral do lote
+ */
 export function getBatchOverview(batchNumber: string) {
   return api
     .get(`${resource}/${encodeURIComponent(batchNumber)}/overview`)

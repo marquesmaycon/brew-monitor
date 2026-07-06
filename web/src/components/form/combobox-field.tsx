@@ -30,6 +30,11 @@ type ComboboxFieldProps = {
   shouldFilter?: boolean
 }
 
+/**
+ * Componente customizado de caixa de seleção (Combobox) integrado ao formulário.
+ * A configuração de `shouldFilter={false}` combinada com `onSearchChange` desativa a filtragem cliente
+ * local e delega a filtragem inteiramente à pesquisa server-side na API à medida que o usuário digita.
+ */
 export function ComboboxField({
   label,
   options,

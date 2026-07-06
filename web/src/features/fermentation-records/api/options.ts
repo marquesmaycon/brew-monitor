@@ -18,6 +18,11 @@ import {
   updateFermentationRecord,
 } from './requests'
 
+/**
+ * Fábrica de chaves de cache (Query Keys) para os registros de fermentação.
+ * Adota a convenção estruturada dividida em prefixo geral (root), listas parametrizadas (list) 
+ * e chaves de identificação individual (detail) para otimizar invalidações.
+ */
 export const fermentationRecordKeys = {
   root: ['fermentation-records'] as const,
   list: function (pagination: Pagination) {

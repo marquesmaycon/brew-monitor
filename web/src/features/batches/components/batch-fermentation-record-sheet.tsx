@@ -20,6 +20,14 @@ type BatchFermentationRecordSheetProps = {
   batch: Pick<BatchOverview, 'batchNumber' | 'beerId'>
 }
 
+/**
+ * Painel lateral para inserção de um novo registro de fermentação diretamente a partir da tela do lote.
+ * Dispara `router.invalidate()` após o sucesso no formulário para forçar a rota atual a recarregar
+ * seus loaders e sincronizar os componentes exibidos com os novos dados inseridos.
+ *
+ * @param props - Contém dados essenciais do lote associado
+ * @returns Elemento JSX do sheet de novo registro
+ */
 export function BatchFermentationRecordSheet({
   batch,
 }: BatchFermentationRecordSheetProps) {

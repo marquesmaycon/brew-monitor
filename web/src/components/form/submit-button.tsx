@@ -8,6 +8,11 @@ type SubmitButtonProps = ComponentProps<typeof Button> & {
   label?: string
 }
 
+/**
+ * Botão de submissão do formulário.
+ * Permanece desabilitado (`disabled={!isDirty}`) até que pelo menos um campo seja modificado, 
+ * prevenindo requisições de salvamento desnecessárias ao servidor quando nenhum dado foi alterado.
+ */
 export function SubmitButton({ label, ...props }: SubmitButtonProps) {
   const form = useFormContext()
 

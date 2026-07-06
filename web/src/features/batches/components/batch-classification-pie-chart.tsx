@@ -42,6 +42,11 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
+/**
+ * Gráfico de rosca para exibição consolidada das classificações do lote.
+ * @param props - Contém os dados estruturados de contagem das classificações
+ * @returns Elemento JSX do gráfico de pizza
+ */
 export function BatchClassificationPieChart({
   classificationCounts,
 }: BatchClassificationPieChartProps) {

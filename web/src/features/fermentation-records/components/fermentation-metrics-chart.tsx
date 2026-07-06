@@ -36,6 +36,15 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
+/**
+ * Calcula o domínio dinâmico do eixo Y unificando os valores de todas as séries.
+ * Caso a variação (range) seja zero, aplica um padding padrão de 1 para evitar distorções no gráfico.
+ * As três métricas (temperatura, pH e extrato) compartilham o mesmo eixo Y para possibilitar a comparação direta
+ * de suas respectivas curvas de variação em uma única escala consolidada.
+ *
+ * @param data - Conjunto de pontos de medição
+ * @returns Array contendo os limites mínimo e máximo calculados para o eixo Y
+ */
 function getMetricDomain(data: Array<FermentationMetricsPoint>) {
   const values = data.flatMap((point) => [
     point.temperature,
@@ -50,6 +59,16 @@ function getMetricDomain(data: Array<FermentationMetricsPoint>) {
   return [Math.floor(min - padding), Math.ceil(max + padding)] as const
 }
 
+/**
+ * Renderiza um gráfico de área suavizado (`type="bump"`) com preenchimentos em gradientes elegantes.
+ * Exibe três métricas principais e seus respectivos propósitos:
+ * - Temperatura (monitoramento do controle térmico da fermentação).
+ * - pH (acompanhamento da saúde metabólica da levedura).
+ * - Extrato (redução da densidade e atenuação de açúcares).
+ *
+ * @param props - Contém a lista de dados e pontos históricos
+ * @returns Elemento JSX do gráfico de métricas
+ */
 export function FermentationMetricsChart({
   data,
 }: FermentationMetricsChartProps) {

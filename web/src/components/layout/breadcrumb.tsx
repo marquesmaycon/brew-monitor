@@ -83,6 +83,11 @@ function getDynamicLabel(
   return decodeURIComponent(segment)
 }
 
+/**
+ * Constrói a estrutura de trilha de navegação (Breadcrumbs) da rota atual.
+ * Utiliza o histórico do loader (via `getDynamicLabel`) para resolver labels textuais dinâmicos e amigáveis 
+ * (como nomes de cervejas, tanques e códigos de lote) a partir dos parâmetros e IDs do caminho de URL.
+ */
 function buildBreadcrumbs(pathname: string, data?: unknown): Array<Crumb> {
   const segments = pathname.split('/').filter(Boolean)
   const crumbs: Array<Crumb> = [{ label: 'Início', to: '/' }]

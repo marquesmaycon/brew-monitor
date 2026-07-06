@@ -8,6 +8,14 @@ import type {
 
 const resource = 'fermentation-records'
 
+/**
+ * Obtém a lista paginada de registros de fermentação.
+ * Constrói os parâmetros de busca omitindo chaves de strings vazias, aplicando trim no termo 
+ * de pesquisa e incluindo parâmetros de ordenação/filtragem apenas se estiverem definidos.
+ *
+ * @param pagination - Configurações de paginação, busca e ordenação
+ * @returns Promise com o resultado paginado dos registros
+ */
 export function listFermentationRecords(pagination: Pagination) {
   const { search, sortBy, sortDirection, classification, ...pageParams } =
     pagination

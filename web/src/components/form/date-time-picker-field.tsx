@@ -17,6 +17,14 @@ const dateTimeFormatter = new Intl.DateTimeFormat('pt-BR', {
   timeStyle: 'short',
 })
 
+/**
+ * Converte Date para string compatível com input datetime-local.
+ * Compensa o timezone offset para que o valor exibido corresponda
+ * ao horário local do usuário, não UTC.
+ *
+ * @param date - Instância Date a converter
+ * @returns String no formato "YYYY-MM-DDTHH:mm"
+ */
 function toLocalDateTimeValue(date: Date) {
   const offsetDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
 
@@ -36,6 +44,15 @@ function parseFieldDate(value: string) {
 function getTimeValue(value: string) {
   return value.split('T')[1] ?? '00:00'
 }
+
+/**
+ * Componente de campo para seleção de data e hora.
+ * Gerencia a alteração individual da data (via Popover com calendário) ou da hora (via input time),
+ * mesclando a nova entrada e preservando a informação do outro campo selecionado.
+ *
+ * @param props - Propriedades contendo o label do campo
+ * @returns Elemento JSX do campo de formulário
+ */
 
 export function DateTimePickerField({ label }: DateTimePickerFieldProps) {
   const field = useFieldContext<string>()

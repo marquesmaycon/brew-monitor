@@ -42,6 +42,11 @@ export const beerKeys = {
   },
 }
 
+/**
+ * Define as opções para a query de listagem de cervejas.
+ * Configura `refetchOnMount: false` para evitar múltiplas requisições repetidas de atualização (refetch storm) 
+ * à API no momento de montagem ou foco nos campos Combobox que consomem esta lista.
+ */
 export function listBeersOptions(
   pagination: Pagination = { page: 1, limit: 20 },
 ) {

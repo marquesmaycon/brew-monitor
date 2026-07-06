@@ -18,6 +18,11 @@ export type AssociatedFermentationRecordEntityType = 'beer' | 'tank'
 
 const columnHelper = createColumnHelper<FermentationRecord>()
 
+/**
+ * Constrói a definição de colunas da tabela de registros associados.
+ * Alterna dinamicamente a exibição da coluna de relacionamento (mostrando o Tanque caso a entidade pai
+ * seja uma Cerveja, ou a Cerveja caso a entidade pai seja um Tanque) para evitar redundâncias na tela.
+ */
 export function buildAssociatedFermentationRecordColumns(
   entityType: AssociatedFermentationRecordEntityType,
 ) {

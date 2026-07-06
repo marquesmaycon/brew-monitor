@@ -3,6 +3,12 @@ import z from 'zod'
 
 import type { FermentationParameter } from '@/types/api'
 
+/**
+ * Esquema de validação Zod para os parâmetros ideais de fermentação da cerveja.
+ * Aplica três refinações (.refine()) com caminhos de erro explícitos (path: ['minX']) 
+ * para garantir que limites mínimos sejam menores ou iguais aos limites máximos correspondentes,
+ * direcionando o erro visual de validação exatamente para o input apropriado no formulário.
+ */
 export const fermentationParametersSchema = z
   .object({
     minTemperature: z.coerce

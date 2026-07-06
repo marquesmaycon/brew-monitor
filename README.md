@@ -205,6 +205,7 @@ O material gerado por IA precisou ser revisado e ajustado em alguns pontos:
 
 - Controllers organizados por domínio, separando endpoints de cervejas, tanques, registros fermentativos, dashboard e lotes.
 - Regras de negócio centralizadas em serviços, mantendo os controllers mais focados em entrada, saída e status HTTP.
+- DTOs de entrada para `body`, `query params` e parâmetros de rota, com validação automática via ASP.NET Core antes da execução das regras de negócio.
 - Entity Framework Core com PostgreSQL, migrations, seed inicial e convenção `snake_case` no banco de dados.
 - Migrations aplicadas automaticamente na inicialização da API, junto com seed inicial para facilitar a execução local.
 - Classificação fermentativa calculada no backend, garantindo consistência entre criação, edição, dashboard e histórico.
@@ -241,6 +242,9 @@ O material gerado por IA precisou ser revisado e ajustado em alguns pontos:
 
 ## Validações e regras
 
+- A API valida entradas por DTOs específicos de request, evitando receber entidades de persistência diretamente nos payloads.
+- As validações cobrem corpo da requisição, query params de paginação/filtros/ordenação e parâmetros de rota.
+- O frontend também valida os formulários com Zod, mantendo as mesmas regras principais antes do envio para a API.
 - Cervejas exigem nome e estilo.
 - Tanques exigem nome e capacidade maior que zero.
 - Parâmetros mínimos devem ser menores ou iguais aos respectivos máximos.

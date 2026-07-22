@@ -1,14 +1,18 @@
 'use client'
 
 import { Link } from '@tanstack/react-router'
-import { BookOpenTextIcon, ExternalLinkIcon } from 'lucide-react'
+import {
+  Beer,
+  BookOpenTextIcon,
+  ClipboardList,
+  Container,
+  ExternalLinkIcon,
+  LayoutDashboard,
+  Package,
+} from 'lucide-react'
 import * as React from 'react'
 
-import BatchIcon from '@/assets/icons/batch.svg?react'
-import BeerIcon from '@/assets/icons/beer.svg?react'
-import DashboardIcon from '@/assets/icons/dashboard.svg?react'
-import RecordIcon from '@/assets/icons/record.svg?react'
-import TankIcon from '@/assets/icons/tank.svg?react'
+import Logo from '@/assets/logo.svg?react'
 import { NavMain } from '#/components/layout/sidebar/nav-main'
 import { NavUser } from '#/components/layout/sidebar/nav-user'
 import {
@@ -35,27 +39,27 @@ const data = {
     {
       title: 'Dashboard',
       url: '/',
-      icon: <DashboardIcon />,
+      icon: <LayoutDashboard />,
     },
     {
       title: 'Cervejas',
       url: '/beers',
-      icon: <BeerIcon />,
+      icon: <Beer />,
     },
     {
       title: 'Tanques',
       url: '/tanks',
-      icon: <TankIcon />,
+      icon: <Container />,
     },
     {
       title: 'Registros',
       url: '/fermentation-records',
-      icon: <RecordIcon />,
+      icon: <ClipboardList />,
     },
     {
       title: 'Lotes',
       url: '/batches',
-      icon: <BatchIcon />,
+      icon: <Package />,
     },
   ],
 }
@@ -69,10 +73,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenuButton size="lg" asChild>
               <Link to="/">
                 <div className="text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                  <img
-                    src="/logo-white.svg"
-                    alt="Brew Monitor"
-                    className="size-8 shrink-0 object-contain"
+                  <Logo
+                    className="size-8! min-h-8 min-w-8 shrink-0 text-white"
+                    aria-hidden
                   />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">

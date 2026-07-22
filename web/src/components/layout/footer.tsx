@@ -1,5 +1,7 @@
 import { ExternalLinkIcon, GlobeIcon } from 'lucide-react'
 
+import Logo from '@/assets/logo.svg?react'
+
 import { Button } from '../ui/button'
 
 const authorLinks = [
@@ -46,10 +48,9 @@ export function Footer() {
       <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
         <div className="max-w-xl space-y-3">
           <div className="flex items-center gap-4">
-            <img
-              src="/logo-gray.svg"
-              alt="Brew Monitor"
-              className="h-12 w-auto object-contain"
+            <Logo
+              className="h-12 w-auto shrink-0 text-muted-foreground"
+              aria-hidden
             />
             <span className="truncate font-medium">Brew Monitor</span>
           </div>

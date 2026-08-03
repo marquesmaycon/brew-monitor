@@ -27,17 +27,16 @@ import { getFermentationHistoryOptions } from '../api/options'
  * Componente do painel que exibe o histórico de fermentação por lote.
  * Possui um estado duplo de lote: o `batchNumber` selecionado localmente na combo e o `data.selectedBatchNumber`
  * vindo da resposta da API (que resolve o lote mais recente caso a busca inicial ocorra sem parâmetros).
- * A query é habilitada condicionalmente (`enabled: !!batchNumber`) para evitar requisições desnecessárias com valores nulos.
+ * A primeira query busca sem filtro para popular a lista de lotes e resolver o lote mais recente.
  *
  * @returns Elemento JSX do card do histórico de fermentação
  */
 export function FermentationHistoryChart() {
   const [batchNumber, setBatchNumber] = useState<string>()
 
-  const { data, isError, isFetching } = useQuery({
-    ...getFermentationHistoryOptions(batchNumber),
-    enabled: !!batchNumber,
-  })
+  const { data, isError, isFetching } = useQuery(
+    getFermentationHistoryOptions(batchNumber),
+  )
 
   useEffect(() => {
     if (!data?.selectedBatchNumber) return
@@ -96,7 +95,8 @@ export function FermentationHistoryChart() {
       <CardContent>
         {isError ? (
           <div className="text-muted-foreground flex h-72 items-center justify-center rounded-lg border border-dashed text-sm">
-            Nao foi possivel carregar o historico fermentativo.
+            A API pode estar iniciando. Aguarde 1 a 2 minutos e tente
+            novamente.
           </div>
         ) : data?.data.length ? (
           <FermentationMetricsChart data={data.data} />

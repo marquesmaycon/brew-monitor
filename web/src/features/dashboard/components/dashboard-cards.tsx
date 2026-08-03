@@ -66,7 +66,8 @@ export function DashboardCards() {
           <CardHeader>
             <CardTitle>Nao foi possivel carregar o dashboard</CardTitle>
             <CardDescription>
-              Verifique se a API esta em execucao e tente novamente.
+              A API pode estar iniciando apos um periodo de inatividade.
+              Aguarde 1 a 2 minutos e tente novamente.
             </CardDescription>
           </CardHeader>
         </Card>

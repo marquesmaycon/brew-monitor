@@ -5,6 +5,7 @@ import {
   getDashboardMetricsOptions,
   getFermentationHistoryOptions,
 } from '#/features/dashboard/api/options'
+import { ApiWakeUpAlert } from '#/features/dashboard/components/api-wake-up-alert'
 import { DashboardCards } from '#/features/dashboard/components/dashboard-cards'
 import { FermentationHistoryChart } from '#/features/dashboard/components/fermentation-history-chart'
 import { createMetadata } from '#/lib/metadata'
@@ -12,7 +13,7 @@ import { createMetadata } from '#/lib/metadata'
 export const Route = createFileRoute('/')({
   component: App,
   loader: ({ context }) =>
-    Promise.all([
+    Promise.allSettled([
       context.queryClient.ensureQueryData(getDashboardMetricsOptions()),
       context.queryClient.ensureQueryData(getFermentationHistoryOptions()),
     ]),
@@ -36,6 +37,7 @@ function App() {
       </PageHeader>
 
       <section className="flex flex-col gap-8">
+        <ApiWakeUpAlert />
         <DashboardCards />
         <FermentationHistoryChart />
       </section>

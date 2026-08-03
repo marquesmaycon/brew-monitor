@@ -43,6 +43,8 @@ export function FermentationHistoryChart() {
     setBatchNumber(data.selectedBatchNumber)
   }, [data?.selectedBatchNumber])
 
+  if (isError) return null
+
   const selectedBatchNumber = data?.selectedBatchNumber ?? batchNumber
 
   return (
@@ -60,7 +62,7 @@ export function FermentationHistoryChart() {
           <Select
             value={selectedBatchNumber}
             onValueChange={setBatchNumber}
-            disabled={!data?.batches.length || isError}
+            disabled={!data?.batches.length}
           >
             <SelectTrigger
               className="w-full sm:w-56"
@@ -93,12 +95,7 @@ export function FermentationHistoryChart() {
         )}
       </CardHeader>
       <CardContent>
-        {isError ? (
-          <div className="text-muted-foreground flex h-72 items-center justify-center rounded-lg border border-dashed text-sm">
-            A API pode estar iniciando. Aguarde 1 a 2 minutos e tente
-            novamente.
-          </div>
-        ) : data?.data.length ? (
+        {data?.data.length ? (
           <FermentationMetricsChart data={data.data} />
         ) : isFetching ? (
           <div className="text-muted-foreground flex h-72 items-center justify-center gap-2 rounded-lg border border-dashed text-sm">

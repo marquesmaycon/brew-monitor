@@ -24,6 +24,8 @@ type DashboardCard = {
 export function DashboardCards() {
   const { data, isError, isLoading } = useQuery(getDashboardMetricsOptions())
 
+  if (isError) return null
+
   const cards: Array<DashboardCard> = [
     {
       title: 'Total de registros fermentativos',
@@ -60,29 +62,11 @@ export function DashboardCards() {
   ]
 
   return (
-    <>
-      {isError ? (
-        <Card className="border-red-200 bg-red-50 text-red-700 dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-300">
-          <CardHeader>
-            <CardTitle>Nao foi possivel carregar o dashboard</CardTitle>
-            <CardDescription>
-              A API pode estar iniciando apos um periodo de inatividade.
-              Aguarde 1 a 2 minutos e tente novamente.
-            </CardDescription>
-          </CardHeader>
-        </Card>
-      ) : (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {cards.map((card) => (
-            <DashboardMetricCard
-              key={card.title}
-              card={card}
-              isLoading={isLoading}
-            />
-          ))}
-        </div>
-      )}
-    </>
+    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      {cards.map((card) => (
+        <DashboardMetricCard key={card.title} card={card} isLoading={isLoading} />
+      ))}
+    </div>
   )
 }
 

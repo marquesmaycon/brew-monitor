@@ -3,6 +3,7 @@ using BrewMonitor.Api.Data.Seed;
 using BrewMonitor.Api.Documentation.OpenApi;
 using BrewMonitor.Api.Services;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using Scalar.AspNetCore;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -64,7 +65,7 @@ builder.Services.AddControllers()
     );
 builder.Services.AddDbContext<AppDbContext>(options =>
         options
-            .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+            .UseNpgsql(GetPostgresConnectionString(builder.Configuration))
             .UseSnakeCaseNamingConvention()
     );
 builder.Services.AddScoped<IBeerService, BeerService>();
@@ -106,3 +107,25 @@ app.MapGet("/", () => Results.Ok(new
 .WithDescription("Retorna um payload simples para confirmar que a API está online.");
 
 app.Run();
+
+static string GetPostgresConnectionString(IConfiguration configuration)
+{
+    var databaseUrl = configuration.GetConnectionString("DefaultConnection");
+
+    if (string.IsNullOrWhiteSpace(databaseUrl))
+    {
+        throw new InvalidOperationException("Configure ConnectionStrings:DefaultConnection com a URL de conexao do PostgreSQL.");
+    }
+
+    var uri = new Uri(databaseUrl);
+    var userInfo = uri.UserInfo.Split(':', 2);
+
+    return new NpgsqlConnectionStringBuilder
+    {
+        Host = uri.Host,
+        Port = uri.IsDefaultPort ? 5432 : uri.Port,
+        Database = Uri.UnescapeDataString(uri.AbsolutePath.TrimStart('/')),
+        Username = Uri.UnescapeDataString(userInfo[0]),
+        Password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : null
+    }.ConnectionString;
+}
